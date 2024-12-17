@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FaTools, FaBolt, FaPhoneAlt, FaQuestionCircle } from 'react-icons/fa';
+import { FaTools, FaBolt, FaPhoneAlt } from 'react-icons/fa';
 
 const TechnicalService = () => {
   const services = [

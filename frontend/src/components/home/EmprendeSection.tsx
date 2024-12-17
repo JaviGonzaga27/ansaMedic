@@ -58,12 +58,12 @@ const EmprendeSection = () => {
           transition={{ duration: 0.6, delay: 0.6 }}
           className="text-center"
         >
-          <a 
+          <link 
             href="/products" 
             className="inline-flex items-center bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-8 rounded-full transition duration-300 transform hover:scale-105 text-lg"
           >
             Ver Catálogo de Insumos
-          </a>
+          </link>
         </motion.div>
       </div>
     </section>
