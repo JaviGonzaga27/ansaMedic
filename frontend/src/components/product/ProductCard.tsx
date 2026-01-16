@@ -12,7 +12,7 @@ interface ProductCardProps {
       images: string[];
       features: string[];
       specifications: { name: string; value: string }[];
-    }[]; 
+    }[];
   };
 }
 
@@ -31,17 +31,17 @@ export default function ProductCard({ product }: ProductCardProps) {
 
   return (
     <>
-      <div className="max-w-sm rounded-lg overflow-hidden shadow-[0_4px_10px_rgba(20,184,166,0.1)] hover:shadow-[0_10px_20px_rgba(20,184,166,0.2)] bg-white transition-all duration-300 ease-in-out transform hover:-translate-y-1 flex flex-col h-[330px]">
+      <div className="max-w-sm rounded-2xl overflow-hidden shadow-premium hover:shadow-premium-lg bg-white transition-smooth transform hover:-translate-y-2 flex flex-col h-[350px]">
         <div className="h-36 overflow-hidden flex-shrink-0">
           <img
             src={product.imageUrl}
             alt={product.name}
-            className="w-full h-full object-cover transition-transform duration-300 ease-in-out transform hover:scale-110"
+            className="w-full h-full object-cover transition-smooth transform hover:scale-110"
           />
         </div>
         <div className="px-6 py-4 flex-grow overflow-hidden">
-          <h2 className="font-bold text-sm mb-2 text-teal-700 line-clamp-2">{product.name}</h2>
-          <p className="text-gray-700 text-xs text-justify line-clamp-4">{product.description}</p>
+          <h2 className="font-bold text-base mb-2 text-teal-700 line-clamp-2">{product.name}</h2>
+          <p className="text-gray-600 text-sm text-justify line-clamp-4">{product.description}</p>
         </div>
         <div className="px-6 pt-2 pb-6 flex-shrink-0">
           <div className="flex gap-2">
@@ -54,7 +54,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             </button>
             <button
               onClick={handleWhatsAppClick}
-              className="flex-1 bg-teal-600 hover:bg-teal-700 text-white text-sm font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out flex items-center justify-center"
+              className="flex-1 bg-gradient-teal hover:opacity-90 text-white text-sm font-bold py-2.5 px-4 rounded-lg transition-smooth flex items-center justify-center shadow-teal-glow hover:shadow-teal-glow-lg"
             >
               <FaWhatsapp className="mr-2" />
               Contactar
@@ -62,7 +62,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           </div>
         </div>
       </div>
-      <ProductDetail 
+      <ProductDetail
         product={product}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
