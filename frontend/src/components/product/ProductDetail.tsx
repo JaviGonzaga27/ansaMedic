@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { FaWhatsapp, FaTimes } from 'react-icons/fa';
+import LocationSelector from '../common/LocationSelector';
 
 interface ProductDetailProps {
   product: {
@@ -20,30 +21,44 @@ interface ProductDetailProps {
 
 export default function ProductDetail({ product, isOpen, onClose }: ProductDetailProps) {
   const [currentImage, setCurrentImage] = useState(0);
+  const [isLocationSelectorOpen, setIsLocationSelectorOpen] = useState(false);
 
   if (!isOpen) return null;
 
   const handleWhatsAppClick = () => {
-    window.open('https://wa.me/0999120734', '_blank');
+    setIsLocationSelectorOpen(true);
   };
 
-  // Usar las imágenes del primer elemento de detalles si existen, de lo contrario usar imageUrl
-  const images =
-    product.details && product.details.length > 0 && product.details[0].images?.length
-      ? product.details[0].images
-      : [product.imageUrl];
+  // Siempre mostrar primero la imagen principal (imageUrl), luego agregar imágenes adicionales de details si existen
+  const getProductImages = () => {
+    const mainImage = product.imageUrl;
+    const additionalImages = 
+      product.details && product.details.length > 0 && product.details[0].images?.length
+        ? product.details[0].images.filter(img => img !== mainImage) // Evitar duplicados
+        : [];
+    
+    return [mainImage, ...additionalImages];
+  };
+
+  const images = getProductImages();
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center p-4">
-      <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-bold text-teal-700">{product.name}</h2>
-            <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
-              <FaTimes size={24} />
-            </button>
-          </div>
-          
+      <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] flex flex-col">
+        {/* Header fijo */}
+        <div className="sticky top-0 bg-white rounded-t-lg border-b border-gray-200 px-4 md:px-6 py-4 flex justify-between items-center z-10 flex-shrink-0">
+          <h2 className="text-lg md:text-2xl font-bold text-teal-700 pr-4 line-clamp-2">{product.name}</h2>
+          <button 
+            onClick={onClose} 
+            className="text-gray-500 hover:text-gray-700 p-2 hover:bg-gray-100 rounded-lg transition-colors flex-shrink-0"
+            aria-label="Cerrar"
+          >
+            <FaTimes size={24} />
+          </button>
+        </div>
+        
+        {/* Contenido con scroll */}
+        <div className="overflow-y-auto flex-1 p-4 md:p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <img 
@@ -92,18 +107,28 @@ export default function ProductDetail({ product, isOpen, onClose }: ProductDetai
                   </div>
                 </>
               )}
-              
-              <button
-                onClick={handleWhatsAppClick}
-                className="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out flex items-center justify-center"
-              >
-                <FaWhatsapp className="mr-2" />
-                Contactar por WhatsApp
-              </button>
             </div>
           </div>
         </div>
+
+        {/* Footer fijo con botón de WhatsApp */}
+        <div className="sticky bottom-0 bg-white border-t border-gray-200 px-4 md:px-6 py-3 md:py-4 flex-shrink-0 rounded-b-lg shadow-lg">
+          <button
+            onClick={handleWhatsAppClick}
+            className="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 md:py-3.5 px-4 rounded-lg transition duration-300 ease-in-out flex items-center justify-center shadow-md hover:shadow-lg"
+          >
+            <FaWhatsapp className="mr-2 text-lg md:text-xl" />
+            <span className="text-sm md:text-base">Contactar por WhatsApp</span>
+          </button>
+        </div>
       </div>
+      
+      <LocationSelector
+        isOpen={isLocationSelectorOpen}
+        onClose={() => setIsLocationSelectorOpen(false)}
+        productName={product.name}
+        productId={product.id}
+      />
     </div>
   );
 }

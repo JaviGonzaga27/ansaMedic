@@ -39,7 +39,7 @@ const FeaturedProducts = () => {
   };
 
   return (
-    <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <section className="bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 py-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       {/* Animated decorative background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-10 right-10 w-96 h-96 bg-gradient-to-br from-purple-300 to-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
@@ -54,7 +54,7 @@ const FeaturedProducts = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-12"
         >
           <motion.div
             initial={{ scale: 0.9 }}
@@ -63,11 +63,11 @@ const FeaturedProducts = () => {
             transition={{ duration: 0.5 }}
             className="inline-block"
           >
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 bg-gradient-to-r from-purple-600 via-pink-600 to-orange-600 bg-clip-text text-transparent">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 bg-gradient-to-r from-purple-600 via-pink-600 to-orange-600 bg-clip-text text-transparent">
               Productos Destacados
             </h2>
           </motion.div>
-          <p className="text-lg md:text-xl text-gray-700 max-w-2xl mx-auto">
+          <p className="text-base md:text-lg text-gray-700 max-w-2xl mx-auto">
             Descubre nuestra selección de equipamiento dental de primera calidad
           </p>
         </motion.div>
@@ -85,12 +85,12 @@ const FeaturedProducts = () => {
               className="group bg-white/90 backdrop-blur-sm rounded-3xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-500"
             >
               {/* Product Image */}
-              <div className="relative h-64 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
+              <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
                 <Image
                   src={product.image}
                   alt={product.name}
                   fill
-                  className="transition-transform duration-700 group-hover:scale-110 object-cover"
+                  className="transition-transform duration-700 group-hover:scale-110 object-contain p-4"
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   loading="lazy"
                   priority={false}
@@ -101,7 +101,7 @@ const FeaturedProducts = () => {
                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                   <Link
                     href={`/productos/${product.slug}`}
-                    className="bg-white/95 backdrop-blur-sm text-purple-600 font-semibold py-3 px-6 rounded-full shadow-lg hover:bg-white transition-all duration-300 flex items-center space-x-2 transform hover:scale-110"
+                    className="bg-white/95 backdrop-blur-sm text-purple-600 font-semibold py-2.5 px-5 rounded-full shadow-lg hover:bg-white transition-all duration-300 flex items-center space-x-2 transform hover:scale-110 text-sm"
                   >
                     <FaInfoCircle />
                     <span>Ver Detalles</span>
@@ -109,33 +109,33 @@ const FeaturedProducts = () => {
                 </div>
 
                 {/* Gradient Badge */}
-                <div className="absolute top-4 right-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-full text-xs font-bold shadow-lg">
+                <div className="absolute top-3 right-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-lg">
                   Destacado
                 </div>
               </div>
 
               {/* Product Info */}
-              <div className="p-6">
-                <h3 className="text-xl font-bold mb-3 text-gray-800 group-hover:text-purple-600 transition-colors duration-300">
+              <div className="p-5">
+                <h3 className="text-lg font-bold mb-2 text-gray-800 group-hover:text-purple-600 transition-colors duration-300">
                   {product.name}
                 </h3>
-                <p className="text-gray-600 mb-6 leading-relaxed line-clamp-2">
+                <p className="text-gray-600 mb-4 leading-relaxed line-clamp-2 text-sm">
                   {product.description}
                 </p>
 
                 {/* Action Buttons */}
-                <div className="flex gap-3">
+                <div className="flex gap-2">
                   <Link
                     href={`/productos/${product.slug}`}
-                    className="flex-1 bg-gradient-to-r from-gray-100 to-gray-200 hover:from-gray-200 hover:to-gray-300 text-gray-700 font-semibold py-3 px-4 rounded-xl transition-all duration-300 text-center text-sm"
+                    className="flex-1 bg-gradient-to-r from-gray-100 to-gray-200 hover:from-gray-200 hover:to-gray-300 text-gray-700 font-semibold py-2.5 px-3 rounded-xl transition-all duration-300 text-center text-xs"
                   >
                     Más Info
                   </Link>
                   <button
                     onClick={() => handleWhatsAppClick(product.name)}
-                    className="flex-1 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 flex items-center justify-center space-x-2 shadow-md hover:shadow-lg text-sm transform hover:scale-105"
+                    className="flex-1 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-2.5 px-3 rounded-xl transition-all duration-300 flex items-center justify-center space-x-1.5 shadow-md hover:shadow-lg text-xs transform hover:scale-105"
                   >
-                    <FaWhatsapp className="text-lg" />
+                    <FaWhatsapp className="text-base" />
                     <span>Consultar</span>
                   </button>
                 </div>

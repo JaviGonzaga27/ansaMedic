@@ -22,7 +22,7 @@ const EmprendeSection = () => {
   ];
 
   return (
-    <section className="min-h-screen flex items-center justify-center bg-teal-100 py-12 px-4 sm:px-6 lg:px-8">
+    <section className="bg-teal-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl w-full">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}

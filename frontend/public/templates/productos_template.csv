@@ -1,0 +1,4 @@
+id,nombre,descripcion,precio,stock,categoria,marca,sku,imageUrl,tags,destacado,activo
+1,Cepillo Dental Eléctrico Pro-Care,Cepillo eléctrico con tecnología sónica avanzada y 5 modos de limpieza,89.99,50,Higiene Oral,Oral-B,OB-PRO-001,https://ejemplo.com/imagen1.jpg,"cepillo,electrico,oral",true,true
+2,Kit de Ortodoncia Invisible,Alineadores transparentes personalizados para corrección dental,1200.00,20,Ortodoncia,Invisalign,INV-KIT-002,https://ejemplo.com/imagen2.jpg,"ortodoncia,invisible,alineadores",true,true
+3,Irrigador Dental Waterpik,Sistema de limpieza por agua a presión para limpieza profunda,65.50,30,Higiene Oral,Waterpik,WP-IRRIG-003,https://ejemplo.com/imagen3.jpg,"irrigador,limpieza,agua",false,true

@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { FaWhatsapp } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
+import { CONTACT } from '@/utils/constants';
 
 const WhatsappNavbar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -13,7 +14,7 @@ const WhatsappNavbar = () => {
   }, []);
 
   const openWhatsapp = (location: 'Quito' | 'Valle de los Chillos') => {
-    const phoneNumber = location === 'Quito' ? '+593979380563' : '+593992339152';
+    const phoneNumber = location === 'Quito' ? CONTACT.WHATSAPP.QUITO : CONTACT.WHATSAPP.VALLE;
     const message = encodeURIComponent(`Hola, estoy interesado en realizar una cotización. Sector: ${location.toUpperCase()}`);
 
     // Comprobar si el dispositivo es móvil

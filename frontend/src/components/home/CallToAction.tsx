@@ -4,7 +4,7 @@ import { FaArrowRight, FaWhatsapp } from 'react-icons/fa';
 
 const CallToAction = () => {
   return (
-    <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-teal-600 via-emerald-600 to-green-600 py-20 px-4 relative overflow-hidden">
+    <section className="bg-gradient-to-br from-teal-600 via-emerald-600 to-green-600 py-16 px-4 relative overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-10 left-10 w-96 h-96 bg-white rounded-full mix-blend-overlay filter blur-3xl opacity-10 animate-blob"></div>

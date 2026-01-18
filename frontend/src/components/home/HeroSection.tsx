@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaCheckCircle, FaWhatsapp, FaPhone, FaEnvelope, FaMapMarkerAlt, FaClock, FaAward } from 'react-icons/fa';
+import { CONTACT, WHATSAPP_URLS, CAROUSEL_IMAGES } from '@/utils/constants';
 
 const HeroSection: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const slides = ['/images1.jpg', '/images2.jpg', '/images3.jpg'];
+  const slides = CAROUSEL_IMAGES;
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -41,7 +42,7 @@ const HeroSection: React.FC = () => {
   ];
 
   return (
-    <section className="relative min-h-screen bg-gradient-to-br from-gray-50 to-teal-50 overflow-hidden -mt-20 md:-mt-24 pt-20 md:pt-24">
+    <section className="relative bg-gradient-to-br from-gray-50 to-teal-50 overflow-hidden">
       {/* Decorative background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-teal-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
@@ -49,16 +50,16 @@ const HeroSection: React.FC = () => {
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-teal-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
       </div>
 
-      <div className="container mx-auto px-4 py-12 md:py-16 relative z-10">
-        <div className="grid lg:grid-cols-5 gap-8 lg:gap-12 items-center">
+      <div className="container mx-auto px-4 py-8 md:py-12 relative z-10">
+        <div className="grid lg:grid-cols-5 gap-6 lg:gap-10 items-start">
           {/* Left Side - Content & Images (60%) */}
-          <div className="lg:col-span-3 space-y-8">
+          <div className="lg:col-span-3 space-y-6">
             {/* Image Carousel */}
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
-              className="relative h-[400px] md:h-[500px] rounded-3xl overflow-hidden shadow-2xl"
+              className="relative h-[400px] md:h-[500px] rounded-3xl overflow-hidden shadow-2xl bg-white"
             >
               <AnimatePresence initial={false}>
                 <motion.div
@@ -67,35 +68,39 @@ const HeroSection: React.FC = () => {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.7 }}
-                  className="absolute inset-0"
+                  className="absolute inset-0 p-4"
                 >
                   <Image
                     src={slides[currentSlide]}
                     alt={`Equipo dental ${currentSlide + 1}`}
                     layout="fill"
-                    objectFit="cover"
+                    objectFit="contain"
                     priority
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none"></div>
                 </motion.div>
               </AnimatePresence>
 
               {/* Carousel Indicators */}
-              <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-3 z-20">
-                {slides.map((_, index) => (
+              <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-20">
+                {slides.map((_: string, index: number) => (
                   <button
                     key={index}
-                    className={`h-2 rounded-full transition-all duration-300 ${index === currentSlide ? 'bg-teal-400 w-8' : 'bg-white/50 w-2 hover:bg-white/75'
-                      }`}
+                    style={{
+                      width: index === currentSlide ? '10px' : '8px',
+                      height: index === currentSlide ? '10px' : '8px',
+                      minWidth: index === currentSlide ? '10px' : '8px',
+                      minHeight: index === currentSlide ? '10px' : '8px',
+                    }}
+                    className={`rounded-full transition-all duration-300 flex-shrink-0 ${
+                      index === currentSlide 
+                        ? 'bg-teal-500' 
+                        : 'bg-white/80 hover:bg-white'
+                    }`}
                     onClick={() => setCurrentSlide(index)}
                     aria-label={`Ir a diapositiva ${index + 1}`}
                   />
                 ))}
-              </div>
-
-              {/* Promotional Badge */}
-              <div className="absolute top-6 right-6 bg-gradient-to-r from-teal-500 to-teal-600 text-white px-6 py-3 rounded-full shadow-lg z-20">
-                <p className="text-sm font-bold">¡Promoción Especial!</p>
               </div>
             </motion.div>
 
@@ -104,44 +109,44 @@ const HeroSection: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="space-y-6"
+              className="space-y-4"
             >
               <div>
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 bg-gradient-to-r from-teal-600 to-teal-800 bg-clip-text text-transparent">
+                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 bg-gradient-to-r from-teal-600 to-teal-800 bg-clip-text text-transparent">
                   Ansa Medic-Dent
                 </h1>
-                <p className="text-xl md:text-2xl text-gray-700 font-light">
+                <p className="text-lg md:text-xl text-gray-700 font-light">
                   Transformamos la práctica dental con innovación y calidad superior
                 </p>
               </div>
 
               {/* Benefits Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 {benefits.map((benefit, index) => (
                   <motion.div
                     key={index}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
-                    className="flex items-center space-x-3 bg-white/80 backdrop-blur-sm p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300"
+                    className="flex items-center space-x-2 bg-white/80 backdrop-blur-sm p-3 rounded-xl shadow-md hover:shadow-lg transition-all duration-300"
                   >
-                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-teal-500 to-teal-600 rounded-lg flex items-center justify-center">
-                      <benefit.icon className="text-white text-lg" />
+                    <div className="flex-shrink-0 w-9 h-9 bg-gradient-to-br from-teal-500 to-teal-600 rounded-lg flex items-center justify-center">
+                      <benefit.icon className="text-white text-base" />
                     </div>
-                    <p className="text-sm font-semibold text-gray-700">{benefit.text}</p>
+                    <p className="text-xs font-semibold text-gray-700">{benefit.text}</p>
                   </motion.div>
                 ))}
               </div>
 
               {/* Quick Contact Info */}
-              <div className="flex flex-wrap gap-4 text-sm text-gray-600">
+              <div className="flex flex-wrap gap-3 text-xs text-gray-600">
                 <div className="flex items-center space-x-2">
                   <FaPhone className="text-teal-600" />
-                  <span>(02) 286-7212</span>
+                  <span>{CONTACT.PHONE.MAIN}</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <FaEnvelope className="text-teal-600" />
-                  <span>ansamedicdent@gmail.com</span>
+                  <span>{CONTACT.EMAIL}</span>
                 </div>
               </div>
             </motion.div>
@@ -154,29 +159,29 @@ const HeroSection: React.FC = () => {
             transition={{ duration: 0.8, delay: 0.3 }}
             className="lg:col-span-2"
           >
-            <div className="bg-white/90 backdrop-blur-lg p-8 md:p-10 rounded-3xl shadow-2xl border border-teal-100">
+            <div className="bg-white/90 backdrop-blur-lg p-6 md:p-8 rounded-3xl shadow-2xl border border-teal-100">
               {isSubmitted ? (
                 <motion.div
                   initial={{ scale: 0.8, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
-                  className="text-center py-12"
+                  className="text-center py-8"
                 >
-                  <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-green-400 to-green-600 rounded-full mb-6">
-                    <FaCheckCircle className="text-white text-4xl" />
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-green-400 to-green-600 rounded-full mb-4">
+                    <FaCheckCircle className="text-white text-3xl" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-800 mb-3">¡Mensaje Enviado!</h3>
-                  <p className="text-gray-600">Nos pondremos en contacto contigo pronto.</p>
+                  <h3 className="text-xl font-bold text-gray-800 mb-2">¡Mensaje Enviado!</h3>
+                  <p className="text-gray-600 text-sm">Nos pondremos en contacto contigo pronto.</p>
                 </motion.div>
               ) : (
                 <>
-                  <div className="text-center mb-8">
-                    <h2 className="text-3xl font-bold text-gray-800 mb-2">Solicita Información</h2>
-                    <p className="text-gray-600">Completa el formulario y te contactaremos</p>
+                  <div className="text-center mb-6">
+                    <h2 className="text-2xl font-bold text-gray-800 mb-1">Solicita Información</h2>
+                    <p className="text-gray-600 text-sm">Completa el formulario y te contactaremos</p>
                   </div>
 
-                  <form onSubmit={handleSubmit} className="space-y-5">
+                  <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-                      <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-2">
+                      <label htmlFor="name" className="block text-xs font-semibold text-gray-700 mb-1">
                         Nombre Completo
                       </label>
                       <input
@@ -184,13 +189,13 @@ const HeroSection: React.FC = () => {
                         id="name"
                         name="name"
                         placeholder="Juan Pérez"
-                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-300 hover:bg-gray-100"
+                        className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-300 hover:bg-gray-100 text-sm"
                         required
                       />
                     </div>
 
                     <div>
-                      <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
+                      <label htmlFor="email" className="block text-xs font-semibold text-gray-700 mb-1">
                         Correo Electrónico
                       </label>
                       <input
@@ -198,13 +203,13 @@ const HeroSection: React.FC = () => {
                         id="email"
                         name="email"
                         placeholder="juan@ejemplo.com"
-                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-300 hover:bg-gray-100"
+                        className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-300 hover:bg-gray-100 text-sm"
                         required
                       />
                     </div>
 
                     <div>
-                      <label htmlFor="phone" className="block text-sm font-semibold text-gray-700 mb-2">
+                      <label htmlFor="phone" className="block text-xs font-semibold text-gray-700 mb-1">
                         Teléfono
                       </label>
                       <input
@@ -212,35 +217,35 @@ const HeroSection: React.FC = () => {
                         id="phone"
                         name="phone"
                         placeholder="0999 123 456"
-                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-300 hover:bg-gray-100"
+                        className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-300 hover:bg-gray-100 text-sm"
                         required
                       />
                     </div>
 
                     <div>
-                      <label htmlFor="message" className="block text-sm font-semibold text-gray-700 mb-2">
+                      <label htmlFor="message" className="block text-xs font-semibold text-gray-700 mb-1">
                         Mensaje
                       </label>
                       <textarea
                         id="message"
                         name="message"
                         placeholder="¿En qué podemos ayudarte?"
-                        rows={4}
-                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-300 hover:bg-gray-100 resize-none"
+                        rows={3}
+                        className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-300 hover:bg-gray-100 resize-none text-sm"
                         required
                       ></textarea>
                     </div>
 
                     <motion.button
                       type="submit"
-                      className="w-full bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 flex items-center justify-center shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="w-full bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white font-bold py-3 px-4 rounded-xl transition-all duration-300 flex items-center justify-center shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                       disabled={isLoading}
                       whileHover={{ scale: isLoading ? 1 : 1.02 }}
                       whileTap={{ scale: isLoading ? 1 : 0.98 }}
                     >
                       {isLoading ? (
                         <>
-                          <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <svg className="animate-spin -ml-1 mr-3 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                           </svg>
@@ -256,15 +261,15 @@ const HeroSection: React.FC = () => {
                   </form>
 
                   {/* WhatsApp Quick Contact */}
-                  <div className="mt-6 pt-6 border-t border-gray-200">
-                    <p className="text-center text-sm text-gray-600 mb-3">O contáctanos directamente</p>
+                  <div className="mt-4 pt-4 border-t border-gray-200">
+                    <p className="text-center text-xs text-gray-600 mb-2">O contáctanos directamente</p>
                     <a
-                      href="https://wa.me/593979380563"
+                      href={WHATSAPP_URLS.QUITO}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center justify-center space-x-2 w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg"
+                      className="flex items-center justify-center space-x-2 w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-2.5 px-4 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg text-sm"
                     >
-                      <FaWhatsapp className="text-xl" />
+                      <FaWhatsapp className="text-lg" />
                       <span>WhatsApp</span>
                     </a>
                   </div>

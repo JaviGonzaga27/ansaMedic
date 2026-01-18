@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { FaTools, FaBolt, FaPhoneAlt, FaShieldAlt, FaClock } from 'react-icons/fa';
+import { WHATSAPP_URLS } from '@/utils/constants';
 
 const TechnicalService = () => {
   const services = [
@@ -31,7 +32,7 @@ const TechnicalService = () => {
   ];
 
   return (
-    <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-cyan-50 to-teal-50 py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <section className="bg-gradient-to-br from-blue-50 via-cyan-50 to-teal-50 py-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-96 h-96 bg-gradient-to-br from-blue-300 to-cyan-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
@@ -39,24 +40,24 @@ const TechnicalService = () => {
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-cyan-300 to-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
       </div>
 
-      <div className="max-w-7xl w-full relative z-10">
+      <div className="max-w-7xl w-full relative z-10 mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-12"
         >
           <motion.h2
             initial={{ scale: 0.9 }}
             whileInView={{ scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 bg-clip-text text-transparent"
+            className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-3 bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 bg-clip-text text-transparent"
           >
             Servicio Técnico Especializado
           </motion.h2>
-          <p className="text-lg sm:text-xl mb-8 text-gray-700 max-w-3xl mx-auto">
+          <p className="text-base sm:text-lg mb-6 text-gray-700 max-w-3xl mx-auto">
             Nuestro equipo de expertos está listo para mantener tu equipo en óptimas condiciones
           </p>
         </motion.div>
@@ -70,7 +71,7 @@ const TechnicalService = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
               whileHover={{ y: -10, scale: 1.05 }}
-              className="bg-white/90 backdrop-blur-sm p-6 sm:p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 text-center"
+              className="bg-white/90 backdrop-blur-sm p-5 sm:p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 text-center"
             >
               <motion.div
                 whileHover={{ rotate: 360, scale: 1.2 }}
@@ -79,9 +80,9 @@ const TechnicalService = () => {
               >
                 {service.icon}
               </motion.div>
-              <h3 className="text-xl sm:text-2xl font-semibold mb-3 text-gray-800">{service.title}</h3>
-              <p className="text-gray-600 leading-relaxed">{service.description}</p>
-              <div className={`mt-4 h-1 w-20 mx-auto rounded-full bg-gradient-to-r ${service.gradient}`}></div>
+              <h3 className="text-lg sm:text-xl font-semibold mb-2 text-gray-800">{service.title}</h3>
+              <p className="text-gray-600 leading-relaxed text-xs sm:text-sm">{service.description}</p>
+              <div className={`mt-3 h-1 w-16 mx-auto rounded-full bg-gradient-to-r ${service.gradient}`}></div>
             </motion.div>
           ))}
         </div>
@@ -94,10 +95,12 @@ const TechnicalService = () => {
           className="text-center"
         >
           <a
-            href="#contact"
-            className="inline-flex items-center bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 hover:from-blue-700 hover:via-cyan-700 hover:to-teal-700 text-white font-bold py-4 px-8 sm:px-10 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+            href={WHATSAPP_URLS.SERVICIO}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 hover:from-blue-700 hover:via-cyan-700 hover:to-teal-700 text-white font-bold py-3 px-6 sm:px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl text-sm sm:text-base"
           >
-            <FaPhoneAlt className="mr-2 text-xl" />
+            <FaPhoneAlt className="mr-2 text-base sm:text-lg" />
             Solicitar Servicio Técnico
           </a>
         </motion.div>

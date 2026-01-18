@@ -1,45 +1,189 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import './variables.css';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  :root {
-    /* Primary Teal Palette - Enhanced for better contrast */
-    --color-teal-50: #f0fdfc;
-    --color-teal-100: #ccfbf6;
-    --color-teal-200: #99f6ec;
-    --color-teal-300: #5eead4;
-    --color-teal-400: #2dd4bf;
-    --color-teal-500: #14b8a6;
-    --color-teal-600: #0f7d80;
-    --color-teal-700: #0e6469;
-    --color-teal-800: #115e59;
-    --color-teal-900: #134e4a;
-
-    /* Accent Colors */
-    --color-accent-cyan: #06b6d4;
-    --color-accent-emerald: #10b981;
-
-    /* Neutral Palette */
-    --color-gray-50: #f9fafb;
-    --color-gray-100: #f3f4f6;
-    --color-gray-600: #4b5563;
-    --color-gray-700: #374151;
-    --color-gray-800: #1f2937;
-    --color-gray-900: #111827;
-  }
-
+  /* ========================================
+     CONFIGURACIÓN BASE - ISO 9241 Compliant
+     ======================================== */
+  
   html {
+    scroll-behavior: smooth;
+    /* Permitir ajuste de tamaño de fuente del navegador */
+    font-size: 100%;
+  }
+  
+  /* Mejorar scroll padding para skip links */
+  html:focus-within {
     scroll-behavior: smooth;
   }
 
   body {
     @apply bg-white text-gray-900;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-normal);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* Mejorar renderizado de texto */
+    text-rendering: optimizeLegibility;
+  }
+  
+  /* ========================================
+     TIPOGRAFÍA SEMÁNTICA
+     ======================================== */
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-family-heading);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-tight);
+    color: var(--color-gray-900);
+  }
+  
+  h1 {
+    font-size: var(--font-size-4xl);
+    margin-bottom: var(--spacing-6);
+  }
+  
+  h2 {
+    font-size: var(--font-size-3xl);
+    margin-bottom: var(--spacing-5);
+  }
+  
+  h3 {
+    font-size: var(--font-size-2xl);
+    margin-bottom: var(--spacing-4);
+  }
+  
+  h4 {
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--spacing-3);
+  }
+  
+  p {
+    margin-bottom: var(--spacing-4);
+    line-height: var(--line-height-relaxed);
+  }
+  
+  /* ========================================
+     ENLACES - WCAG 2.1 AA Compliant
+     ======================================== */
+  
+  a {
+    color: var(--color-primary-600);
+    text-decoration: none;
+    transition: color var(--transition-base);
+  }
+  
+  a:hover {
+    color: var(--color-primary-700);
+    text-decoration: underline;
+  }
+  
+  a:focus-visible {
+    outline: 2px solid var(--color-primary-600);
+    outline-offset: 2px;
+    border-radius: var(--border-radius-sm);
+  }
+  
+  /* ========================================
+     BOTONES Y CONTROLES INTERACTIVOS
+     Mínimo 44x44px (ISO 9241-9)
+     ======================================== */
+  
+  button, [role="button"] {
+    min-height: var(--touch-target-min);
+    cursor: pointer;
+    user-select: none;
+  }
+  
+  button:disabled, [aria-disabled="true"] {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+  
+  /* ========================================
+     FORMULARIOS - Accesibilidad mejorada
+     ======================================== */
+  
+  input, textarea, select {
+    font-family: inherit;
+    font-size: var(--font-size-base);
+    min-height: var(--touch-target-min);
+  }
+  
+  input:focus, textarea:focus, select:focus {
+    outline: 2px solid var(--color-primary-600);
+    outline-offset: 0;
+  }
+  
+  label {
+    display: block;
+    font-weight: var(--font-weight-medium);
+    margin-bottom: var(--spacing-2);
+    color: var(--color-gray-700);
+  }
+  
+  /* Estados de validación */
+  input:invalid:not(:placeholder-shown) {
+    border-color: var(--color-error-500);
+  }
+  
+  input[aria-invalid="true"] {
+    border-color: var(--color-error-500);
+  }
+  
+  /* ========================================
+     MEJORAS DE ACCESIBILIDAD
+     ======================================== */
+  
+  /* Reducir movimiento para usuarios con preferencias de accesibilidad */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+  
+  /* Alto contraste para Windows */
+  @media (prefers-contrast: high) {
+    * {
+      outline-color: currentColor;
+    }
+  }
+  
+  /* ========================================
+     UTILIDADES VISUALES
+     ======================================== */
+  
+  /* Ocultar visualmente pero mantener para lectores de pantalla */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+  
+  .sr-only:focus,
+  .sr-only:active {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
   }
 }
 

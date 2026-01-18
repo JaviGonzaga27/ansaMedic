@@ -17,7 +17,12 @@ const Testimonials = dynamic(() => import('../components/home/Testimonials'), {
 const Home = () => {
 
   return (
-    <Layout>
+    <Layout
+      title="Inicio - Insumos Odontológicos y Médicos"
+      description="Ansa Medic Dent - Distribuidor líder de insumos odontológicos, equipos dentales y servicio técnico especializado en Quito, Ecuador. Calidad garantizada."
+      keywords="insumos odontológicos Ecuador, equipos dentales Quito, instrumental odontológico, servicio técnico dental, materiales dentales, consultorio odontológico"
+      canonical="/"
+    >
       <Head>
         <title>{SEO_CONSTANTS.HOME_TITLE}</title>
         <meta name="description" content={SEO_CONSTANTS.HOME_DESCRIPTION} />

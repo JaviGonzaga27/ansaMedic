@@ -2,16 +2,17 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Phone, Mail } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import WhatsappNavbar from './WhatsappNavbar';
+import { CONTACT, WHATSAPP_URLS } from '@/utils/constants';
 
 const navLinks = [
   { href: '/', label: 'Inicio' },
-  { href: '/about', label: 'Acerca de' },
+  { href: '/about', label: 'Nosotros' },
   { href: '/products', label: 'Productos' },
   { href: '/service_technical', label: 'Servicio Técnico' },
-  { href: '/contact', label: 'Contactanos' },
+  { href: '/contact', label: 'Contacto' },
 ];
 
 interface NavLinkProps {
@@ -22,28 +23,34 @@ interface NavLinkProps {
   isMobile?: boolean;
 }
 
-const NavLink: React.FC<NavLinkProps> = ({ href, label, isActive, onClick, isMobile }) => (
-  <motion.div
-    whileHover={{ scale: 1.05 }}
-    whileTap={{ scale: 0.95 }}
-    className={`relative ${isMobile ? 'py-2' : ''}`}
-  >
-    <Link
-      href={href}
-      className={`text-sm sm:text-base font-semibold transition-all duration-300 ease-in-out
-        ${isActive
-          ? 'text-teal-600 border-b-2 border-teal-600'
-          : 'text-gray-700 hover:text-teal-600 focus:text-teal-600'
-        } 
-        ${isMobile ? 'block px-4 py-3' : 'px-3 py-2'}
-        focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 rounded-md`}
-      onClick={onClick}
-      aria-current={isActive ? 'page' : undefined}
-    >
-      {label}
-    </Link>
-  </motion.div>
-);
+const NavLink: React.FC<NavLinkProps> = ({ href, label, isActive, onClick, isMobile }) => {
+  return (
+    <div className={`relative ${isMobile ? 'py-0.5' : ''}`}>
+      <Link
+        href={href}
+        className={`font-semibold transition-all duration-200 ease-out
+          ${isActive
+            ? 'text-teal-600 bg-teal-50'
+            : 'text-gray-800 hover:text-teal-600 hover:bg-teal-50 focus:text-teal-600'
+          } 
+          ${isMobile ? 'block px-6 py-3.5 text-base' : 'px-3 py-2 relative group text-sm lg:text-base'}
+          focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-1 rounded-md`}
+        onClick={onClick}
+        aria-current={isActive ? 'page' : undefined}
+      >
+        {label}
+        {!isMobile && (
+          <span 
+            className={`absolute bottom-0 left-0 w-full h-0.5 bg-teal-600 transform origin-left transition-transform duration-200 ${
+              isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
+            }`}
+            aria-hidden="true"
+          />
+        )}
+      </Link>
+    </div>
+  );
+};
 
 const Header = () => {
   const router = useRouter();
@@ -66,14 +73,12 @@ const Header = () => {
     };
   }, []);
 
-  // Close mobile menu on route change
   useEffect(() => {
     const handleRouteChange = () => setIsMenuOpen(false);
     router.events?.on('routeChangeStart', handleRouteChange);
     return () => router.events?.off('routeChangeStart', handleRouteChange);
   }, [router]);
 
-  // Prevent body scroll when mobile menu is open
   useEffect(() => {
     if (isMenuOpen) {
       document.body.style.overflow = 'hidden';
@@ -85,7 +90,6 @@ const Header = () => {
     };
   }, [isMenuOpen]);
 
-  // Handle escape key to close mobile menu
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isMenuOpen) {
@@ -97,28 +101,58 @@ const Header = () => {
   }, [isMenuOpen]);
 
   return (
-    <motion.header
-      className={`fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-md z-50 transition-all duration-300 ${isScrolled ? 'shadow-xl py-2' : 'shadow-md py-4'
-        }`}
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+    <header
+      className={`fixed top-0 left-0 right-0 bg-white/98 backdrop-blur-md z-50 transition-all duration-300 shadow-md`}
       role="banner"
     >
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between">
+      {/* Top Bar - Contact Info */}
+      <div className="bg-teal-600 text-white py-2">
+        <div className="container mx-auto px-4">
+          <div className="flex justify-between items-center text-xs md:text-sm">
+            <div className="flex items-center gap-2 md:gap-6">
+              <a 
+                href={`tel:${CONTACT.PHONE.FORMATTED}`}
+                className="flex items-center gap-2 text-white hover:text-teal-100 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-teal-600 rounded px-2 py-1"
+                aria-label="Llamar al teléfono principal"
+              >
+                <Phone className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
+                <span className="font-medium">{CONTACT.PHONE.MAIN}</span>
+              </a>
+              <a 
+                href={`mailto:${CONTACT.EMAIL}`}
+                className="flex items-center gap-2 text-white hover:text-teal-100 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-teal-600 rounded px-2 py-1"
+                aria-label="Enviar email"
+              >
+                <Mail className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
+                <span className="font-medium hidden sm:inline">{CONTACT.EMAIL}</span>
+                <span className="font-medium sm:hidden">Email</span>
+              </a>
+            </div>
+            <div className="flex items-center gap-3 md:gap-4">
+              <div className="text-sm font-medium hidden md:block">
+                {CONTACT.HOURS.WEEKDAY} | {CONTACT.HOURS.SATURDAY}
+              </div>
+              <WhatsappNavbar />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Header */}
+      <div className="container mx-auto px-4 py-3">
+        <div className="flex items-center justify-between gap-8">
           <Link
             href="/"
-            className="flex items-center focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 rounded-lg"
-            aria-label="Ir a la página de inicio"
+            className="flex items-center focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 rounded-lg transition-transform hover:scale-105 active:scale-95 flex-shrink-0"
+            aria-label="Ir a la página de inicio de Ansa Medic Dent"
           >
             <Image
               src="/logo.png"
-              alt="Ansa Medic Dent Logo"
-              width={isScrolled ? 70 : 100}
-              height={isScrolled ? 70 : 100}
+              alt="Ansa Medic Dent - Insumos Odontológicos"
+              width={110}
+              height={110}
               className="transition-all duration-300"
-              sizes="(max-width: 640px) 50px, 60px"
+              sizes="110px"
               placeholder="blur"
               blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
               priority
@@ -126,7 +160,7 @@ const Header = () => {
           </Link>
 
           <nav
-            className="hidden md:flex md:items-center md:space-x-1 lg:space-x-2"
+            className="hidden lg:flex lg:items-center lg:space-x-2 xl:space-x-3 ml-auto"
             aria-label="Navegación principal"
           >
             {navLinks.map(({ href, label }) => (
@@ -139,19 +173,16 @@ const Header = () => {
             ))}
           </nav>
 
-          <div className="flex items-center space-x-4">
-            <WhatsappNavbar />
-            <motion.button
-              className="md:hidden text-teal-600 p-2 rounded-full hover:bg-teal-50 active:bg-teal-100 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
+          <div className="flex items-center">
+            <button
+              className="lg:hidden text-teal-600 p-2 rounded-lg hover:bg-teal-50 active:bg-teal-100 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
+              aria-label={isMenuOpen ? "Cerrar menú de navegación" : "Abrir menú de navegación"}
               aria-expanded={isMenuOpen}
               aria-controls="mobile-menu"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
             >
-              {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
-            </motion.button>
+              {isMenuOpen ? <X size={26} aria-hidden="true" /> : <Menu size={26} aria-hidden="true" />}
+            </button>
           </div>
         </div>
       </div>
@@ -165,8 +196,7 @@ const Header = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="fixed inset-0 bg-black/50 backdrop-blur-sm md:hidden"
-              style={{ top: isScrolled ? '80px' : '96px' }}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm lg:hidden z-40"
               onClick={() => setIsMenuOpen(false)}
               aria-hidden="true"
             />
@@ -174,15 +204,28 @@ const Header = () => {
             {/* Mobile Menu */}
             <motion.div
               id="mobile-menu"
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3, ease: 'easeInOut' }}
-              className="md:hidden bg-white shadow-2xl overflow-hidden"
+              initial={{ opacity: 0, x: '100%' }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: '100%' }}
+              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+              className="fixed right-0 top-0 bottom-0 w-[280px] bg-white shadow-2xl lg:hidden z-50 flex flex-col"
+              style={{ backgroundColor: '#ffffff' }}
               role="navigation"
               aria-label="Navegación móvil"
             >
-              <nav className="flex flex-col py-4">
+              {/* Mobile Menu Header with Close Button */}
+              <div className="bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between flex-shrink-0">
+                <h2 className="text-base font-bold text-teal-600">Menú</h2>
+                <button
+                  onClick={() => setIsMenuOpen(false)}
+                  className="p-2 rounded-lg hover:bg-gray-100 active:bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  aria-label="Cerrar menú"
+                >
+                  <X size={22} className="text-gray-700" aria-hidden="true" />
+                </button>
+              </div>
+
+              <nav className="flex flex-col flex-1 justify-center py-4 bg-white">
                 {navLinks.map(({ href, label }) => (
                   <NavLink
                     key={href}
@@ -193,12 +236,33 @@ const Header = () => {
                     isMobile={true}
                   />
                 ))}
+                
+                {/* Mobile Contact Info */}
+                <div className="mt-4 pt-4 px-6 border-t border-gray-200 bg-white">
+                  <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">
+                    Contáctanos
+                  </h3>
+                  <a 
+                    href="tel:+59322867212"
+                    className="flex items-center gap-3 py-2 text-gray-800 hover:text-teal-600 transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500 rounded"
+                  >
+                    <Phone className="w-4 h-4" aria-hidden="true" />
+                    <span className="text-sm font-medium">(02) 286-7212</span>
+                  </a>
+                  <a 
+                    href="mailto:ansamedicdent@gmail.com"
+                    className="flex items-center gap-3 py-2 text-gray-800 hover:text-teal-600 transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500 rounded"
+                  >
+                    <Mail className="w-4 h-4" aria-hidden="true" />
+                    <span className="text-sm font-medium">Email</span>
+                  </a>
+                </div>
               </nav>
             </motion.div>
           </>
         )}
       </AnimatePresence>
-    </motion.header>
+    </header>
   );
 };
 
