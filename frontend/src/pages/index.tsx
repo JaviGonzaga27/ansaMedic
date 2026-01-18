@@ -1,13 +1,18 @@
 import React from 'react';
 import Head from 'next/head';
+import dynamic from 'next/dynamic';
 import Layout from '../components/layout/Layout';
 import HeroSection from '../components/home/HeroSection';
 import FeaturedProducts from '../components/home/FeaturedProducts';
 import TechnicalService from '../components/home/TechnicalService';
-import Testimonials from '../components/home/Testiomonials';
 import CallToAction from '../components/home/CallToAction';
 import EmprendeSection from '../components/home/EmprendeSection';
 import { SEO_CONSTANTS } from '../utils/constants';
+
+const Testimonials = dynamic(() => import('../components/home/Testimonials'), {
+  ssr: false,
+  loading: () => <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50"><div className="animate-spin rounded-full h-32 w-32 border-b-2 border-indigo-600"></div></div>
+});
 
 const Home = () => {
 

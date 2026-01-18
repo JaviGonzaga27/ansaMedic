@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, memo } from 'react';
 import { FaWhatsapp, FaInfoCircle } from 'react-icons/fa';
 import ProductDetail from './ProductDetail';
 
@@ -21,13 +21,17 @@ interface ProductCardProps {
 export default function ProductCard({ product }: ProductCardProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleWhatsAppClick = () => {
+  const handleWhatsAppClick = useCallback(() => {
     window.open('https://wa.me/0999120734', '_blank');
-  };
+  }, []);
 
-  const handleLearnMoreClick = () => {
+  const handleLearnMoreClick = useCallback(() => {
     setIsModalOpen(true);
-  };
+  }, []);
+
+  const handleCloseModal = useCallback(() => {
+    setIsModalOpen(false);
+  }, []);
 
   return (
     <>
@@ -65,8 +69,12 @@ export default function ProductCard({ product }: ProductCardProps) {
       <ProductDetail
         product={product}
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={handleCloseModal}
       />
     </>
   );
 }
+
+const MemoizedProductCard = memo(ProductCard);
+MemoizedProductCard.displayName = 'ProductCard';
+export default MemoizedProductCard;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, memo } from 'react';
 import ProductCard from './ProductCard';
 import ProductsCategoriesData from '../../../public/json/products/productsCategories.json';
 
@@ -41,35 +41,42 @@ function getProductById(productId: string): Product | undefined {
   return getAllProducts().find(product => product.id === productId);
 }
 
+//memoize utilities para evitar recalcular en cada render
+const allCategories = getAllCategories();
+const allProducts = getAllProducts();
+
 export default function ProductList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const productPerPage = 6;
 
-  useEffect(() => {
+  const filteredProducts = useMemo(() => {
     if (selectedCategory === 'all') {
-      setFilteredProducts(getAllProducts());
-    } else {
-      const categoryProducts = getProductsByCategory(selectedCategory);
-      setFilteredProducts(categoryProducts || []);
+      return allProducts;
     }
+    return getProductsByCategory(selectedCategory) || [];
+  }, [selectedCategory]);
+
+  useEffect(() => {
     setCurrentPage(1);
   }, [selectedCategory]);
 
-  const indexOfLastProduct = currentPage * productPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productPerPage;
-  const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+  const paginatedData = useMemo(() => {
+    const indexOfLastProduct = currentPage * productPerPage;
+    const indexOfFirstProduct = indexOfLastProduct - productPerPage;
+    const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+    const totalPages = Math.ceil(filteredProducts.length / productPerPage);
+    
+    return { currentProducts, totalPages };
+  }, [filteredProducts, currentPage, productPerPage]);
 
-  const totalPages = Math.ceil(filteredProducts.length / productPerPage);
-
-  const handlePageChange = (pageNumber: number) => {
+  const handlePageChange = useCallback((pageNumber: number) => {
     setCurrentPage(pageNumber);
-  }
+  }, []);
 
-  const handleCategoryChange = (categoryId: string) => {
+  const handleCategoryChange = useCallback((categoryId: string) => {
     setSelectedCategory(categoryId);
-  }
+  }, []);
 
   return (
     <div className="container mx-auto px-10">
@@ -88,7 +95,7 @@ export default function ProductList() {
             >
               Todas las categorías
             </div>
-            {getAllCategories().map(category => (
+            {allCategories.map(category => (
               <div 
                 key={category.id} 
                 className={`text-sm cursor-pointer p-2 rounded transition-colors duration-200 ${
@@ -108,7 +115,7 @@ export default function ProductList() {
         <div className="w-full md:w-3/4">
           {/* Lista de productos */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            {currentProducts.map(product => (
+            {paginatedData.currentProducts.map(product => (
               <ProductCard
                 key={product.id}
                 product={product}
@@ -117,7 +124,7 @@ export default function ProductList() {
           </div>
           
           {/* Controles de paginación */}
-          {totalPages > 1 && (
+          {paginatedData.totalPages > 1 && (
             <div className="flex justify-center items-center space-x-2 pb-8">
               <button
                 onClick={() => handlePageChange(currentPage - 1)}
@@ -133,7 +140,7 @@ export default function ProductList() {
               
               {/* Números de página */}
               <div className="flex space-x-2">
-                {[...Array(totalPages)].map((_, index) => (
+                {[...Array(paginatedData.totalPages)].map((_, index) => (
                   <button
                     key={index + 1}
                     onClick={() => handlePageChange(index + 1)}
@@ -150,9 +157,9 @@ export default function ProductList() {
               
               <button
                 onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === totalPages}
+                disabled={currentPage === paginatedData.totalPages}
                 className={`px-4 py-2 rounded ${
-                  currentPage === totalPages 
+                  currentPage === paginatedData.totalPages 
                   ? 'bg-gray-300 cursor-not-allowed' 
                   : 'bg-teal-600 text-white hover:bg-teal-700'
                 }`}
@@ -166,3 +173,7 @@ export default function ProductList() {
     </div>
   );
 }
+
+const MemoizedProductList = memo(ProductList);
+MemoizedProductList.displayName = 'ProductList';
+export default MemoizedProductList;

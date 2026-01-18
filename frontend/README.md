@@ -1,36 +1,90 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Ansa Medic Dent - Frontend
 
-## Getting Started
+Un sitio web moderno y optimizado para Ansa Medic Dent, especializado en insumos odontológicos y servicio técnico dental.
 
-First, run the development server:
+## Características principales
+
+- ⚡ **Next.js 14** con TypeScript para máxima performance
+- 🎨 **Tailwind CSS** para diseño responsive y moderno
+- 🚀 **Framer Motion** para animaciones fluidas
+- 📱 **Diseño responsive** optimizado para todos los dispositivos
+- 🔍 **SEO optimizado** con meta tags dinámicos
+- 🎯 **Componentes optimizados** con React.memo y lazy loading
+
+## Optimizaciones aplicadas
+
+### Performance
+- **React.memo** en componentes clave para evitar re-renders innecesarios
+- **useMemo** y **useCallback** para memoización de cálculos pesados
+- **Dynamic imports** para carga diferida de componentes (Testimonials)
+- **Next/Image** moderno con `fill` y `sizes` optimizados
+- **Lazy loading** de imágenes para mejor Core Web Vitals
+
+### Estructura de componentes
+- **Componentes reutilizables** en `/common` (Button, Modal)
+- **TypeScript interfaces** bien definidas para type safety
+- **Separación de responsabilidades** entre UI y lógica de negocio
+- **AuthContext** preparado para futuras funcionalidades de autenticación
+
+### UX/UI
+- **Loading states** en componentes dinámicos
+- **Animaciones performantes** con Framer Motion
+- **Accesibilidad** mejorada con aria-labels y keyboard navigation
+- **WhatsApp integration** con detección de dispositivo móvil
+
+## Tecnologías utilizadas
+
+- [Next.js](https://nextjs.org) - React Framework
+- [TypeScript](https://typescriptlang.org) - Type Safety
+- [Tailwind CSS](https://tailwindcss.com) - Styling
+- [Framer Motion](https://framer.com/motion) - Animations
+- [React Icons](https://react-icons.github.io/react-icons/) - Icon Library
+- [Lucide React](https://lucide.dev) - Modern Icons
+
+## Instalación y desarrollo
 
 ```bash
+# Instalar dependencias
+npm install
+
+# Ejecutar en desarrollo
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Build para producción
+npm run build
+
+# Ejecutar en producción
+npm start
+
+# Linting
+npm run lint
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Estructura del proyecto
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+src/
+├── components/
+│   ├── common/          # Componentes reutilizables
+│   ├── home/            # Componentes de la página principal
+│   ├── layout/          # Layout y navegación
+│   ├── product/         # Componentes de productos
+│   └── admin/           # Panel de administración
+├── context/             # React Contexts
+├── pages/              # Páginas de Next.js
+├── services/           # Servicios y APIs
+├── styles/             # Estilos globales
+└── utils/              # Utilidades y constantes
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Características de optimización implementadas
 
-## Learn More
+✅ **Corregido error de naming**: `Testiomonials.tsx` → `Testimonials.tsx`  
+✅ **Optimizado Next/Image**: Uso de API moderna con `fill` y `sizes`  
+✅ **Memoización inteligente**: React.memo en componentes pesados  
+✅ **Carga diferida**: Dynamic import para Testimonials  
+✅ **AuthContext funcional**: Preparado para autenticación  
+✅ **Componentes comunes**: Button y Modal reutilizables  
+✅ **TypeScript strict**: Interfaces bien definidas  
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
