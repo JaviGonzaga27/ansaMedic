@@ -38,10 +38,10 @@ export const SEO_CONSTANTS = {
 };
 
 export const CAROUSEL_IMAGES = [
+    '/Prom1.png',
   '/images1.jpg',
   '/images2.jpg',
-  '/images3.jpg',
-  '/Prom1.png'
+  '/images3.jpg'
 ];
 
 export const CAROUSEL_INTERVAL = 5000; // 5 seconds
