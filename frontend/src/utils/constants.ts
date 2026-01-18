@@ -38,10 +38,10 @@ export const SEO_CONSTANTS = {
 };
 
 export const CAROUSEL_IMAGES = [
-  'https://placehold.co/1920x800/0d9488/ffffff?text=Insumos+Odontol%C3%B3gicos',
-  'https://placehold.co/1920x800/14b8a6/ffffff?text=Equipamiento+Dental',
-  'https://placehold.co/1920x800/0d9488/ffffff?text=Servicio+T%C3%A9cnico',
-  'https://placehold.co/1920x800/14b8a6/ffffff?text=Promoci%C3%B3n+Especial'
+  '/images1.jpg',
+  '/images2.jpg',
+  '/images3.jpg',
+  '/Prom1.png'
 ];
 
 export const CAROUSEL_INTERVAL = 5000; // 5 seconds
