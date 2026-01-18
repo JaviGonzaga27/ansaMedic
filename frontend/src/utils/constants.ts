@@ -33,22 +33,22 @@ export const SEO_CONSTANTS = {
   HOME_KEYWORDS: "insumos dentales, equipos odontológicos, servicio técnico dental, suministros odontológicos",
   HOME_OG_TITLE: "Ansa Medic-Dent - Insumos Odontológicos de Calidad",
   HOME_OG_DESCRIPTION: "Descubre nuestra amplia gama de insumos y equipos dentales de alta calidad. Servicio técnico especializado y soporte continuo para tu práctica odontológica.",
-  HOME_OG_IMAGE: "/og-image.jpg",
+  HOME_OG_IMAGE: "https://placehold.co/1200x630/0d9488/ffffff?text=Ansa+Medic-Dent",
 };
 
 export const CAROUSEL_IMAGES = [
-  '/images1.jpg',
-  '/images2.jpg',
-  '/images3.jpg',
-  '/Prom1.png'
+  'https://placehold.co/1920x800/0d9488/ffffff?text=Insumos+Odontol%C3%B3gicos',
+  'https://placehold.co/1920x800/14b8a6/ffffff?text=Equipamiento+Dental',
+  'https://placehold.co/1920x800/0d9488/ffffff?text=Servicio+T%C3%A9cnico',
+  'https://placehold.co/1920x800/14b8a6/ffffff?text=Promoci%C3%B3n+Especial'
 ];
 
 export const CAROUSEL_INTERVAL = 5000; // 5 seconds
 
 export const FEATURED_PRODUCTS = [
-  { name: 'Guantes de Nitrilo', image: '/images/producto/Product1.jpg', slug: 'guantes-de-nitrilo' },
-  { name: 'Resina Compuesta', image: '/images/producto/Product2.jpg', slug: 'resina-compuesta' },
-  { name: 'Instrumental Quirúrgico', image: '/images/producto/Product3.jpeg', slug: 'instrumental-quirurgico' }
+  { name: 'Guantes de Nitrilo', image: 'https://placehold.co/400x400/0d9488/ffffff?text=Guantes+de+Nitrilo', slug: 'guantes-de-nitrilo' },
+  { name: 'Resina Compuesta', image: 'https://placehold.co/400x400/0d9488/ffffff?text=Resina+Compuesta', slug: 'resina-compuesta' },
+  { name: 'Instrumental Quirúrgico', image: 'https://placehold.co/400x400/0d9488/ffffff?text=Instrumental', slug: 'instrumental-quirurgico' }
 ];
 
 export const COLORS = {

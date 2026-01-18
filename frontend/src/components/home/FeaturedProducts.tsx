@@ -8,7 +8,7 @@ const FeaturedProducts = () => {
   const products = [
     {
       name: "Sillón Dental Ergonómico",
-      image: "/images/sillon-dental.jpg",
+      image: "https://placehold.co/400x400/0d9488/ffffff?text=Sill%C3%B3n+Dental",
       slug: "sillon-dental-ergonomico",
       description: "Máximo confort para ti y tus pacientes con tecnología de punta"
     },

@@ -72,7 +72,7 @@ const About: NextPage = () => {
               <div className="flex flex-col md:flex-row">
                 <div className="md:w-1/2 relative h-64 md:h-auto min-h-[300px]">
                   <Image 
-                    src="/images/dental-history.jpg" 
+                    src="https://placehold.co/800x600/0d9488/ffffff?text=Nuestra+Historia" 
                     alt="Equipo profesional de Ansa Medic Dent" 
                     fill
                     style={{ objectFit: 'cover' }}
@@ -170,7 +170,7 @@ const About: NextPage = () => {
             <div className="flex flex-col md:flex-row-reverse">
               <div className="md:w-1/2 relative h-64 md:h-auto min-h-[300px]">
                 <Image 
-                  src="/images/technical-service.jpg" 
+                  src="https://placehold.co/600x400/0d9488/ffffff?text=Servicio+T%C3%A9cnico" 
                   alt="Servicio técnico especializado" 
                   fill
                   style={{ objectFit: 'cover' }}
