@@ -1,9 +1,23 @@
 import axios from 'axios';
-import { Product, CreateProductInput, UpdateProductInput } from '../types/product';
-import { Order, CreateOrderInput } from '../types/order';
-import { User, CreateUserInput, LoginCredentials } from '../types/user';
-import { ApiResponse, PaginatedResponse } from '../types/api';
-import { AuthToken } from '../types/auth';
+// TODO: Crear tipos cuando se implemente el backend
+// import { Product, CreateProductInput, UpdateProductInput } from '../types/product';
+// import { Order, CreateOrderInput } from '../types/order';
+// import { User, CreateUserInput, LoginCredentials } from '../types/user';
+// import { ApiResponse, PaginatedResponse } from '../types/api';
+// import { AuthToken } from '../types/auth';
+
+// Tipos temporales
+type Product = any;
+type CreateProductInput = any;
+type UpdateProductInput = any;
+type Order = any;
+type CreateOrderInput = any;
+type User = any;
+type CreateUserInput = any;
+type LoginCredentials = any;
+type ApiResponse<T> = { data: T };
+type PaginatedResponse<T> = { data: T[] };
+type AuthToken = any;
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 

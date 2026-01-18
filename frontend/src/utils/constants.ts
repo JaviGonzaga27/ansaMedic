@@ -34,6 +34,7 @@ export const SEO_CONSTANTS = {
   HOME_OG_TITLE: "Ansa Medic-Dent - Insumos Odontológicos de Calidad",
   HOME_OG_DESCRIPTION: "Descubre nuestra amplia gama de insumos y equipos dentales de alta calidad. Servicio técnico especializado y soporte continuo para tu práctica odontológica.",
   HOME_OG_IMAGE: "https://placehold.co/1200x630/0d9488/ffffff?text=Ansa+Medic-Dent",
+  HOME_OG_URL: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.ansamedicdent.com',
 };
 
 export const CAROUSEL_IMAGES = [

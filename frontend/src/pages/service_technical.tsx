@@ -46,7 +46,6 @@ const ServiceTechnical: NextPage = () => {
       keywords="servicio técnico dental Ecuador, mantenimiento equipos odontológicos, reparación equipos dentales Quito, técnico equipos odontológicos, calibración equipos dentales"
       canonical="/service_technical"
     >
-    >
       <Head>
         <title>Servicio Técnico Especializado - Ansa Medic Dent</title>
         <meta name="description" content="Mantenimiento, reparación y calibración de equipos dentales. Tu práctica en buenas manos con nuestro servicio técnico especializado disponible 24/7" />
