@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { FaWhatsapp } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X } from 'lucide-react';
+import { X, MapPin, ChevronRight } from 'lucide-react';
 import { CONTACT } from '@/utils/constants';
 
 const WhatsappNavbar = () => {
@@ -17,19 +17,10 @@ const WhatsappNavbar = () => {
     const phoneNumber = location === 'Quito' ? CONTACT.WHATSAPP.QUITO : CONTACT.WHATSAPP.VALLE;
     const message = encodeURIComponent(`Hola, estoy interesado en realizar una cotización. Sector: ${location.toUpperCase()}`);
 
-    // Comprobar si el dispositivo es móvil
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
-    let whatsappUrl;
-    if (isMobile) {
-      // Para dispositivos móviles, usar la app de WhatsApp
-      whatsappUrl = `whatsapp://send?phone=${phoneNumber}&text=${message}`;
-    } else {
-      // Para escritorio, usar WhatsApp Web
-      whatsappUrl = `https://web.whatsapp.com/send?phone=${phoneNumber}&text=${message}`;
-    }
-
-    window.open(whatsappUrl, '_blank');
+    // Usar el protocolo whatsapp:// que funciona para móvil, desktop y web
+    const whatsappUrl = `whatsapp://send?phone=${phoneNumber}&text=${message}`;
+    
+    window.location.href = whatsappUrl;
     setIsModalOpen(false);
   };
 
@@ -85,43 +76,59 @@ const WhatsappNavbar = () => {
               <X size={24} />
             </button>
 
-            <div className="text-center mb-6">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-[#25D366] to-[#128C7E] rounded-full mb-4">
-                <FaWhatsapp className="w-8 h-8 text-white" />
+            <div className="text-center mb-8">
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-teal-500 to-teal-600 rounded-full mb-4 shadow-lg">
+                <FaWhatsapp className="w-10 h-10 text-white" />
               </div>
-              <h2 id="whatsapp-modal-title" className="text-2xl sm:text-3xl font-bold text-gray-800">
+              <h2 id="whatsapp-modal-title" className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
                 Selecciona tu ubicación
               </h2>
-              <p className="text-gray-600 mt-2 text-sm sm:text-base">
+              <p className="text-sm text-gray-600">
                 Elige la sucursal más cercana para contactarte
               </p>
             </div>
 
-            <div className="flex flex-col space-y-3 sm:space-y-4">
+            <div className="space-y-4">
               <motion.button
-                whileHover={{ scale: 1.03, y: -2 }}
-                whileTap={{ scale: 0.97 }}
+                whileHover={{ scale: 1.02, y: -2 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => openWhatsapp('Quito')}
-                className="bg-gradient-to-r from-[#25D366] to-[#128C7E] hover:from-[#128C7E] hover:to-[#25D366] text-white font-bold py-3 sm:py-4 px-6 rounded-xl transition-all duration-300 flex items-center justify-center shadow-md hover:shadow-xl text-base sm:text-lg focus:outline-none focus:ring-2 focus:ring-[#25D366] focus:ring-offset-2"
+                className="group w-full bg-white border-2 border-teal-200 hover:border-teal-500 hover:bg-teal-50 text-gray-800 py-5 px-6 rounded-2xl transition-all duration-300 flex items-center justify-between shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
               >
-                <FaWhatsapp className="w-5 h-5 sm:w-6 sm:h-6 mr-3" />
-                <div className="text-left">
-                  <div className="font-bold">Quito</div>
-                  <div className="text-xs opacity-90">Carcelén</div>
+                <div className="flex items-center gap-4">
+                  <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center shadow-md">
+                    <FaWhatsapp className="w-6 h-6 text-white" />
+                  </div>
+                  <div className="text-left">
+                    <div className="font-bold text-lg text-gray-900 group-hover:text-teal-700 transition-colors">Quito</div>
+                    <div className="flex items-center gap-1.5 text-sm text-gray-600">
+                      <MapPin className="w-3.5 h-3.5" />
+                      <span>Carcelén</span>
+                    </div>
+                  </div>
                 </div>
+                <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-teal-600 group-hover:translate-x-1 transition-all" />
               </motion.button>
 
               <motion.button
-                whileHover={{ scale: 1.03, y: -2 }}
-                whileTap={{ scale: 0.97 }}
+                whileHover={{ scale: 1.02, y: -2 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => openWhatsapp('Valle de los Chillos')}
-                className="bg-gradient-to-r from-[#25D366] to-[#128C7E] hover:from-[#128C7E] hover:to-[#25D366] text-white font-bold py-3 sm:py-4 px-6 rounded-xl transition-all duration-300 flex items-center justify-center shadow-md hover:shadow-xl text-base sm:text-lg focus:outline-none focus:ring-2 focus:ring-[#25D366] focus:ring-offset-2"
+                className="group w-full bg-white border-2 border-teal-200 hover:border-teal-500 hover:bg-teal-50 text-gray-800 py-5 px-6 rounded-2xl transition-all duration-300 flex items-center justify-between shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
               >
-                <FaWhatsapp className="w-5 h-5 sm:w-6 sm:h-6 mr-3" />
-                <div className="text-left">
-                  <div className="font-bold">Valle de los Chillos</div>
-                  <div className="text-xs opacity-90">Plaza París</div>
+                <div className="flex items-center gap-4">
+                  <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center shadow-md">
+                    <FaWhatsapp className="w-6 h-6 text-white" />
+                  </div>
+                  <div className="text-left">
+                    <div className="font-bold text-lg text-gray-900 group-hover:text-teal-700 transition-colors">Valle de los Chillos</div>
+                    <div className="flex items-center gap-1.5 text-sm text-gray-600">
+                      <MapPin className="w-3.5 h-3.5" />
+                      <span>Plaza París</span>
+                    </div>
+                  </div>
                 </div>
+                <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-teal-600 group-hover:translate-x-1 transition-all" />
               </motion.button>
             </div>
           </motion.div>

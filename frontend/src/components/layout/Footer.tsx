@@ -102,11 +102,11 @@ const Footer: React.FC = () => {
             <ul className="space-y-3" role="list">
               <li>
                 <a 
-                  href={`mailto:${CONTACT.EMAIL}`}
+                  href={`mailto:${CONTACT.EMAIL.MAIN}`}
                   className="flex items-start gap-3 text-sm text-gray-300 hover:text-teal-400 transition-colors group focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-2 focus:ring-offset-gray-900 rounded p-1"
                 >
                   <Mail className="w-5 h-5 mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform" aria-hidden="true" />
-                  <span>{CONTACT.EMAIL}</span>
+                  <span>{CONTACT.EMAIL.MAIN}</span>
                 </a>
               </li>
               <li>

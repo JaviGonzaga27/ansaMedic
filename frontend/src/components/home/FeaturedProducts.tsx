@@ -1,30 +1,50 @@
-import React, { memo } from 'react';
+import React, { memo, useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { FaWhatsapp, FaInfoCircle } from 'react-icons/fa';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FaWhatsapp, FaChevronLeft, FaChevronRight, FaShoppingCart, FaStar } from 'react-icons/fa';
+
+interface Product {
+  id: string;
+  imageUrl: string;
+  name: string;
+  description: string;
+  featured?: boolean;
+}
 
 const FeaturedProducts = () => {
-  const products = [
-    {
-      name: "Sillón Dental Ergonómico",
-      image: "https://placehold.co/400x400/0d9488/ffffff?text=Sill%C3%B3n+Dental",
-      slug: "sillon-dental-ergonomico",
-      description: "Máximo confort para ti y tus pacientes con tecnología de punta"
-    },
-    {
-      name: "Lámpara LED para Odontología",
-      image: "/images/lampara-led.jpg",
-      slug: "lampara-led-odontologia",
-      description: "Iluminación precisa y ajustable para procedimientos detallados"
-    },
-    {
-      name: "Kit de Instrumentos Dentales",
-      image: "/images/kit-instrumentos.jpg",
-      slug: "kit-instrumentos-dentales",
-      description: "Herramientas esenciales de alta calidad para tu consultorio"
-    }
-  ];
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [autoplay, setAutoplay] = useState(true);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('/json/products/products.json');
+        const data = await response.json();
+        // Filtrar solo productos destacados
+        const featuredProducts = data.products.filter((p: Product) => p.featured === true);
+        setProducts(featuredProducts);
+      } catch (error) {
+        console.error('Error loading products:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  useEffect(() => {
+    if (!autoplay || products.length === 0) return;
+    
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % products.length);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [autoplay, products.length]);
 
   const handleWhatsAppClick = (productName: string) => {
     const message = encodeURIComponent(`Hola, estoy interesado en obtener más información sobre: ${productName}`);
@@ -38,110 +58,196 @@ const FeaturedProducts = () => {
     window.open(whatsappUrl, '_blank');
   };
 
+  const nextSlide = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % products.length);
+    setAutoplay(false);
+  };
+
+  const prevSlide = () => {
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + products.length) % products.length);
+    setAutoplay(false);
+  };
+
+  const goToSlide = (index: number) => {
+    setCurrentIndex(index);
+    setAutoplay(false);
+  };
+
+  if (loading) {
+    return (
+      <section className="bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 py-16 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto text-center">
+          <p className="text-gray-600">Cargando productos destacados...</p>
+        </div>
+      </section>
+    );
+  }
+
+  if (products.length === 0) {
+    return null;
+  }
+
   return (
-    <section className="bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 py-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <section className="bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 py-12 md:py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       {/* Animated decorative background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-10 right-10 w-96 h-96 bg-gradient-to-br from-purple-300 to-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
         <div className="absolute bottom-10 left-10 w-96 h-96 bg-gradient-to-br from-orange-300 to-yellow-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-pink-300 to-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
       </div>
 
       <div className="max-w-7xl mx-auto relative z-10 w-full">
         {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12"
-        >
+        <div className="text-center mb-8 md:mb-12">
           <motion.div
-            initial={{ scale: 0.9 }}
-            whileInView={{ scale: 1 }}
+            initial={{ opacity: 0, y: -20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="inline-block"
+            transition={{ duration: 0.6 }}
           >
+            <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full mb-4 shadow-md">
+              <FaStar className="text-yellow-500 text-sm" />
+              <span className="text-sm font-semibold text-gray-700">Lo Más Destacado</span>
+            </div>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 bg-gradient-to-r from-purple-600 via-pink-600 to-orange-600 bg-clip-text text-transparent">
-              Productos Destacados
+              Novedades en Insumos Dentales
             </h2>
+            <p className="text-base md:text-lg text-gray-700 max-w-2xl mx-auto">
+              Los productos más innovadores y solicitados por profesionales
+            </p>
           </motion.div>
-          <p className="text-base md:text-lg text-gray-700 max-w-2xl mx-auto">
-            Descubre nuestra selección de equipamiento dental de primera calidad
-          </p>
-        </motion.div>
+        </div>
 
-        {/* Products Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {products.map((product, index) => (
-            <motion.div
-              key={product.slug}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              whileHover={{ y: -10, scale: 1.02 }}
-              className="group bg-white/90 backdrop-blur-sm rounded-3xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-500"
-            >
-              {/* Product Image */}
-              <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
-                <Image
-                  src={product.image}
-                  alt={product.name}
-                  fill
-                  className="transition-transform duration-700 group-hover:scale-110 object-contain p-4"
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  loading="lazy"
-                  priority={false}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        {/* Products Carousel */}
+        <div className="relative">
+          {/* Navigation Buttons */}
+          <button
+            onClick={prevSlide}
+            style={{ width: '28px', height: '28px', minWidth: '28px', minHeight: '28px' }}
+            className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-20 bg-white/90 hover:bg-white rounded-full shadow-sm hover:shadow-md transition-all duration-300 text-teal-600 hover:text-teal-700 flex items-center justify-center"
+            aria-label="Producto anterior"
+          >
+            <FaChevronLeft style={{ fontSize: '10px' }} />
+          </button>
+          
+          <button
+            onClick={nextSlide}
+            style={{ width: '28px', height: '28px', minWidth: '28px', minHeight: '28px' }}
+            className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-20 bg-white/90 hover:bg-white rounded-full shadow-sm hover:shadow-md transition-all duration-300 text-teal-600 hover:text-teal-700 flex items-center justify-center"
+            aria-label="Producto siguiente"
+          >
+            <FaChevronRight style={{ fontSize: '10px' }} />
+          </button>
 
-                {/* Hover Overlay with Details Button */}
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                  <Link
-                    href={`/productos/${product.slug}`}
-                    className="bg-white/95 backdrop-blur-sm text-purple-600 font-semibold py-2.5 px-5 rounded-full shadow-lg hover:bg-white transition-all duration-300 flex items-center space-x-2 transform hover:scale-110 text-sm"
-                  >
-                    <FaInfoCircle />
-                    <span>Ver Detalles</span>
-                  </Link>
+          {/* Carousel Container */}
+          <div className="overflow-hidden rounded-3xl max-w-5xl mx-auto">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentIndex}
+                initial={{ opacity: 0, x: 100 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -100 }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+                className="bg-white rounded-3xl shadow-2xl overflow-hidden"
+              >
+                <div className="grid md:grid-cols-5">
+                  {/* Product Image - Larger on desktop */}
+                  <div className="md:col-span-2 relative aspect-square md:aspect-auto overflow-hidden bg-gradient-to-br from-teal-50 to-teal-100">
+                    <Image
+                      src={products[currentIndex].imageUrl}
+                      alt={products[currentIndex].name}
+                      fill
+                      className="object-cover p-6 md:p-10 hover:scale-105 transition-transform duration-500"
+                      sizes="(max-width: 768px) 100vw, 40vw"
+                      priority
+                    />
+                    {/* Badge */}
+                    <div className="absolute top-4 left-4 md:top-6 md:left-6">
+                      <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-full text-xs md:text-sm font-bold shadow-lg flex items-center gap-2">
+                        <FaStar className="text-yellow-300" />
+                        <span>Destacado</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Product Info - More space on desktop */}
+                  <div className="md:col-span-3 p-6 md:p-10 lg:p-12 flex flex-col justify-center bg-gradient-to-br from-white to-purple-50/30">
+                    {/* Product Number */}
+                    <div className="text-purple-300 font-bold text-sm mb-3">
+                      {String(currentIndex + 1).padStart(2, '0')} / {String(products.length).padStart(2, '0')}
+                    </div>
+
+                    <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 md:mb-6 text-gray-900 leading-tight">
+                      {products[currentIndex].name}
+                    </h3>
+                    
+                    <p className="text-gray-600 mb-6 md:mb-8 leading-relaxed text-base md:text-lg">
+                      {products[currentIndex].description}
+                    </p>
+
+                    {/* Features/Benefits */}
+                    <div className="grid grid-cols-2 gap-3 mb-6 md:mb-8">
+                      <div className="flex items-center gap-2 text-sm text-gray-700">
+                        <div className="w-2 h-2 bg-teal-500 rounded-full"></div>
+                        <span>Alta Calidad</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm text-gray-700">
+                        <div className="w-2 h-2 bg-teal-500 rounded-full"></div>
+                        <span>Garantía Incluida</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm text-gray-700">
+                        <div className="w-2 h-2 bg-teal-500 rounded-full"></div>
+                        <span>Envío Rápido</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm text-gray-700">
+                        <div className="w-2 h-2 bg-teal-500 rounded-full"></div>
+                        <span>Asesoría Gratis</span>
+                      </div>
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="flex flex-col sm:flex-row gap-3">
+                      <button
+                        onClick={() => handleWhatsAppClick(products[currentIndex].name)}
+                        className="flex-1 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95"
+                      >
+                        <FaWhatsapp className="text-2xl" />
+                        <span>Consultar por WhatsApp</span>
+                      </button>
+                      <Link
+                        href="/products"
+                        className="sm:w-auto bg-gradient-to-r from-purple-100 to-pink-100 hover:from-purple-200 hover:to-pink-200 text-purple-700 font-semibold py-4 px-6 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 border-2 border-purple-200 hover:border-purple-300"
+                      >
+                        <FaShoppingCart />
+                        <span>Ver Catálogo</span>
+                      </Link>
+                    </div>
+                  </div>
                 </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
 
-                {/* Gradient Badge */}
-                <div className="absolute top-3 right-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-lg">
-                  Destacado
-                </div>
-              </div>
-
-              {/* Product Info */}
-              <div className="p-5">
-                <h3 className="text-lg font-bold mb-2 text-gray-800 group-hover:text-purple-600 transition-colors duration-300">
-                  {product.name}
-                </h3>
-                <p className="text-gray-600 mb-4 leading-relaxed line-clamp-2 text-sm">
-                  {product.description}
-                </p>
-
-                {/* Action Buttons */}
-                <div className="flex gap-2">
-                  <Link
-                    href={`/productos/${product.slug}`}
-                    className="flex-1 bg-gradient-to-r from-gray-100 to-gray-200 hover:from-gray-200 hover:to-gray-300 text-gray-700 font-semibold py-2.5 px-3 rounded-xl transition-all duration-300 text-center text-xs"
-                  >
-                    Más Info
-                  </Link>
-                  <button
-                    onClick={() => handleWhatsAppClick(product.name)}
-                    className="flex-1 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-2.5 px-3 rounded-xl transition-all duration-300 flex items-center justify-center space-x-1.5 shadow-md hover:shadow-lg text-xs transform hover:scale-105"
-                  >
-                    <FaWhatsapp className="text-base" />
-                    <span>Consultar</span>
-                  </button>
-                </div>
-              </div>
-            </motion.div>
-          ))}
+          {/* Carousel Indicators - Enhanced */}
+          <div className="flex justify-center gap-1.5 mt-4">
+            {products.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => goToSlide(index)}
+                style={{
+                  width: index === currentIndex ? '10px' : '8px',
+                  height: index === currentIndex ? '10px' : '8px',
+                  minWidth: index === currentIndex ? '10px' : '8px',
+                  minHeight: index === currentIndex ? '10px' : '8px',
+                }}
+                className={`rounded-full transition-all duration-300 flex-shrink-0 ${
+                  index === currentIndex 
+                    ? 'bg-gradient-to-r from-purple-500 to-pink-500' 
+                    : 'bg-gray-300 hover:bg-gray-400'
+                }`}
+                aria-label={`Ir al producto ${index + 1}`}
+              />
+            ))}
+          </div>
         </div>
 
         {/* View All Products CTA */}
@@ -149,18 +255,42 @@ const FeaturedProducts = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="text-center mt-16"
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="text-center mt-12 md:mt-16"
         >
           <Link
             href="/products"
-            className="inline-flex items-center space-x-2 bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 hover:from-purple-600 hover:via-pink-600 hover:to-orange-600 text-white font-bold py-4 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+            className="inline-flex items-center space-x-3 bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 hover:from-purple-600 hover:via-pink-600 hover:to-orange-600 text-white font-bold py-4 px-10 rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 active:scale-95"
           >
-            <span>Ver Todos los Productos</span>
+            <FaShoppingCart className="text-xl" />
+            <span className="text-lg">Ver Todos los Productos</span>
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
           </Link>
+          
+          {/* Trust Badges */}
+          <div className="flex flex-wrap justify-center gap-4 md:gap-8 mt-8 text-sm text-gray-600">
+            <div className="flex items-center gap-2">
+              <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
+              </svg>
+              <span className="font-semibold">Productos Certificados</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <svg className="w-5 h-5 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"/>
+                <path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1v-5a1 1 0 00-.293-.707l-2-2A1 1 0 0015 7h-1z"/>
+              </svg>
+              <span className="font-semibold">Envío a Todo Ecuador</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <svg className="w-5 h-5 text-purple-500" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd"/>
+              </svg>
+              <span className="font-semibold">Asesoría Profesional</span>
+            </div>
+          </div>
         </motion.div>
       </div>
     </section>

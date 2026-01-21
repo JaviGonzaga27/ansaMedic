@@ -49,14 +49,22 @@ function ProductList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [showCategories, setShowCategories] = useState(false);
-  const productPerPage = 6;
+  const [searchTerm, setSearchTerm] = useState('');
+  const productPerPage = 12;
 
   const filteredProducts = useMemo(() => {
-    if (selectedCategory === 'all') {
-      return allProducts;
+    let products = selectedCategory === 'all' ? allProducts : (getProductsByCategory(selectedCategory) || []);
+    
+    if (searchTerm.trim()) {
+      const search = searchTerm.toLowerCase();
+      products = products.filter(product => 
+        product.name.toLowerCase().includes(search) || 
+        product.description.toLowerCase().includes(search)
+      );
     }
-    return getProductsByCategory(selectedCategory) || [];
-  }, [selectedCategory]);
+    
+    return products;
+  }, [selectedCategory, searchTerm]);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -80,19 +88,45 @@ function ProductList() {
   }, []);
 
   return (
-    <div className="container mx-auto px-4 md:px-10">
-      <div className="flex flex-col md:flex-row gap-6 md:gap-8">
-        {/* Filtro de categorías (lado izquierdo) */}
+    <div className="w-full">
+      <div className="flex flex-col lg:flex-row gap-4 lg:gap-6">
+        {/* Sidebar de categorías y búsqueda (lado izquierdo) */}
         <aside 
-          className="w-full md:w-1/4 flex-shrink-0" 
-          aria-label="Filtros de categoría"
+          className="w-full lg:w-64 xl:w-72 flex-shrink-0" 
+          aria-label="Filtros"
           role="complementary"
         >
-          <div className="bg-white rounded-xl shadow-md overflow-hidden md:sticky md:top-24">
+          <div className="bg-white rounded-xl shadow-md overflow-hidden lg:sticky lg:top-32">
+            {/* Barra de búsqueda */}
+            <div className="p-4 border-b border-gray-200">
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Buscar productos..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full px-4 py-2.5 pl-10 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                />
+                <svg className="absolute left-3 top-3 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                {searchTerm && (
+                  <button
+                    onClick={() => setSearchTerm('')}
+                    className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+                  >
+                    <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                )}
+              </div>
+            </div>
+
             {/* Header mobile con toggle */}
             <button
               onClick={() => setShowCategories(!showCategories)}
-              className="w-full flex items-center justify-between p-4 md:hidden bg-teal-600 text-white font-semibold"
+              className="w-full flex items-center justify-between p-4 lg:hidden bg-teal-600 text-white font-semibold"
               aria-expanded={showCategories}
             >
               <span>Filtrar por Categoría</span>
@@ -102,8 +136,8 @@ function ProductList() {
             </button>
             
             {/* Categorías header desktop */}
-            <div className="hidden md:block p-6 pb-4">
-              <h2 className="text-xl font-bold text-teal-700" id="category-filter-heading">
+            <div className="hidden lg:block p-4 pb-3">
+              <h2 className="text-lg font-bold text-teal-700" id="category-filter-heading">
                 Categorías
               </h2>
             </div>
@@ -112,7 +146,7 @@ function ProductList() {
             <nav 
               className={`${
                 showCategories ? 'block' : 'hidden'
-              } md:block p-4 md:px-6 md:pb-6`}
+              } lg:block p-4 lg:px-4 lg:pb-6`}
               aria-labelledby="category-filter-heading"
             >
               <ul className="space-y-1.5" role="list">
@@ -157,96 +191,97 @@ function ProductList() {
 
         {/* Lista de productos y paginación (lado derecho) */}
         <section 
-          className="w-full md:w-3/4"
+          className="flex-1 min-w-0"
           aria-label="Lista de productos"
           role="region"
         >
-          {/* Contador de productos */}
-          <div className="mb-4 md:mb-6 bg-white rounded-lg shadow-sm p-3 md:p-4">
-            <p className="text-sm md:text-base text-gray-700 text-center md:text-left" aria-live="polite" aria-atomic="true">
-              Mostrando <span className="font-bold text-teal-600">{paginatedData.currentProducts.length}</span> de{' '}
-              <span className="font-bold text-teal-600">{filteredProducts.length}</span> productos
-            </p>
+
+      {/* Contador de productos */}
+      <div className="mb-4 md:mb-6 bg-white rounded-lg shadow-sm p-3 md:p-4">
+        <p className="text-sm md:text-base text-gray-700 text-center md:text-left" aria-live="polite" aria-atomic="true">
+          Mostrando <span className="font-bold text-teal-600">{paginatedData.currentProducts.length}</span> de{' '}
+          <span className="font-bold text-teal-600">{filteredProducts.length}</span> productos
+        </p>
+      </div>
+      
+      {/* Lista de productos */}
+      {paginatedData.currentProducts.length === 0 ? (
+        <div className="text-center py-12 md:py-16 bg-white rounded-xl shadow-md" role="status">
+          <svg className="mx-auto h-12 w-12 md:h-16 md:w-16 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">No se encontraron productos</h3>
+          <p className="text-gray-600">Intenta seleccionar otra categoría</p>
+        </div>
+      ) : (
+        <div 
+          className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 mb-6 md:mb-8"
+          role="list"
+        >
+          {paginatedData.currentProducts.map(product => (
+            <div key={product.id} role="listitem">
+              <ProductCard product={product} />
+            </div>
+          ))}
+        </div>
+      )}
+      
+      {/* Controles de paginación */}
+      {paginatedData.totalPages > 1 && (
+        <nav 
+          className="flex flex-wrap justify-center items-center gap-2 pb-8" 
+          aria-label="Paginación"
+          role="navigation"
+        >
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+            aria-label="Página anterior"
+            className={`px-4 md:px-5 py-2 md:py-2.5 text-sm md:text-base rounded-lg font-medium transition-all duration-200 ${
+              currentPage === 1 
+              ? 'bg-gray-200 text-gray-400 cursor-not-allowed' 
+              : 'bg-teal-600 text-white hover:bg-teal-700 shadow-md'
+            }`}
+          >
+            Anterior
+          </button>
+          
+          {/* Números de página */}
+          <div className="flex gap-1.5 md:gap-2" role="list">
+            {[...Array(paginatedData.totalPages)].map((_, index) => {
+              const pageNumber = index + 1;
+              return (
+                <button
+                  key={pageNumber}
+                  onClick={() => handlePageChange(pageNumber)}
+                  aria-label={`Página ${pageNumber}`}
+                  aria-current={currentPage === pageNumber ? 'page' : undefined}
+                  className={`w-10 h-10 md:min-w-[44px] md:min-h-[44px] flex items-center justify-center rounded-lg font-medium text-sm md:text-base transition-all duration-200 ${
+                    currentPage === pageNumber
+                    ? 'bg-teal-600 text-white shadow-md'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  {pageNumber}
+                </button>
+              );
+            })}
           </div>
           
-          {/* Lista de productos */}
-          {paginatedData.currentProducts.length === 0 ? (
-            <div className="text-center py-12 md:py-16 bg-white rounded-xl shadow-md" role="status">
-              <svg className="mx-auto h-12 w-12 md:h-16 md:w-16 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">No se encontraron productos</h3>
-              <p className="text-gray-600">Intenta seleccionar otra categoría</p>
-            </div>
-          ) : (
-            <div 
-              className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4 lg:gap-6 mb-6 md:mb-8"
-              role="list"
-            >
-              {paginatedData.currentProducts.map(product => (
-                <div key={product.id} role="listitem">
-                  <ProductCard product={product} />
-                </div>
-              ))}
-            </div>
-          )}
-          
-          {/* Controles de paginación */}
-          {paginatedData.totalPages > 1 && (
-            <nav 
-              className="flex flex-wrap justify-center items-center gap-2 pb-8" 
-              aria-label="Paginación"
-              role="navigation"
-            >
-              <button
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-                aria-label="Página anterior"
-                className={`px-4 md:px-5 py-2 md:py-2.5 text-sm md:text-base rounded-lg font-medium transition-all duration-200 ${
-                  currentPage === 1 
-                  ? 'bg-gray-200 text-gray-400 cursor-not-allowed' 
-                  : 'bg-teal-600 text-white hover:bg-teal-700 shadow-md'
-                }`}
-              >
-                Anterior
-              </button>
-              
-              {/* Números de página */}
-              <div className="flex gap-1.5 md:gap-2" role="list">
-                {[...Array(paginatedData.totalPages)].map((_, index) => {
-                  const pageNumber = index + 1;
-                  return (
-                    <button
-                      key={pageNumber}
-                      onClick={() => handlePageChange(pageNumber)}
-                      aria-label={`Página ${pageNumber}`}
-                      aria-current={currentPage === pageNumber ? 'page' : undefined}
-                      className={`w-10 h-10 md:min-w-[44px] md:min-h-[44px] flex items-center justify-center rounded-lg font-medium text-sm md:text-base transition-all duration-200 ${
-                        currentPage === pageNumber
-                        ? 'bg-teal-600 text-white shadow-md'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                      }`}
-                    >
-                      {pageNumber}
-                    </button>
-                  );
-                })}
-              </div>
-              
-              <button
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === paginatedData.totalPages}
-                aria-label="Página siguiente"
-                className={`px-4 md:px-5 py-2 md:py-2.5 text-sm md:text-base rounded-lg font-medium transition-all duration-200 ${
-                  currentPage === paginatedData.totalPages 
-                  ? 'bg-gray-200 text-gray-400 cursor-not-allowed' 
-                  : 'bg-teal-600 text-white hover:bg-teal-700 shadow-md'
-                }`}
-              >
-                Siguiente
-              </button>
-            </nav>
-          )}
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === paginatedData.totalPages}
+            aria-label="Página siguiente"
+            className={`px-4 md:px-5 py-2 md:py-2.5 text-sm md:text-base rounded-lg font-medium transition-all duration-200 ${
+              currentPage === paginatedData.totalPages 
+              ? 'bg-gray-200 text-gray-400 cursor-not-allowed' 
+              : 'bg-teal-600 text-white hover:bg-teal-700 shadow-md'
+            }`}
+          >
+            Siguiente
+          </button>
+        </nav>
+      )}
         </section>
       </div>
     </div>

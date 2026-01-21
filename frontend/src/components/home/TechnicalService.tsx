@@ -62,7 +62,7 @@ const TechnicalService = () => {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-12">
           {services.map((service, index) => (
             <motion.div
               key={index}
@@ -71,7 +71,7 @@ const TechnicalService = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
               whileHover={{ y: -10, scale: 1.05 }}
-              className="bg-white/90 backdrop-blur-sm p-5 sm:p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 text-center"
+              className="bg-white/90 backdrop-blur-sm p-4 sm:p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 text-center"
             >
               <motion.div
                 whileHover={{ rotate: 360, scale: 1.2 }}

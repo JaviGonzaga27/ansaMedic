@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaCheckCircle, FaWhatsapp, FaPhone, FaEnvelope, FaMapMarkerAlt, FaClock, FaAward } from 'react-icons/fa';
-import { CONTACT, WHATSAPP_URLS, CAROUSEL_IMAGES } from '@/utils/constants';
+import { FaWhatsapp, FaPhone, FaEnvelope, FaMapMarkerAlt, FaClock, FaAward } from 'react-icons/fa';
+import { MapPin, ChevronRight, X } from 'lucide-react';
+import { CONTACT, WHATSAPP_URLS, CAROUSEL_IMAGES, LOCATIONS } from '@/utils/constants';
 
 const HeroSection: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isWhatsAppModalOpen, setIsWhatsAppModalOpen] = useState(false);
   const slides = CAROUSEL_IMAGES;
 
   useEffect(() => {
@@ -18,28 +18,31 @@ const HeroSection: React.FC = () => {
     return () => clearInterval(timer);
   }, [slides.length]);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsLoading(true);
-    try {
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      setIsSubmitted(true);
-      setTimeout(() => {
-        setIsSubmitted(false);
-        (e.target as HTMLFormElement).reset();
-      }, 5000);
-    } catch (error) {
-      console.error('Error al enviar el formulario:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   const benefits = [
     { icon: FaAward, text: 'Productos de Alta Calidad' },
     { icon: FaClock, text: 'Servicio Técnico 24/7' },
     { icon: FaMapMarkerAlt, text: '2 Sucursales en Quito' },
   ];
+
+  const openWhatsapp = (location: 'Quito' | 'Valle de los Chillos') => {
+    const phoneNumber = location === 'Quito' ? CONTACT.WHATSAPP.QUITO : CONTACT.WHATSAPP.VALLE;
+    const message = encodeURIComponent(`Hola, estoy interesado en realizar una cotización. Sector: ${location.toUpperCase()}`);
+    const whatsappUrl = `whatsapp://send?phone=${phoneNumber}&text=${message}`;
+    
+    window.location.href = whatsappUrl;
+    setIsWhatsAppModalOpen(false);
+  };
+
+  useEffect(() => {
+    if (isWhatsAppModalOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isWhatsAppModalOpen]);
 
   return (
     <section className="relative bg-gradient-to-br from-gray-50 to-teal-50 overflow-hidden">
@@ -73,8 +76,9 @@ const HeroSection: React.FC = () => {
                   <Image
                     src={slides[currentSlide]}
                     alt={`Equipo dental ${currentSlide + 1}`}
-                    layout="fill"
-                    objectFit="contain"
+                    fill
+                    className="object-contain"
+                    sizes="(max-width: 768px) 100vw, 60vw"
                     priority
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none"></div>
@@ -121,14 +125,14 @@ const HeroSection: React.FC = () => {
               </div>
 
               {/* Benefits Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                 {benefits.map((benefit, index) => (
                   <motion.div
                     key={index}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
-                    className="flex items-center space-x-2 bg-white/80 backdrop-blur-sm p-3 rounded-xl shadow-md hover:shadow-lg transition-all duration-300"
+                    className={`flex items-center space-x-2 bg-white/80 backdrop-blur-sm p-3 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 ${index === 2 ? 'col-span-2 md:col-span-1' : ''}`}
                   >
                     <div className="flex-shrink-0 w-9 h-9 bg-gradient-to-br from-teal-500 to-teal-600 rounded-lg flex items-center justify-center">
                       <benefit.icon className="text-white text-base" />
@@ -140,145 +144,211 @@ const HeroSection: React.FC = () => {
 
               {/* Quick Contact Info */}
               <div className="flex flex-wrap gap-3 text-xs text-gray-600">
-                <div className="flex items-center space-x-2">
+                <a 
+                  href={`tel:${CONTACT.PHONE.MAIN.replace(/[^0-9+]/g, '')}`}
+                  className="flex items-center space-x-2 hover:text-teal-600 transition-colors cursor-pointer"
+                >
                   <FaPhone className="text-teal-600" />
                   <span>{CONTACT.PHONE.MAIN}</span>
-                </div>
-                <div className="flex items-center space-x-2">
+                </a>
+                <a 
+                  href={`mailto:${CONTACT.EMAIL.MAIN}`}
+                  className="flex items-center space-x-2 hover:text-teal-600 transition-colors cursor-pointer"
+                >
                   <FaEnvelope className="text-teal-600" />
-                  <span>{CONTACT.EMAIL}</span>
-                </div>
+                  <span>{CONTACT.EMAIL.MAIN}</span>
+                </a>
               </div>
             </motion.div>
           </div>
 
-          {/* Right Side - Contact Form (40%) */}
+          {/* Right Side - Contact Information Card (40%) */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
             className="lg:col-span-2"
           >
-            <div className="bg-white/90 backdrop-blur-lg p-6 md:p-8 rounded-3xl shadow-2xl border border-teal-100">
-              {isSubmitted ? (
-                <motion.div
-                  initial={{ scale: 0.8, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  className="text-center py-8"
+            <div className="bg-white/90 backdrop-blur-lg p-4 md:p-6 rounded-3xl shadow-2xl border border-teal-100">
+              {/* Contact Information */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.5 }}
+                className="space-y-3"
+              >
+                <div className="text-center mb-4">
+                  <h2 className="text-2xl font-bold text-gray-800 mb-1">Contáctanos</h2>
+                  <p className="text-gray-600 text-sm">Estamos aquí para ayudarte</p>
+                </div>
+
+                {/* Phone */}
+                <a 
+                  href={`tel:${CONTACT.PHONE.MAIN.replace(/[^0-9+]/g, '')}`}
+                  className="flex items-center space-x-3 bg-gray-50 p-3 rounded-lg hover:bg-teal-50 hover:border-teal-300 border-2 border-transparent transition-all duration-300 cursor-pointer group"
                 >
-                  <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-green-400 to-green-600 rounded-full mb-4">
-                    <FaCheckCircle className="text-white text-3xl" />
+                  <div className="flex-shrink-0 w-11 h-11 bg-gradient-to-br from-teal-500 to-teal-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <FaPhone className="text-white text-base" />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">¡Mensaje Enviado!</h3>
-                  <p className="text-gray-600 text-sm">Nos pondremos en contacto contigo pronto.</p>
-                </motion.div>
-              ) : (
-                <>
-                  <div className="text-center mb-6">
-                    <h2 className="text-2xl font-bold text-gray-800 mb-1">Solicita Información</h2>
-                    <p className="text-gray-600 text-sm">Completa el formulario y te contactaremos</p>
+                  <div>
+                    <p className="text-xs text-gray-500 font-semibold">Teléfono</p>
+                    <p className="text-base font-bold text-gray-800 group-hover:text-teal-700">{CONTACT.PHONE.MAIN}</p>
                   </div>
+                </a>
 
-                  <form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
-                      <label htmlFor="name" className="block text-xs font-semibold text-gray-700 mb-1">
-                        Nombre Completo
-                      </label>
-                      <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        placeholder="Juan Pérez"
-                        className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-300 hover:bg-gray-100 text-sm"
-                        required
-                      />
-                    </div>
-
-                    <div>
-                      <label htmlFor="email" className="block text-xs font-semibold text-gray-700 mb-1">
-                        Correo Electrónico
-                      </label>
-                      <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        placeholder="juan@ejemplo.com"
-                        className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-300 hover:bg-gray-100 text-sm"
-                        required
-                      />
-                    </div>
-
-                    <div>
-                      <label htmlFor="phone" className="block text-xs font-semibold text-gray-700 mb-1">
-                        Teléfono
-                      </label>
-                      <input
-                        type="tel"
-                        id="phone"
-                        name="phone"
-                        placeholder="0999 123 456"
-                        className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-300 hover:bg-gray-100 text-sm"
-                        required
-                      />
-                    </div>
-
-                    <div>
-                      <label htmlFor="message" className="block text-xs font-semibold text-gray-700 mb-1">
-                        Mensaje
-                      </label>
-                      <textarea
-                        id="message"
-                        name="message"
-                        placeholder="¿En qué podemos ayudarte?"
-                        rows={3}
-                        className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-300 hover:bg-gray-100 resize-none text-sm"
-                        required
-                      ></textarea>
-                    </div>
-
-                    <motion.button
-                      type="submit"
-                      className="w-full bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white font-bold py-3 px-4 rounded-xl transition-all duration-300 flex items-center justify-center shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed text-sm"
-                      disabled={isLoading}
-                      whileHover={{ scale: isLoading ? 1 : 1.02 }}
-                      whileTap={{ scale: isLoading ? 1 : 0.98 }}
-                    >
-                      {isLoading ? (
-                        <>
-                          <svg className="animate-spin -ml-1 mr-3 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                          </svg>
-                          Enviando...
-                        </>
-                      ) : (
-                        <>
-                          <FaEnvelope className="mr-2" />
-                          Enviar Solicitud
-                        </>
-                      )}
-                    </motion.button>
-                  </form>
-
-                  {/* WhatsApp Quick Contact */}
-                  <div className="mt-4 pt-4 border-t border-gray-200">
-                    <p className="text-center text-xs text-gray-600 mb-2">O contáctanos directamente</p>
-                    <a
-                      href={WHATSAPP_URLS.QUITO}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-center space-x-2 w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-2.5 px-4 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg text-sm"
-                    >
-                      <FaWhatsapp className="text-lg" />
-                      <span>WhatsApp</span>
-                    </a>
+                {/* Email */}
+                <a 
+                  href={`mailto:${CONTACT.EMAIL.MAIN}`}
+                  className="flex items-center space-x-3 bg-gray-50 p-3 rounded-lg hover:bg-teal-50 hover:border-teal-300 border-2 border-transparent transition-all duration-300 cursor-pointer group"
+                >
+                  <div className="flex-shrink-0 w-11 h-11 bg-gradient-to-br from-teal-500 to-teal-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <FaEnvelope className="text-white text-base" />
                   </div>
-                </>
-              )}
+                  <div>
+                    <p className="text-xs text-gray-500 font-semibold">Correo Electrónico</p>
+                    <p className="text-sm font-bold text-gray-800 break-all group-hover:text-teal-700">{CONTACT.EMAIL.MAIN}</p>
+                  </div>
+                </a>
+
+                {/* Locations */}
+                <div className="space-y-2">
+                  <p className="text-xs text-gray-500 font-semibold px-2">Ubicaciones</p>
+                  
+                  {/* Quito */}
+                  <a 
+                    href={LOCATIONS[0].googleMapsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center space-x-3 bg-gray-50 p-3 rounded-lg hover:bg-teal-50 hover:border-teal-300 border-2 border-transparent transition-all duration-300 cursor-pointer group"
+                  >
+                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-teal-500 to-teal-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+                      <FaMapMarkerAlt className="text-white text-sm" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm font-bold text-gray-900 group-hover:text-teal-700">Quito - {LOCATIONS[0].address}</p>
+                    </div>
+                  </a>
+
+                  {/* Valle */}
+                  <a 
+                    href={LOCATIONS[1].googleMapsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center space-x-3 bg-gray-50 p-3 rounded-lg hover:bg-teal-50 hover:border-teal-300 border-2 border-transparent transition-all duration-300 cursor-pointer group"
+                  >
+                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-teal-500 to-teal-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+                      <FaMapMarkerAlt className="text-white text-sm" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm font-bold text-gray-900 group-hover:text-teal-700">Valle - {LOCATIONS[1].address}</p>
+                    </div>
+                  </a>
+                </div>
+
+                {/* WhatsApp Button */}
+                <div className="pt-2">
+                  <button
+                    onClick={() => setIsWhatsAppModalOpen(true)}
+                    className="flex items-center justify-center space-x-2 w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-3 px-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 text-sm"
+                  >
+                    <FaWhatsapp className="text-lg" />
+                    <span>Chatea con Nosotros</span>
+                  </button>
+                </div>
+              </motion.div>
             </div>
           </motion.div>
         </div>
       </div>
+
+      {/* WhatsApp Location Modal */}
+      <AnimatePresence>
+        {isWhatsAppModalOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[100] p-4"
+            onClick={() => setIsWhatsAppModalOpen(false)}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="whatsapp-modal-title"
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: -20, opacity: 0 }}
+              animate={{ scale: 1, y: 0, opacity: 1 }}
+              exit={{ scale: 0.9, y: 20, opacity: 0 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              className="bg-white p-6 sm:p-8 rounded-2xl shadow-2xl relative w-full max-w-md"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                onClick={() => setIsWhatsAppModalOpen(false)}
+                className="absolute top-3 right-3 sm:top-4 sm:right-4 text-gray-400 hover:text-gray-700 transition-colors duration-300 p-1 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                aria-label="Cerrar modal"
+              >
+                <X size={24} />
+              </button>
+
+              <div className="text-center mb-8">
+                <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-teal-500 to-teal-600 rounded-full mb-4 shadow-lg">
+                  <FaWhatsapp className="w-10 h-10 text-white" />
+                </div>
+                <h2 id="whatsapp-modal-title" className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+                  Selecciona tu ubicación
+                </h2>
+                <p className="text-sm text-gray-600">
+                  Elige la sucursal más cercana para contactarte
+                </p>
+              </div>
+
+              <div className="space-y-4">
+                <motion.button
+                  whileHover={{ scale: 1.02, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => openWhatsapp('Quito')}
+                  className="group w-full bg-white border-2 border-teal-200 hover:border-teal-500 hover:bg-teal-50 text-gray-800 py-5 px-6 rounded-2xl transition-all duration-300 flex items-center justify-between shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center shadow-md">
+                      <FaWhatsapp className="w-6 h-6 text-white" />
+                    </div>
+                    <div className="text-left">
+                      <div className="font-bold text-lg text-gray-900 group-hover:text-teal-700 transition-colors">Quito</div>
+                      <div className="flex items-center gap-1.5 text-sm text-gray-600">
+                        <MapPin className="w-3.5 h-3.5" />
+                        <span>Carcelén</span>
+                      </div>
+                    </div>
+                  </div>
+                  <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-teal-600 group-hover:translate-x-1 transition-all" />
+                </motion.button>
+
+                <motion.button
+                  whileHover={{ scale: 1.02, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => openWhatsapp('Valle de los Chillos')}
+                  className="group w-full bg-white border-2 border-teal-200 hover:border-teal-500 hover:bg-teal-50 text-gray-800 py-5 px-6 rounded-2xl transition-all duration-300 flex items-center justify-between shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center shadow-md">
+                      <FaWhatsapp className="w-6 h-6 text-white" />
+                    </div>
+                    <div className="text-left">
+                      <div className="font-bold text-lg text-gray-900 group-hover:text-teal-700 transition-colors">Valle de los Chillos</div>
+                      <div className="flex items-center gap-1.5 text-sm text-gray-600">
+                        <MapPin className="w-3.5 h-3.5" />
+                        <span>Plaza París</span>
+                      </div>
+                    </div>
+                  </div>
+                  <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-teal-600 group-hover:translate-x-1 transition-all" />
+                </motion.button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 };

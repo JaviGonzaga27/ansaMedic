@@ -2,181 +2,184 @@
     "products": [
         {
             "id": "1",
-            "imageUrl": "https://dentalevamarcos.com/wp-content/uploads/2021/12/utilizar-cepillo-dental-electrico.jpg",
+            "imageUrl": "https://placehold.co/600x600/0d9488/ffffff.png?text=Cepillo+Dental+El%C3%A9ctrico&font=montserrat",
             "name": "Cepillo Dental Eléctrico Pro-Care",
-            "description": "Cepillo eléctrico con tecnología sónica avanzada, 5 modos de limpieza y sensor de presión para una limpieza profesional."
+            "description": "Cepillo eléctrico con tecnología sónica avanzada, 5 modos de limpieza y sensor de presión para una limpieza profesional.",
+            "featured": true
         },
         {
             "id": "2",
-            "imageUrl": "https://alignerco.com/cdn/shop/articles/smiling-woman-wearing-an-invisible-dental-aligner.png?v=1693302282",
+            "imageUrl": "https://placehold.co/600x600/0d9488/ffffff.png?text=Ortodoncia+Invisible&font=montserrat",
             "name": "Kit de Ortodoncia Invisible",
-            "description": "Alineadores transparentes personalizados para una corrección dental discreta y efectiva."
+            "description": "Alineadores transparentes personalizados para una corrección dental discreta y efectiva.",
+            "featured": true
         },
         {
             "id": "3",
-            "imageUrl": "https://via.placeholder.com/200x150",
+            "imageUrl": "https://placehold.co/600x600/0d9488/ffffff.png?text=Irrigador+Dental&font=montserrat",
             "name": "Irrigador Dental Waterpik",
-            "description": "Sistema de limpieza por agua a presión para una limpieza profunda entre los dientes y debajo de la línea de las encías."
+            "description": "Sistema de limpieza por agua a presión para una limpieza profunda entre los dientes y debajo de la línea de las encías.",
+            "featured": true
         },
         {
             "id": "4",
-            "imageUrl": "https://via.placeholder.com/200x150",
+            "imageUrl": "https://placehold.co/600x600/0d9488/ffffff.png?text=Pasta+Blanqueadora&font=montserrat",
             "name": "Pasta Dental Blanqueadora Premium",
             "description": "Fórmula profesional que elimina manchas y protege el esmalte dental para una sonrisa más brillante."
         },
         {
             "id": "5",
-            "imageUrl": "https://via.placeholder.com/200x150",
+            "imageUrl": "https://placehold.co/600x600/0d9488/ffffff.png?text=Hilo+Dental&font=montserrat",
             "name": "Hilo Dental de Alta Resistencia",
             "description": "Hilo dental encerado con tecnología antidesgarro para una limpieza efectiva entre los dientes."
         },
         {
             "id": "6",
-            "imageUrl": "https://via.placeholder.com/200x150",
+            "imageUrl": "https://placehold.co/600x600/0d9488/ffffff.png?text=Kit+Blanqueamiento&font=montserrat",
             "name": "Kit de Blanqueamiento Dental",
             "description": "Sistema profesional de blanqueamiento en casa con gel de peróxido de carbamida al 10%."
         },
         {
             "id": "7",
-            "imageUrl": "https://via.placeholder.com/200x150",
+            "imageUrl": "https://placehold.co/600x600/0d9488/ffffff.png?text=Cepillo+Interdental&font=montserrat",
             "name": "Cepillo Interdental Pack",
             "description": "Set de cepillos interdentales de diferentes tamaños para una limpieza completa entre los dientes."
         },
         {
             "id": "8",
-            "imageUrl": "https://via.placeholder.com/200x150",
+            "imageUrl": "https://placehold.co/600x600/0d9488/ffffff.png?text=Enjuague+Bucal&font=montserrat",
             "name": "Enjuague Bucal Terapéutico",
             "description": "Fórmula sin alcohol que combate las bacterias y fortalece el esmalte dental."
         },
         {
             "id": "9",
-            "imageUrl": "https://via.placeholder.com/200x150",
+            "imageUrl": "https://placehold.co/600x600/0d9488/ffffff.png?text=Revelador+de+Placa&font=montserrat",
             "name": "Revelador de Placa Dental",
             "description": "Tabletas que tiñen la placa dental para una mejor visualización y limpieza."
         },
         {
             "id": "10",
-            "imageUrl": "https://via.placeholder.com/200x150",
+            "imageUrl": "https://placehold.co/600x600/0d9488/ffffff.png?text=Protector+Bucal&font=montserrat",
             "name": "Protector Bucal Deportivo",
             "description": "Protector dental personalizable para actividades deportivas, con tecnología de absorción de impactos."
         },
         {
             "id": "11",
-            "imageUrl": "https://via.placeholder.com/200x150",
+            "imageUrl": "https://placehold.co/600x600/0d9488/ffffff.png?text=Cera+Ortod%C3%B3ntica&font=montserrat",
             "name": "Cera Ortodóntica Premium",
             "description": "Cera de alta calidad para prevenir la irritación causada por brackets y aparatos ortodónticos."
         },
         {
             "id": "12",
-            "imageUrl": "https://via.placeholder.com/200x150",
+            "imageUrl": "https://placehold.co/600x600/0d9488/ffffff.png?text=Limpiador+Ultras%C3%B3nico&font=montserrat",
             "name": "Limpiador Ultrasónico de Dentaduras",
             "description": "Dispositivo de limpieza profunda para prótesis dentales con tecnología ultrasónica."
         },
         {
             "id": "13",
-            "imageUrl": "https://via.placeholder.com/200x150",
+            "imageUrl": "https://placehold.co/600x600/0d9488/ffffff.png?text=Pasta+Sensibilidad&font=montserrat",
             "name": "Pasta Dental Sensibilidad Cero",
             "description": "Tratamiento diario para dientes sensibles con tecnología de bloqueo de sensibilidad."
         },
         {
             "id": "14",
-            "imageUrl": "https://via.placeholder.com/200x150",
+            "imageUrl": "https://placehold.co/600x600/0d9488/ffffff.png?text=Cepillo+de+Bamb%C3%BA&font=montserrat",
             "name": "Cepillo Dental de Bambú",
             "description": "Cepillo ecológico con cerdas suaves y mango biodegradable de bambú sostenible."
         },
         {
             "id": "15",
-            "imageUrl": "https://via.placeholder.com/200x150",
+            "imageUrl": "https://placehold.co/600x600/0d9488/ffffff.png?text=Kit+de+Brackets&font=montserrat",
             "name": "Kit de Limpieza de Brackets",
             "description": "Set completo para el cuidado y mantenimiento de brackets, incluye cepillo especial y espejo."
         },
         {
             "id": "16",
-            "imageUrl": "https://via.placeholder.com/200x150",
+            "imageUrl": "https://placehold.co/600x600/0d9488/ffffff.png?text=Gel+para+Aftas&font=montserrat",
             "name": "Gel para Aftas Bucales",
             "description": "Tratamiento rápido y efectivo para úlceras bucales con efecto anestésico."
         },
         {
             "id": "17",
-            "imageUrl": "https://via.placeholder.com/200x150",
+            "imageUrl": "https://placehold.co/600x600/0d9488/ffffff.png?text=Polvo+Blanqueador&font=montserrat",
             "name": "Polvo Dental Blanqueador",
             "description": "Fórmula natural a base de carbón activado para blanqueamiento dental gradual."
         },
         {
             "id": "18",
-            "imageUrl": "https://via.placeholder.com/200x150",
+            "imageUrl": "https://placehold.co/600x600/0d9488/ffffff.png?text=Irrigador+Port%C3%A1til&font=montserrat",
             "name": "Irrigador Dental Portátil",
             "description": "Irrigador compacto y recargable, perfecto para viajes y uso diario."
         },
         {
             "id": "19",
-            "imageUrl": "https://via.placeholder.com/200x150",
+            "imageUrl": "https://placehold.co/600x600/0d9488/ffffff.png?text=Pasta+para+Ni%C3%B1os&font=montserrat",
             "name": "Pasta Dental para Niños",
             "description": "Fórmula suave con flúor y sabor a frutas, especialmente diseñada para niños."
         },
         {
             "id": "20",
-            "imageUrl": "https://via.placeholder.com/200x150",
+            "imageUrl": "https://placehold.co/600x600/0d9488/ffffff.png?text=Tabletas+Limpiadoras&font=montserrat",
             "name": "Tabletas Limpiadoras de Prótesis",
             "description": "Limpieza efervescente que elimina manchas y bacterias de prótesis dentales."
         },
         {
             "id": "21",
-            "imageUrl": "https://via.placeholder.com/200x150",
+            "imageUrl": "https://placehold.co/600x600/0d9488/ffffff.png?text=Spray+Bucal&font=montserrat",
             "name": "Spray Bucal Refrescante",
             "description": "Spray de menta natural para aliento fresco instantáneo, ideal para llevar en el bolso."
         },
         {
             "id": "22",
-            "imageUrl": "https://via.placeholder.com/200x150",
+            "imageUrl": "https://placehold.co/600x600/0d9488/ffffff.png?text=Cepillo+Ultras%C3%B3nico&font=montserrat",
             "name": "Cepillo Dental Ultrasónico",
             "description": "Tecnología ultrasónica avanzada con 40,000 vibraciones por minuto para una limpieza superior."
         },
         {
             "id": "23",
-            "imageUrl": "https://via.placeholder.com/200x150",
+            "imageUrl": "https://placehold.co/600x600/0d9488/ffffff.png?text=Kit+Emergencia&font=montserrat",
             "name": "Kit de Emergencia Dental",
             "description": "Set completo para emergencias dentales, incluye cemento temporal y herramientas básicas."
         },
         {
             "id": "24",
-            "imageUrl": "https://via.placeholder.com/200x150",
+            "imageUrl": "https://placehold.co/600x600/0d9488/ffffff.png?text=Goma+de+Mascar&font=montserrat",
             "name": "Goma de Mascar Dental",
             "description": "Chicle sin azúcar con xilitol para estimular la producción de saliva y prevenir caries."
         },
         {
             "id": "25",
-            "imageUrl": "https://via.placeholder.com/200x150",
+            "imageUrl": "https://placehold.co/600x600/0d9488/ffffff.png?text=Espejo+con+LED&font=montserrat",
             "name": "Espejo Dental con Luz LED",
             "description": "Espejo de inspección dental con iluminación LED para una mejor visualización."
         },
         {
             "id": "26",
-            "imageUrl": "https://via.placeholder.com/200x150",
+            "imageUrl": "https://placehold.co/600x600/0d9488/ffffff.png?text=Limpiador+de+Lengua&font=montserrat",
             "name": "Limpiador de Lengua de Cobre",
             "description": "Raspador lingual ayurvédico de cobre para eliminar bacterias y mejorar el aliento."
         },
         {
             "id": "27",
-            "imageUrl": "https://via.placeholder.com/200x150",
+            "imageUrl": "https://placehold.co/600x600/0d9488/ffffff.png?text=Pasta+Natural&font=montserrat",
             "name": "Pasta Dental Natural",
             "description": "Fórmula orgánica sin flúor con ingredientes naturales y aceites esenciales."
         },
         {
             "id": "28",
-            "imageUrl": "https://via.placeholder.com/200x150",
+            "imageUrl": "https://placehold.co/600x600/0d9488/ffffff.png?text=Retenedor+Dental&font=montserrat",
             "name": "Retenedor Dental Transparente",
             "description": "Retenedor personalizado de alta calidad para mantener los dientes alineados."
         },
         {
             "id": "29",
-            "imageUrl": "https://via.placeholder.com/200x150",
+            "imageUrl": "https://placehold.co/600x600/0d9488/ffffff.png?text=Irrigador+con+UV&font=montserrat",
             "name": "Irrigador de Agua con UV",
             "description": "Sistema de limpieza dental con esterilización UV y 10 niveles de presión ajustables."
         },
         {
             "id": "30",
-            "imageUrl": "https://via.placeholder.com/200x150",
+            "imageUrl": "https://placehold.co/600x600/0d9488/ffffff.png?text=Kit+de+Viaje&font=montserrat",
             "name": "Kit Dental de Viaje",
             "description": "Set compacto de higiene dental para viajes, incluye cepillo plegable y pasta dental."
         }

@@ -5,13 +5,19 @@ export const CONTACT = {
   PHONE: {
     MAIN: process.env.NEXT_PUBLIC_PHONE_MAIN || '(02) 286-7212',
     FORMATTED: process.env.NEXT_PUBLIC_PHONE_FORMATTED || '+593-2-286-7212',
+    QUITO: process.env.NEXT_PUBLIC_PHONE_QUITO || '(02) 344-1762',
+    VALLE: process.env.NEXT_PUBLIC_PHONE_VALLE || '(02) 286-7212',
   },
   WHATSAPP: {
     QUITO: process.env.NEXT_PUBLIC_WHATSAPP_QUITO || '+593979380563',
     VALLE: process.env.NEXT_PUBLIC_WHATSAPP_VALLE || '+593992339152',
     SERVICIO: process.env.NEXT_PUBLIC_WHATSAPP_SERVICIO || '+593984603365',
   },
-  EMAIL: process.env.NEXT_PUBLIC_EMAIL || 'ansamedicdent@gmail.com',
+  EMAIL: {
+    MAIN: process.env.NEXT_PUBLIC_EMAIL || 'ansamedic.dent@gmail.com',
+    QUITO: process.env.NEXT_PUBLIC_EMAIL_QUITO || 'ansamedic.dent@gmail.com',
+    VALLE: process.env.NEXT_PUBLIC_EMAIL_VALLE || 'ansamedicdent.valle@gmail.com',
+  },
   HOURS: {
     WEEKDAY: process.env.NEXT_PUBLIC_HOURS_WEEKDAY || 'Lun - Vie: 8:00 AM - 6:00 PM',
     SATURDAY: process.env.NEXT_PUBLIC_HOURS_SATURDAY || 'Sáb: 9:00 AM - 2:00 PM',

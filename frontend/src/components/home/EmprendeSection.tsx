@@ -36,14 +36,14 @@ const EmprendeSection = () => {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-8 mb-12">
           {benefits.map((benefit, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.2 }}
-              className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-2"
+              className={`bg-white p-4 sm:p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-2 ${index === 2 ? 'col-span-2 md:col-span-1' : ''}`}
             >
               {benefit.icon}
               <h3 className="text-xl font-semibold mb-3 text-teal-700">{benefit.title}</h3>

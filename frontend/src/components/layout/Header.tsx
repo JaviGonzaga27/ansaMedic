@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
-import { Menu, X, Phone, Mail } from 'lucide-react';
+import { Menu, X, Phone, Mail, ChevronDown, MapPin, MessageCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import WhatsappNavbar from './WhatsappNavbar';
 import { CONTACT, WHATSAPP_URLS } from '@/utils/constants';
@@ -56,6 +56,7 @@ const Header = () => {
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [showContactDropdown, setShowContactDropdown] = useState(false);
 
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
@@ -109,27 +110,129 @@ const Header = () => {
       <div className="bg-teal-600 text-white py-2">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center text-xs md:text-sm">
-            <div className="flex items-center gap-2 md:gap-6">
+            {/* Desktop Contact Info */}
+            <div className="hidden lg:flex items-center gap-4">
               <a 
-                href={`tel:${CONTACT.PHONE.FORMATTED}`}
-                className="flex items-center gap-2 text-white hover:text-teal-100 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-teal-600 rounded px-2 py-1"
-                aria-label="Llamar al teléfono principal"
+                href={`tel:${CONTACT.PHONE.QUITO.replace(/[^0-9+]/g, '')}`}
+                className="flex items-center gap-1.5 text-white hover:text-teal-100 transition-colors"
+                aria-label="Teléfono Quito"
               >
-                <Phone className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
-                <span className="font-medium">{CONTACT.PHONE.MAIN}</span>
+                <MapPin className="w-3 h-3" />
+                <span className="font-medium">Quito: {CONTACT.PHONE.QUITO}</span>
               </a>
+              <span className="text-white/40">|</span>
               <a 
-                href={`mailto:${CONTACT.EMAIL}`}
-                className="flex items-center gap-2 text-white hover:text-teal-100 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-teal-600 rounded px-2 py-1"
+                href={`tel:${CONTACT.PHONE.VALLE.replace(/[^0-9+]/g, '')}`}
+                className="flex items-center gap-1.5 text-white hover:text-teal-100 transition-colors"
+                aria-label="Teléfono Valle"
+              >
+                <MapPin className="w-3 h-3" />
+                <span className="font-medium">Valle: {CONTACT.PHONE.VALLE}</span>
+              </a>
+              <span className="text-white/40">|</span>
+              <a 
+                href={`mailto:${CONTACT.EMAIL.MAIN}`}
+                className="flex items-center gap-1.5 text-white hover:text-teal-100 transition-colors"
                 aria-label="Enviar email"
               >
-                <Mail className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
-                <span className="font-medium hidden sm:inline">{CONTACT.EMAIL}</span>
-                <span className="font-medium sm:hidden">Email</span>
+                <Mail className="w-3 h-3" />
+                <span className="font-medium">{CONTACT.EMAIL.MAIN}</span>
               </a>
             </div>
+
+            {/* Mobile Contact Dropdown */}
+            <div className="lg:hidden relative flex-1">
+              <button
+                onClick={() => setShowContactDropdown(!showContactDropdown)}
+                className="flex items-center gap-2 text-white hover:text-teal-100 transition-colors w-full"
+                aria-label="Mostrar contactos"
+              >
+                <Phone className="w-4 h-4" />
+                <span className="font-medium">Contactos</span>
+                <ChevronDown className={`w-4 h-4 transition-transform ${showContactDropdown ? 'rotate-180' : ''}`} />
+              </button>
+              
+              <AnimatePresence>
+                {showContactDropdown && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-xl overflow-hidden z-50"
+                  >
+                    <div className="py-2">
+                      <a 
+                        href={`tel:${CONTACT.PHONE.QUITO.replace(/[^0-9+]/g, '')}`}
+                        className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-teal-50 transition-colors"
+                      >
+                        <Phone className="w-4 h-4 text-teal-600" />
+                        <div>
+                          <div className="text-xs text-gray-500">Quito</div>
+                          <div className="font-semibold text-sm">{CONTACT.PHONE.QUITO}</div>
+                        </div>
+                      </a>
+                      <a 
+                        href={`tel:${CONTACT.PHONE.VALLE.replace(/[^0-9+]/g, '')}`}
+                        className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-teal-50 transition-colors"
+                      >
+                        <Phone className="w-4 h-4 text-teal-600" />
+                        <div>
+                          <div className="text-xs text-gray-500">Valle</div>
+                          <div className="font-semibold text-sm">{CONTACT.PHONE.VALLE}</div>
+                        </div>
+                      </a>
+                      <a 
+                        href={WHATSAPP_URLS.QUITO}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-teal-50 transition-colors"
+                      >
+                        <MessageCircle className="w-4 h-4 text-green-600" />
+                        <div>
+                          <div className="text-xs text-gray-500">WhatsApp Quito</div>
+                          <div className="font-semibold text-sm">{CONTACT.WHATSAPP.QUITO}</div>
+                        </div>
+                      </a>
+                      <a 
+                        href={WHATSAPP_URLS.VALLE}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-teal-50 transition-colors"
+                      >
+                        <MessageCircle className="w-4 h-4 text-green-600" />
+                        <div>
+                          <div className="text-xs text-gray-500">WhatsApp Valle</div>
+                          <div className="font-semibold text-sm">{CONTACT.WHATSAPP.VALLE}</div>
+                        </div>
+                      </a>
+                      <a 
+                        href={`mailto:${CONTACT.EMAIL.QUITO}`}
+                        className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-teal-50 transition-colors"
+                      >
+                        <Mail className="w-4 h-4 text-teal-600" />
+                        <div>
+                          <div className="text-xs text-gray-500">Email Quito</div>
+                          <div className="font-semibold text-xs">{CONTACT.EMAIL.QUITO}</div>
+                        </div>
+                      </a>
+                      <a 
+                        href={`mailto:${CONTACT.EMAIL.VALLE}`}
+                        className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-teal-50 transition-colors"
+                      >
+                        <Mail className="w-4 h-4 text-teal-600" />
+                        <div>
+                          <div className="text-xs text-gray-500">Email Valle</div>
+                          <div className="font-semibold text-xs">{CONTACT.EMAIL.VALLE}</div>
+                        </div>
+                      </a>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
             <div className="flex items-center gap-3 md:gap-4">
-              <div className="text-sm font-medium hidden md:block">
+              <div className="text-sm font-medium hidden xl:block">
                 {CONTACT.HOURS.WEEKDAY} | {CONTACT.HOURS.SATURDAY}
               </div>
               <WhatsappNavbar />
@@ -151,7 +254,7 @@ const Header = () => {
               alt="Ansa Medic Dent - Insumos Odontológicos"
               width={110}
               height={110}
-              className="transition-all duration-300"
+              className="transition-all duration-300 w-auto h-auto"
               sizes="110px"
               placeholder="blur"
               blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
@@ -239,23 +342,65 @@ const Header = () => {
                 
                 {/* Mobile Contact Info */}
                 <div className="mt-4 pt-4 px-6 border-t border-gray-200 bg-white">
-                  <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">
+                  <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-3">
                     Contáctanos
                   </h3>
-                  <a 
-                    href="tel:+59322867212"
-                    className="flex items-center gap-3 py-2 text-gray-800 hover:text-teal-600 transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500 rounded"
-                  >
-                    <Phone className="w-4 h-4" aria-hidden="true" />
-                    <span className="text-sm font-medium">(02) 286-7212</span>
-                  </a>
-                  <a 
-                    href="mailto:ansamedicdent@gmail.com"
-                    className="flex items-center gap-3 py-2 text-gray-800 hover:text-teal-600 transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500 rounded"
-                  >
-                    <Mail className="w-4 h-4" aria-hidden="true" />
-                    <span className="text-sm font-medium">Email</span>
-                  </a>
+                  
+                  {/* Quito */}
+                  <div className="mb-3">
+                    <p className="text-xs font-semibold text-teal-700 mb-1.5">Quito</p>
+                    <a 
+                      href={`tel:${CONTACT.PHONE.QUITO.replace(/[^0-9+]/g, '')}`}
+                      className="flex items-center gap-2 py-1.5 text-gray-800 hover:text-teal-600 transition-colors"
+                    >
+                      <Phone className="w-3.5 h-3.5" aria-hidden="true" />
+                      <span className="text-sm">{CONTACT.PHONE.QUITO}</span>
+                    </a>
+                    <a 
+                      href={WHATSAPP_URLS.QUITO}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 py-1.5 text-gray-800 hover:text-green-600 transition-colors"
+                    >
+                      <MessageCircle className="w-3.5 h-3.5" aria-hidden="true" />
+                      <span className="text-sm">WhatsApp</span>
+                    </a>
+                    <a 
+                      href={`mailto:${CONTACT.EMAIL.QUITO}`}
+                      className="flex items-center gap-2 py-1.5 text-gray-800 hover:text-teal-600 transition-colors"
+                    >
+                      <Mail className="w-3.5 h-3.5" aria-hidden="true" />
+                      <span className="text-sm">Email</span>
+                    </a>
+                  </div>
+
+                  {/* Valle */}
+                  <div>
+                    <p className="text-xs font-semibold text-teal-700 mb-1.5">Valle</p>
+                    <a 
+                      href={`tel:${CONTACT.PHONE.VALLE.replace(/[^0-9+]/g, '')}`}
+                      className="flex items-center gap-2 py-1.5 text-gray-800 hover:text-teal-600 transition-colors"
+                    >
+                      <Phone className="w-3.5 h-3.5" aria-hidden="true" />
+                      <span className="text-sm">{CONTACT.PHONE.VALLE}</span>
+                    </a>
+                    <a 
+                      href={WHATSAPP_URLS.VALLE}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 py-1.5 text-gray-800 hover:text-green-600 transition-colors"
+                    >
+                      <MessageCircle className="w-3.5 h-3.5" aria-hidden="true" />
+                      <span className="text-sm">WhatsApp</span>
+                    </a>
+                    <a 
+                      href={`mailto:${CONTACT.EMAIL.VALLE}`}
+                      className="flex items-center gap-2 py-1.5 text-gray-800 hover:text-teal-600 transition-colors"
+                    >
+                      <Mail className="w-3.5 h-3.5" aria-hidden="true" />
+                      <span className="text-sm">Email</span>
+                    </a>
+                  </div>
                 </div>
               </nav>
             </motion.div>

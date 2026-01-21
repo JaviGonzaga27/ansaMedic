@@ -10,6 +10,18 @@ const nextConfig = {
                 protocol: 'https',
                 hostname: 'placehold.co',
             },
+            {
+                protocol: 'https',
+                hostname: 'dentalevamarcos.com',
+            },
+            {
+                protocol: 'https',
+                hostname: 'alignerco.com',
+            },
+            {
+                protocol: 'https',
+                hostname: 'via.placeholder.com',
+            },
         ],
     },
 };

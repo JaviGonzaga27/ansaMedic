@@ -185,7 +185,7 @@ const ServiceTechnical: NextPage = () => {
                   </div>
                 </a>
                 <a 
-                  href={`mailto:${CONTACT.EMAIL}`}
+                  href={`mailto:${CONTACT.EMAIL.MAIN}`}
                   className="flex items-center gap-4 bg-white/10 backdrop-blur-sm p-6 rounded-xl hover:bg-white/20 transition-colors group"
                 >
                   <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
@@ -193,7 +193,7 @@ const ServiceTechnical: NextPage = () => {
                   </div>
                   <div>
                     <p className="text-white/80 text-sm font-semibold">Escríbenos</p>
-                    <p className="text-white text-lg font-bold">{CONTACT.EMAIL}</p>
+                    <p className="text-white text-lg font-bold">{CONTACT.EMAIL.MAIN}</p>
                   </div>
                 </a>
               </div>
