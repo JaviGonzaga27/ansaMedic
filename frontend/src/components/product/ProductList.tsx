@@ -1,74 +1,62 @@
 import React, { useState, useEffect, useMemo, useCallback, memo } from 'react';
 import ProductCard from './ProductCard';
-import ProductsCategoriesData from '../../../public/json/products/productsCategories.json';
-
-// Interfaces actualizadas
-interface Product {
-  id: string;
-  imageUrl: string;
-  name: string;
-  description: string;
-  details?: {
-    images: string[];
-    features: string[];
-    specifications: { name: string; value: string }[];
-  }[];
-}
-
-interface Category {
-  id: string;
-  name: string;
-  products: Product[];
-}
-
-
-
-// Funciones de utilidad actualizadas
-function getAllCategories(): Category[] {
-  return ProductsCategoriesData.categories;
-}
-
-function getProductsByCategory(categoryId: string): Product[] | undefined {
-  const category = ProductsCategoriesData.categories.find(category => category.id === categoryId);
-  return category?.products;
-}
-
-function getAllProducts(): Product[] {
-  return ProductsCategoriesData.categories.flatMap(category => category.products);
-}
-
-function getProductById(productId: string): Product | undefined {
-  return getAllProducts().find(product => product.id === productId);
-}
-
-//memoize utilities para evitar recalcular en cada render
-const allCategories = getAllCategories();
-const allProducts = getAllProducts();
+import { 
+  getAllProducts, 
+  getAllCategories, 
+  getProductsByCategory,
+  Product,
+  Category 
+} from '../../services/products.service';
 
 function ProductList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [showCategories, setShowCategories] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
   const productPerPage = 12;
 
+  // Cargar productos y categorías al montar el componente
+  useEffect(() => {
+    async function loadData() {
+      setLoading(true);
+      try {
+        const [allProducts, allCategories] = await Promise.all([
+          getAllProducts(),
+          getAllCategories(),
+        ]);
+        setProducts(allProducts);
+        setCategories(allCategories);
+      } catch (error) {
+        console.error('Error loading products:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadData();
+  }, []);
+
   const filteredProducts = useMemo(() => {
-    let products = selectedCategory === 'all' ? allProducts : (getProductsByCategory(selectedCategory) || []);
+    let productsToFilter = selectedCategory === 'all' 
+      ? products 
+      : categories.find(cat => cat.id === selectedCategory)?.products || [];
     
     if (searchTerm.trim()) {
       const search = searchTerm.toLowerCase();
-      products = products.filter(product => 
+      productsToFilter = productsToFilter.filter(product => 
         product.name.toLowerCase().includes(search) || 
         product.description.toLowerCase().includes(search)
       );
     }
     
-    return products;
-  }, [selectedCategory, searchTerm]);
+    return productsToFilter;
+  }, [selectedCategory, searchTerm, products, categories]);
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [selectedCategory]);
+  }, [selectedCategory, searchTerm]);
 
   const paginatedData = useMemo(() => {
     const indexOfLastProduct = currentPage * productPerPage;
@@ -89,6 +77,14 @@ function ProductList() {
 
   return (
     <div className="w-full">
+      {loading ? (
+        <div className="flex justify-center items-center min-h-[400px]">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-teal-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">Cargando productos...</p>
+          </div>
+        </div>
+      ) : (
       <div className="flex flex-col lg:flex-row gap-4 lg:gap-6">
         {/* Sidebar de categorías y búsqueda (lado izquierdo) */}
         <aside 
@@ -166,7 +162,7 @@ function ProductList() {
                     Todas las categorías
                   </button>
                 </li>
-                {allCategories.map(category => (
+                {categories.map(category => (
                   <li key={category.id}>
                     <button
                       className={`w-full text-left text-sm px-4 py-2.5 rounded-lg transition-all duration-200 ${
@@ -284,6 +280,7 @@ function ProductList() {
       )}
         </section>
       </div>
+      )}
     </div>
   );
 }

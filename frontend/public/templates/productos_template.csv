@@ -1,4 +1,3 @@
-id,nombre,descripcion,precio,stock,categoria,marca,sku,imageUrl,tags,destacado,activo
-1,Cepillo Dental Eléctrico Pro-Care,Cepillo eléctrico con tecnología sónica avanzada y 5 modos de limpieza,89.99,50,Higiene Oral,Oral-B,OB-PRO-001,https://ejemplo.com/imagen1.jpg,"cepillo,electrico,oral",true,true
-2,Kit de Ortodoncia Invisible,Alineadores transparentes personalizados para corrección dental,1200.00,20,Ortodoncia,Invisalign,INV-KIT-002,https://ejemplo.com/imagen2.jpg,"ortodoncia,invisible,alineadores",true,true
-3,Irrigador Dental Waterpik,Sistema de limpieza por agua a presión para limpieza profunda,65.50,30,Higiene Oral,Waterpik,WP-IRRIG-003,https://ejemplo.com/imagen3.jpg,"irrigador,limpieza,agua",false,true
+categoria,nombre,descripcion,imagen_principal,imagenes_adicionales,caracteristicas,especificaciones,destacado
+Cuidado Dental Básico,Cepillo Dental Eléctrico Pro-Care,"Cepillo eléctrico con tecnología sónica avanzada, 5 modos de limpieza y sensor de presión",cepillo-electrico-principal.jpg,"cepillo-electrico-vista1.jpg | cepillo-electrico-vista2.jpg","Tecnología sónica | 5 modos de limpieza | Sensor de presión | Batería recargable","Tecnología: Sónica | Modos: 5 | Batería: Recargable",SI
+Cuidado Dental Básico,Irrigador Dental Waterpik,"Sistema de limpieza por agua a presión para una limpieza profunda entre los dientes",irrigador-dental-principal.jpg,irrigador-dental-vista1.jpg,"Limpieza profunda | 10 niveles de presión | Tanque de 600ml","Presión: 10 niveles | Capacidad: 600ml | Uso: Diario",NO

@@ -27,6 +27,11 @@ yarn-error.log*
 
 # local env files
 .env*.local
+.env
+
+# scripts de migración - resultados
+/scripts/cloudinary-urls.json
+/scripts/migration-results.json
 
 # vercel
 .vercel

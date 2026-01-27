@@ -3,14 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaWhatsapp, FaChevronLeft, FaChevronRight, FaShoppingCart, FaStar } from 'react-icons/fa';
-
-interface Product {
-  id: string;
-  imageUrl: string;
-  name: string;
-  description: string;
-  featured?: boolean;
-}
+import { getFeaturedProducts, Product } from '../../services/products.service';
 
 const FeaturedProducts = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -21,10 +14,8 @@ const FeaturedProducts = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('/json/products/products.json');
-        const data = await response.json();
-        // Filtrar solo productos destacados
-        const featuredProducts = data.products.filter((p: Product) => p.featured === true);
+        // Obtener productos destacados de ambas fuentes (JSON + Supabase)
+        const featuredProducts = await getFeaturedProducts();
         setProducts(featuredProducts);
       } catch (error) {
         console.error('Error loading products:', error);
