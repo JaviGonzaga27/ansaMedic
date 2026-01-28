@@ -66,7 +66,7 @@ const FeaturedProducts = () => {
 
   if (loading) {
     return (
-      <section className="bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 py-16 px-4 sm:px-6 lg:px-8">
+      <section className="bg-gradient-to-br from-indigo-50 via-purple-50 to-blue-50 py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center">
           <p className="text-gray-600">Cargando productos destacados...</p>
         </div>
@@ -79,11 +79,11 @@ const FeaturedProducts = () => {
   }
 
   return (
-    <section className="bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 py-12 md:py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <section className="bg-gradient-to-br from-indigo-50 via-purple-50 to-blue-50 py-12 md:py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       {/* Animated decorative background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-10 right-10 w-96 h-96 bg-gradient-to-br from-purple-300 to-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
-        <div className="absolute bottom-10 left-10 w-96 h-96 bg-gradient-to-br from-orange-300 to-yellow-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
+        <div className="absolute top-10 right-10 w-96 h-96 bg-gradient-to-br from-indigo-300 to-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
+        <div className="absolute bottom-10 left-10 w-96 h-96 bg-gradient-to-br from-blue-300 to-indigo-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
       </div>
 
       <div className="max-w-7xl mx-auto relative z-10 w-full">
@@ -99,7 +99,7 @@ const FeaturedProducts = () => {
               <FaStar className="text-yellow-500 text-sm" />
               <span className="text-sm font-semibold text-gray-700">Lo Más Destacado</span>
             </div>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 bg-gradient-to-r from-purple-600 via-pink-600 to-orange-600 bg-clip-text text-transparent">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 bg-clip-text text-transparent">
               Novedades en Insumos Dentales
             </h2>
             <p className="text-base md:text-lg text-gray-700 max-w-2xl mx-auto">
@@ -251,7 +251,7 @@ const FeaturedProducts = () => {
         >
           <Link
             href="/products"
-            className="inline-flex items-center space-x-3 bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 hover:from-purple-600 hover:via-pink-600 hover:to-orange-600 text-white font-bold py-4 px-10 rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 active:scale-95"
+            className="inline-flex items-center space-x-3 bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 hover:from-indigo-700 hover:via-purple-700 hover:to-blue-700 text-white font-bold py-4 px-10 rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 active:scale-95"
           >
             <FaShoppingCart className="text-xl" />
             <span className="text-lg">Ver Todos los Productos</span>

@@ -89,7 +89,7 @@ export const LOCATIONS = [
     address: 'Av. Diego Vásquez de Cepeda Oe1-100 y Edmundo Carvajal',
     phone: CONTACT.PHONE.MAIN,
     whatsapp: CONTACT.WHATSAPP.QUITO,
-    googleMapsUrl: 'https://www.google.com/maps/place/AnsaMedic-Dent/@-0.0902669,-78.4706700,20z',
+    googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=AnsaMedic-Dent+Av.+Diego+V%C3%A1squez+de+Cepeda+Oe1-100+y+Edmundo+Carvajal+Quito',
     embedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d997.4533422136245!2d-78.4706700008026!3d-0.09026699999998146!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91d58f9e6e8dd78d%3A0x7b456a2472688637!2sAnsaMedic-Dent!5e0!3m2!1ses!2sec!4v1768761447390!5m2!1ses!2sec',
   },
   {
@@ -97,7 +97,7 @@ export const LOCATIONS = [
     address: 'Valle de los Chillos',
     phone: CONTACT.PHONE.MAIN,
     whatsapp: CONTACT.WHATSAPP.VALLE,
-    googleMapsUrl: 'https://www.google.com/maps/place/Ansa+Medic-Dent+Valle/@-0.3001136,-78.4598171,20z',
+    googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=Ansa+Medic-Dent+Valle+Valle+de+los+Chillos',
     embedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d997.4408968592319!2d-78.45981710080261!3d-0.30011369999999327!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91d5bde0d3c7cced%3A0x83fb4bb6d17fe8c1!2sAnsa%20Medic-Dent%20Valle!5e0!3m2!1ses!2sec!4v1768761519132!5m2!1ses!2sec',
   }
 ];

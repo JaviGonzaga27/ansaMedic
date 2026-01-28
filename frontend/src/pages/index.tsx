@@ -40,7 +40,6 @@ const Home = () => {
         <FeaturedProducts/>
         <TechnicalService />
         <EmprendeSection />
-        <Testimonials />
         <CallToAction />
       </main>
     </Layout>

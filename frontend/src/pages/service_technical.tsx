@@ -10,32 +10,32 @@ const ServiceTechnical: NextPage = () => {
   const services = [
     {
       icon: Wrench,
-      title: 'Mantenimiento Preventivo',
-      description: 'Inspecciones regulares, limpieza profunda y ajustes precisos para extender la vida útil de tus equipos'
+      title: 'Mantenimiento Preventivo y Correctivo',
+      description: 'Inspecciones regulares, limpieza profunda y reparaciones para mantener tus equipos en óptimas condiciones'
     },
     {
       icon: Clock,
-      title: 'Servicio de Emergencia',
-      description: 'Atención rápida y eficiente para minimizar interrupciones en tu práctica'
+      title: 'Instalación de Unidad Dental',
+      description: 'Instalación profesional y configuración completa de unidades dentales'
     },
     {
       icon: Shield,
-      title: 'Reparación Especializada',
-      description: 'Técnicos certificados con experiencia en equipos dentales de todas las marcas'
+      title: 'Reparación y Mantenimiento de Autoclave',
+      description: 'Servicio especializado para autoclaves, garantizando su correcto funcionamiento y esterilización'
     },
     {
       icon: GraduationCap,
-      title: 'Soporte',
-      description: 'Uso y cuidado del equipo dental para maximizar su rendimiento y durabilidad'
+      title: 'Reparación de Compresor',
+      description: 'Mantenimiento y reparación de compresores dentales para un flujo de aire óptimo'
     }
   ]
 
   const benefits = [
-    'Respuesta inmediata a emergencias',
+    'Reparación y mantenimiento de Scaler',
+    'Reparación y mantenimiento de piezas de mano',
     'Técnicos certificados y especializados',
     'Repuestos originales garantizados',
     'Seguimiento post-servicio',
-    'Reportes detallados de cada servicio',
     'Garantía en todas las reparaciones'
   ]
 
@@ -48,7 +48,7 @@ const ServiceTechnical: NextPage = () => {
     >
       <Head>
         <title>Servicio Técnico - Ansa Medic Dent</title>
-        <meta name="description" content="Mantenimiento, reparación y calibración de equipos dentales. Tu práctica en buenas manos con nuestro servicio técnico especializado disponible 24/7" />
+        <meta name="description" content="Mantenimiento preventivo y correctivo, instalación de unidades dentales, reparación de autoclave, compresor, scaler y piezas de mano. Servicio técnico especializado" />
       </Head>
   
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-teal-50">

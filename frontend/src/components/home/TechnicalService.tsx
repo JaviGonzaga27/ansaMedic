@@ -7,25 +7,25 @@ const TechnicalService = () => {
   const services = [
     {
       title: "Mantenimiento Preventivo",
-      description: "Programas personalizados para extender la vida útil de tus equipos con revisiones trimestrales.",
+      description: "Programas personalizados para extender la vida útil de tus equipos.",
       icon: <FaTools className="text-5xl mb-4 text-blue-500" />,
       gradient: "from-blue-500 to-cyan-500"
     },
     {
-      title: "Reparaciones Rápidas",
-      description: "Soluciones eficientes con tiempo de respuesta garantizado en 24 horas.",
+      title: "Reparaciones Especializadas",
+      description: "Servicio profesional para autoclaves, compresores y piezas de mano.",
       icon: <FaBolt className="text-5xl mb-4 text-yellow-500" />,
       gradient: "from-yellow-500 to-orange-500"
     },
     {
-      title: "Garantía Extendida",
-      description: "Protección completa para tu inversión con cobertura extendida disponible.",
+      title: "Repuestos de Buena Calidad",
+      description: "Utilizamos únicamente repuestos de buena calidad para tus equipos.",
       icon: <FaShieldAlt className="text-5xl mb-4 text-green-500" />,
       gradient: "from-green-500 to-emerald-500"
     },
     {
-      title: "Soporte 24/7",
-      description: "Asistencia técnica disponible en todo momento para emergencias críticas.",
+      title: "Instalación Profesional",
+      description: "Instalación y configuración de unidades dentales especializadas.",
       icon: <FaClock className="text-5xl mb-4 text-purple-500" />,
       gradient: "from-purple-500 to-pink-500"
     }
@@ -71,17 +71,13 @@ const TechnicalService = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
               whileHover={{ y: -10, scale: 1.05 }}
-              className="bg-white/90 backdrop-blur-sm p-4 sm:p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 text-center"
+              className="bg-white/90 backdrop-blur-sm p-4 sm:p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 text-center flex flex-col h-full"
             >
-              <motion.div
-                whileHover={{ rotate: 360, scale: 1.2 }}
-                transition={{ duration: 0.6 }}
-                className="inline-block"
-              >
+              <div className="inline-block">
                 {service.icon}
-              </motion.div>
+              </div>
               <h3 className="text-lg sm:text-xl font-semibold mb-2 text-gray-800">{service.title}</h3>
-              <p className="text-gray-600 leading-relaxed text-xs sm:text-sm">{service.description}</p>
+              <p className="text-gray-600 leading-relaxed text-xs sm:text-sm flex-grow">{service.description}</p>
               <div className={`mt-3 h-1 w-16 mx-auto rounded-full bg-gradient-to-r ${service.gradient}`}></div>
             </motion.div>
           ))}
