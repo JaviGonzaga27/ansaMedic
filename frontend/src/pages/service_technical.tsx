@@ -3,10 +3,29 @@ import Head from 'next/head'
 import Link from 'next/link'
 import Layout from '../components/layout/Layout'
 import Image from 'next/image'
-import { Wrench, Clock, Shield, GraduationCap, Phone, Mail, CheckCircle } from 'lucide-react'
+import { Wrench, Clock, Shield, GraduationCap, Phone, Mail, CheckCircle, Armchair } from 'lucide-react'
 import { CONTACT, WHATSAPP_URLS } from '@/utils/constants'
+import { useState, useEffect } from 'react'
 
 const ServiceTechnical: NextPage = () => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  
+  const serviceImages = [
+    'https://res.cloudinary.com/ddmiaf0q3/image/upload/v1769632864/ansamedic/servicio_tecnico/servicio_tecnico_1.jpg',
+    'https://res.cloudinary.com/ddmiaf0q3/image/upload/v1769632865/ansamedic/servicio_tecnico/servicio_tecnico_2.jpg',
+    'https://res.cloudinary.com/ddmiaf0q3/image/upload/v1769632865/ansamedic/servicio_tecnico/servicio_tecnico_3.jpg',
+    'https://res.cloudinary.com/ddmiaf0q3/image/upload/v1769632866/ansamedic/servicio_tecnico/servicio_tecnico_4.jpg',
+  ];
+
+  // Auto-advance carousel every 5 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % serviceImages.length);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [serviceImages.length]);
+
   const services = [
     {
       icon: Wrench,
@@ -27,6 +46,11 @@ const ServiceTechnical: NextPage = () => {
       icon: GraduationCap,
       title: 'Reparación de Compresor',
       description: 'Mantenimiento y reparación de compresores dentales para un flujo de aire óptimo'
+    },
+    {
+      icon: Armchair,
+      title: 'Renovación de Tapizado',
+      description: 'Renovación profesional del tapizado de sillones dentales para una apariencia impecable'
     }
   ]
 
@@ -34,9 +58,9 @@ const ServiceTechnical: NextPage = () => {
     'Reparación y mantenimiento de Scaler',
     'Reparación y mantenimiento de piezas de mano',
     'Técnicos certificados y especializados',
-    'Repuestos originales garantizados',
+    'Repuestos de buena calidad',
     'Seguimiento post-servicio',
-    'Garantía en todas las reparaciones'
+    'Trabajo profesional garantizado'
   ]
 
   return (
@@ -85,7 +109,7 @@ const ServiceTechnical: NextPage = () => {
                 Soluciones integrales para el mantenimiento y reparación de tu equipamiento dental
               </p>
             </div>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
               {services.map((service, index) => {
                 const Icon = service.icon;
                 return (
@@ -108,22 +132,44 @@ const ServiceTechnical: NextPage = () => {
           <section className="mb-20" aria-labelledby="preventivo-heading">
             <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
               <div className="flex flex-col md:flex-row">
-                <div className="md:w-1/2 relative h-64 md:h-auto min-h-[300px]">
+                <div className="md:w-1/2 relative h-96 md:h-auto md:min-h-[500px] bg-gray-100">
                   <Image 
-                    src="/images/preventive-maintenance.jpg" 
-                    alt="Mantenimiento preventivo de equipos dentales" 
+                    src={serviceImages[currentImageIndex]} 
+                    alt={`Servicio técnico dental ${currentImageIndex + 1}`} 
                     fill
-                    style={{ objectFit: 'cover' }}
+                    style={{ objectFit: 'contain' }}
                     sizes="(max-width: 768px) 100vw, 50vw"
+                    priority
                   />
+                  {/* Carousel Controls */}
+                  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+                    {serviceImages.map((_, index) => (
+                      <button
+                        key={index}
+                        style={{
+                          width: index === currentImageIndex ? '10px' : '8px',
+                          height: index === currentImageIndex ? '10px' : '8px',
+                          minWidth: index === currentImageIndex ? '10px' : '8px',
+                          minHeight: index === currentImageIndex ? '10px' : '8px',
+                        }}
+                        onClick={() => setCurrentImageIndex(index)}
+                        className={`rounded-full transition-all duration-300 flex-shrink-0 ${
+                          index === currentImageIndex 
+                            ? 'bg-teal-500' 
+                            : 'bg-white/80 hover:bg-white'
+                        }`}
+                        aria-label={`Ver imagen ${index + 1}`}
+                      />
+                    ))}
+                  </div>
                 </div>
                 <div className="md:w-1/2 p-8 md:p-12">
                   <h2 id="preventivo-heading" className="text-3xl font-bold text-teal-700 mb-6">
-                    Mantenimiento Preventivo
+                    Nuestros Servicios Especializados
                   </h2>
                   <div className="space-y-4 text-gray-700 leading-relaxed">
                     <p>
-                      Nuestro programa de mantenimiento preventivo está diseñado para extender la vida útil 
+                      Ofrecemos un servicio técnico integral diseñado para extender la vida útil 
                       de tus equipos dentales, minimizando el riesgo de fallas y reduciendo los costos de reparación.
                     </p>
                     <p>
