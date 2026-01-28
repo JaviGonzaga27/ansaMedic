@@ -25,8 +25,8 @@ const ServiceTechnical: NextPage = () => {
     },
     {
       icon: GraduationCap,
-      title: 'Capacitación y Soporte',
-      description: 'Formación completa en el uso y cuidado del equipo para tu equipo de trabajo'
+      title: 'Soporte',
+      description: 'Uso y cuidado del equipo dental para maximizar su rendimiento y durabilidad'
     }
   ]
 
@@ -47,7 +47,7 @@ const ServiceTechnical: NextPage = () => {
       canonical="/service_technical"
     >
       <Head>
-        <title>Servicio Técnico Especializado - Ansa Medic Dent</title>
+        <title>Servicio Técnico - Ansa Medic Dent</title>
         <meta name="description" content="Mantenimiento, reparación y calibración de equipos dentales. Tu práctica en buenas manos con nuestro servicio técnico especializado disponible 24/7" />
       </Head>
   
@@ -69,7 +69,7 @@ const ServiceTechnical: NextPage = () => {
           {/* Header */}
           <header className="text-center mb-16">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Servicio Técnico Especializado
+              Servicio Técnico
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Mantén tu consultorio funcionando sin interrupciones con nuestro servicio técnico profesional y confiable
@@ -209,12 +209,6 @@ const ServiceTechnical: NextPage = () => {
                   </svg>
                   WhatsApp Servicio Técnico
                 </a>
-                <Link href="/contact" className="inline-flex items-center justify-center px-8 py-4 bg-white text-teal-600 font-bold rounded-full hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-teal-600">
-                  Formulario de Contacto
-                  <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </Link>
               </div>
             </div>
           </section>
