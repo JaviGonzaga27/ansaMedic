@@ -56,9 +56,15 @@ export interface Database {
   };
 }
 
+// Instancia única (singleton) compartida en toda la app, para que la sesión
+// iniciada en AuthContext viaje también en las peticiones de admin.service.
+let browserClient: ReturnType<typeof createBrowserClient<Database>> | undefined;
+
 export function createClient() {
-  return createBrowserClient<Database>(
+  if (browserClient) return browserClient;
+  browserClient = createBrowserClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   );
+  return browserClient;
 }

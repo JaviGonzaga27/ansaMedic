@@ -1,11 +1,17 @@
-import type { NextPage } from 'next'
+import type { NextPage, GetStaticProps } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
 import Layout from '../components/layout/Layout'
 import ProductList from '../components/product/ProductList'
+import { getCatalogData, Product, Category } from '../services/products.service'
 import { FaSearch, FaWhatsapp, FaTruck, FaCreditCard, FaMoneyBillWave, FaUniversity } from 'react-icons/fa'
 
-const Products: NextPage = () => {
+interface ProductsProps {
+  initialProducts: Product[]
+  initialCategories: Category[]
+}
+
+const Products: NextPage<ProductsProps> = ({ initialProducts, initialCategories }) => {
   return (
     <Layout 
       title="Productos Odontológicos - Catálogo Completo"
@@ -135,11 +141,19 @@ const Products: NextPage = () => {
             </div>
           </header>
           
-          <ProductList />      
+          <ProductList initialProducts={initialProducts} initialCategories={initialCategories} />
         </div>
       </div>
     </Layout>
   )
+}
+
+export const getStaticProps: GetStaticProps<ProductsProps> = async () => {
+  const { products, categories } = await getCatalogData()
+  return {
+    props: { initialProducts: products, initialCategories: categories },
+    revalidate: 60, // ISR: regenera el catálogo cada 60s si hay cambios
+  }
 }
 
 export default Products

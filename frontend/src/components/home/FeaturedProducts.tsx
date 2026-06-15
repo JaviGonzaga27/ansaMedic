@@ -5,27 +5,36 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FaWhatsapp, FaChevronLeft, FaChevronRight, FaShoppingCart, FaStar } from 'react-icons/fa';
 import { getFeaturedProducts, Product } from '../../services/products.service';
 
-const FeaturedProducts = () => {
+interface FeaturedProductsProps {
+  /** Destacados pre-generados en getStaticProps (ISR). Evita el fetch en cliente. */
+  initialProducts?: Product[];
+}
+
+const FeaturedProducts = ({ initialProducts }: FeaturedProductsProps = {}) => {
+  const hasInitial = !!initialProducts && initialProducts.length > 0;
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [products, setProducts] = useState<Product[]>(initialProducts ?? []);
+  const [loading, setLoading] = useState(!hasInitial);
   const [autoplay, setAutoplay] = useState(true);
 
   useEffect(() => {
+    if (hasInitial) return;
+    let active = true;
     const fetchProducts = async () => {
       try {
-        // Obtener productos destacados de ambas fuentes (JSON + Supabase)
         const featuredProducts = await getFeaturedProducts();
-        setProducts(featuredProducts);
+        if (active) setProducts(featuredProducts);
       } catch (error) {
         console.error('Error loading products:', error);
       } finally {
-        setLoading(false);
+        if (active) setLoading(false);
       }
     };
-
     fetchProducts();
-  }, []);
+    return () => {
+      active = false;
+    };
+  }, [hasInitial]);
 
   useEffect(() => {
     if (!autoplay || products.length === 0) return;

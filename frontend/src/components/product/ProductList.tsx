@@ -1,42 +1,52 @@
 import React, { useState, useEffect, useMemo, useCallback, memo } from 'react';
 import ProductCard from './ProductCard';
-import { 
-  getAllProducts, 
-  getAllCategories, 
-  getProductsByCategory,
+import {
+  getCatalogData,
   Product,
-  Category 
+  Category
 } from '../../services/products.service';
 
-function ProductList() {
+interface ProductListProps {
+  /** Datos pre-generados en getStaticProps (ISR). Si vienen, no se consulta en el cliente. */
+  initialProducts?: Product[];
+  initialCategories?: Category[];
+}
+
+function ProductList({ initialProducts, initialCategories }: ProductListProps = {}) {
+  const hasInitial = !!initialProducts && initialProducts.length > 0;
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [showCategories, setShowCategories] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [products, setProducts] = useState<Product[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [products, setProducts] = useState<Product[]>(initialProducts ?? []);
+  const [categories, setCategories] = useState<Category[]>(initialCategories ?? []);
+  const [loading, setLoading] = useState(!hasInitial);
+
   const productPerPage = 12;
 
-  // Cargar productos y categorías al montar el componente
+  // Solo consulta en el cliente si la página NO trajo datos pre-generados.
   useEffect(() => {
+    if (hasInitial) return;
+    let active = true;
     async function loadData() {
       setLoading(true);
       try {
-        const [allProducts, allCategories] = await Promise.all([
-          getAllProducts(),
-          getAllCategories(),
-        ]);
+        const { products: allProducts, categories: allCategories } =
+          await getCatalogData();
+        if (!active) return;
         setProducts(allProducts);
         setCategories(allCategories);
       } catch (error) {
         console.error('Error loading products:', error);
       } finally {
-        setLoading(false);
+        if (active) setLoading(false);
       }
     }
     loadData();
-  }, []);
+    return () => {
+      active = false;
+    };
+  }, [hasInitial]);
 
   const filteredProducts = useMemo(() => {
     let productsToFilter = selectedCategory === 'all' 

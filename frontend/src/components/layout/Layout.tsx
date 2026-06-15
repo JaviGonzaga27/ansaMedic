@@ -2,6 +2,7 @@ import React from 'react';
 import Head from 'next/head';
 import Header from './Header';
 import Footer from './Footer';
+import QuoteWidget from '../quote/QuoteWidget';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -198,6 +199,7 @@ const Layout: React.FC<LayoutProps> = ({
           {children}
         </main>
         <Footer />
+        <QuoteWidget />
       </div>
     </>
   );

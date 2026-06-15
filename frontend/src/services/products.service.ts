@@ -146,11 +146,26 @@ export async function getAllProducts(): Promise<Product[]> {
 }
 
 /**
- * Obtiene todas las categorías únicas
+ * Obtiene productos y categorías en una sola pasada.
+ * Evita el doble fetch a Supabase: getAllProducts() consulta una vez y
+ * getAllCategories() reutiliza ese mismo resultado.
  */
-export async function getAllCategories(): Promise<Category[]> {
-  const allProducts = await getAllProducts();
-  
+export async function getCatalogData(): Promise<{
+  products: Product[];
+  categories: Category[];
+}> {
+  const products = await getAllProducts();
+  const categories = await getAllCategories(products);
+  return { products, categories };
+}
+
+/**
+ * Obtiene todas las categorías únicas.
+ * @param preloaded - productos ya cargados, para no volver a consultar Supabase.
+ */
+export async function getAllCategories(preloaded?: Product[]): Promise<Category[]> {
+  const allProducts = preloaded ?? (await getAllProducts());
+
   // Crear un mapa de categorías
   const categoryMap = new Map<string, Category>();
   
@@ -230,10 +245,10 @@ export async function getProductById(productId: string): Promise<Product | undef
 export async function getFeaturedProducts(limit?: number): Promise<Product[]> {
   const allProducts = await getAllProducts();
   const featured = allProducts.filter(product => product.featured);
-  
+
   if (limit) {
     return featured.slice(0, limit);
   }
-  
+
   return featured;
 }

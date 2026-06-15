@@ -8,13 +8,19 @@ import TechnicalService from '../components/home/TechnicalService';
 import CallToAction from '../components/home/CallToAction';
 import EmprendeSection from '../components/home/EmprendeSection';
 import { SEO_CONSTANTS } from '../utils/constants';
+import type { GetStaticProps } from 'next';
+import { getFeaturedProducts, Product } from '../services/products.service';
 
 const Testimonials = dynamic(() => import('../components/home/Testimonials'), {
   ssr: false,
   loading: () => <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50"><div className="animate-spin rounded-full h-32 w-32 border-b-2 border-indigo-600"></div></div>
 });
 
-const Home = () => {
+interface HomeProps {
+  featured: Product[];
+}
+
+const Home = ({ featured }: HomeProps) => {
 
   return (
     <Layout
@@ -37,13 +43,21 @@ const Home = () => {
 
       <main className="overflow-x-hidden">
         <HeroSection />
-        <FeaturedProducts/>
+        <FeaturedProducts initialProducts={featured} />
         <TechnicalService />
         <EmprendeSection />
         <CallToAction />
       </main>
     </Layout>
   );
+};
+
+export const getStaticProps: GetStaticProps<HomeProps> = async () => {
+  const featured = await getFeaturedProducts();
+  return {
+    props: { featured },
+    revalidate: 60,
+  };
 };
 
 export default Home;

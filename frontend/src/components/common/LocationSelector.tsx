@@ -14,7 +14,7 @@ interface LocationSelectorProps {
 export default function LocationSelector({ isOpen, onClose, productName, productId }: LocationSelectorProps) {
   const handleWhatsAppClick = (location: 'Quito' | 'Valle') => {
     const phoneNumber = location === 'Quito' ? CONTACT.WHATSAPP.QUITO : CONTACT.WHATSAPP.VALLE;
-    const productUrl = typeof window !== 'undefined' ? `${window.location.origin}/products${productId ? `#${productId}` : ''}` : '';
+    const productUrl = typeof window !== 'undefined' ? `${window.location.origin}${productId ? `/products/${productId}` : '/products'}` : '';
     const message = encodeURIComponent(`Hola, estoy interesado en ${productName}. Link: ${productUrl}`);
     
     // Usar el protocolo whatsapp:// que funciona para móvil, desktop y web

@@ -1,7 +1,10 @@
 import React, { useState, useCallback, memo } from 'react';
-import { FaWhatsapp, FaInfoCircle } from 'react-icons/fa';
-import ProductDetail from './ProductDetail';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { FaWhatsapp, FaInfoCircle, FaPlus, FaCheck } from 'react-icons/fa';
 import LocationSelector from '../common/LocationSelector';
+import { useQuote } from '../../context/QuoteContext';
 
 interface ProductCardProps {
   product: {
@@ -17,45 +20,52 @@ interface ProductCardProps {
   };
 }
 
-
-
 function ProductCard({ product }: ProductCardProps) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const router = useRouter();
+  const { has, toggle } = useQuote();
+  const inQuote = has(product.id);
   const [isLocationSelectorOpen, setIsLocationSelectorOpen] = useState(false);
 
+  const href = `/products/${product.id}`;
+
   const handleWhatsAppClick = useCallback((e: React.MouseEvent) => {
-    e.stopPropagation(); // Evitar que se abra el modal
+    e.stopPropagation();
+    e.preventDefault();
     setIsLocationSelectorOpen(true);
   }, []);
 
-  const handleLearnMoreClick = useCallback((e: React.MouseEvent) => {
-    e.stopPropagation(); // Evitar doble trigger
-    setIsModalOpen(true);
-  }, []);
-
+  // La card completa lleva a la ficha del producto
   const handleCardClick = useCallback(() => {
-    // Solo abrir en móvil (pantallas menores a 768px)
-    if (window.innerWidth < 768) {
-      setIsModalOpen(true);
-    }
-  }, []);
-
-  const handleCloseModal = useCallback(() => {
-    setIsModalOpen(false);
-  }, []);
+    router.push(href);
+  }, [router, href]);
 
   return (
     <>
-      <div 
+      <div
         onClick={handleCardClick}
-        className="rounded-lg md:rounded-xl overflow-hidden shadow-md hover:shadow-xl bg-white transition-all duration-300 transform hover:-translate-y-1 flex flex-col h-[350px] sm:h-[380px] md:h-[400px] lg:h-[420px] md:cursor-default cursor-pointer active:scale-[0.98] md:active:scale-100"
+        className="rounded-lg md:rounded-xl overflow-hidden shadow-md hover:shadow-xl bg-white transition-all duration-300 transform hover:-translate-y-1 flex flex-col h-[350px] sm:h-[380px] md:h-[400px] lg:h-[420px] cursor-pointer active:scale-[0.98] md:active:scale-100"
       >
-        <div className="h-[150px] sm:h-[170px] md:h-[180px] lg:h-[200px] overflow-hidden flex-shrink-0 bg-gray-100">
-          <img
+        <div className="relative h-[150px] sm:h-[170px] md:h-[180px] lg:h-[200px] overflow-hidden flex-shrink-0 bg-gray-100">
+          <Image
             src={product.imageUrl}
             alt={product.name}
-            className="w-full h-full object-contain p-2 md:p-3 transition-transform duration-300 hover:scale-110"
+            fill
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            className="object-contain p-2 md:p-3 transition-transform duration-300 hover:scale-110"
           />
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              toggle({ id: product.id, name: product.name, imageUrl: product.imageUrl });
+            }}
+            className={`absolute top-1.5 right-1.5 z-10 w-8 h-8 rounded-full flex items-center justify-center shadow-md transition-colors ${
+              inQuote ? 'bg-teal-600 text-white' : 'bg-white/90 text-teal-600 hover:bg-white'
+            }`}
+            aria-label={inQuote ? 'Quitar de cotización' : 'Agregar a cotización'}
+            title={inQuote ? 'En tu cotización' : 'Agregar a cotización'}
+          >
+            {inQuote ? <FaCheck className="text-xs" /> : <FaPlus className="text-xs" />}
+          </button>
         </div>
         <div className="px-2 py-2 sm:px-3 sm:py-3 md:px-4 md:py-3 flex-grow flex flex-col overflow-hidden">
           <h2 className="font-bold text-xs sm:text-sm md:text-sm lg:text-base mb-1 sm:mb-2 text-teal-700 line-clamp-2">{product.name}</h2>
@@ -63,13 +73,14 @@ function ProductCard({ product }: ProductCardProps) {
         </div>
         <div className="px-1.5 sm:px-2 md:px-3 pt-2 pb-2 sm:pb-3 md:pb-4 flex-shrink-0">
           <div className="flex gap-1 sm:gap-1.5">
-            <button
-              onClick={handleLearnMoreClick}
+            <Link
+              href={href}
+              onClick={(e) => e.stopPropagation()}
               className="flex-1 bg-white hover:bg-gray-100 text-teal-600 text-[8px] sm:text-[9px] md:text-[10px] lg:text-xs font-semibold py-1.5 sm:py-2 px-1 sm:px-1.5 md:px-2 rounded-md sm:rounded-lg transition duration-300 flex items-center justify-center border border-teal-600 whitespace-nowrap min-w-0"
             >
               <FaInfoCircle className="mr-0.5 text-[9px] sm:text-[10px] md:text-xs flex-shrink-0" />
               <span className="overflow-hidden text-ellipsis">Detalles</span>
-            </button>
+            </Link>
             <button
               onClick={handleWhatsAppClick}
               className="flex-1 bg-gradient-teal hover:opacity-90 text-white text-[8px] sm:text-[9px] md:text-[10px] lg:text-xs font-semibold py-1.5 sm:py-2 px-1 sm:px-1.5 md:px-2 rounded-md sm:rounded-lg transition-smooth flex items-center justify-center shadow-md whitespace-nowrap min-w-0"
@@ -80,11 +91,6 @@ function ProductCard({ product }: ProductCardProps) {
           </div>
         </div>
       </div>
-      <ProductDetail
-        product={product}
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-      />
       <LocationSelector
         isOpen={isLocationSelectorOpen}
         onClose={() => setIsLocationSelectorOpen(false)}
