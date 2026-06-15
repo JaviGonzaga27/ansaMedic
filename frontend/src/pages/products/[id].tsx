@@ -71,7 +71,7 @@ const ProductPage: NextPage<ProductPageProps> = ({ product, related }) => {
         />
       </Head>
 
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-teal-50">
+      <div className="min-h-screen bg-gradient-to-br from-cream-50 via-cream-100 to-teal-50">
         <div className="container mx-auto px-4 py-6">
           {/* Breadcrumb */}
           <nav className="mb-6 text-sm" aria-label="Breadcrumb">
@@ -101,14 +101,14 @@ const ProductPage: NextPage<ProductPageProps> = ({ product, related }) => {
           </nav>
 
           {/* Detalle */}
-          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 bg-white rounded-3xl shadow-sm border border-gray-100 p-5 sm:p-8">
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 bg-white rounded-5xl shadow-warm border border-cream-200 p-5 sm:p-8">
             {/* Galería */}
             <ProductGallery images={imagenes} alt={product.name} />
 
             {/* Información */}
             <div className="flex flex-col">
               {product.category && (
-                <span className="inline-block w-fit text-xs font-semibold text-teal-700 bg-teal-50 px-3 py-1 rounded-full mb-3">
+                <span className="inline-block w-fit text-xs font-semibold text-teal-700 bg-teal-100 px-3.5 py-1.5 rounded-full mb-3">
                   {product.category}
                 </span>
               )}
@@ -167,7 +167,7 @@ const ProductPage: NextPage<ProductPageProps> = ({ product, related }) => {
 
           {/* Especificaciones */}
           {specs.length > 0 && (
-            <div className="mt-6 bg-white rounded-3xl shadow-sm border border-gray-100 p-5 sm:p-8">
+            <div className="mt-6 bg-white rounded-5xl shadow-warm border border-cream-200 p-5 sm:p-8">
               <h2 className="text-lg font-bold text-gray-900 mb-4">
                 Especificaciones técnicas
               </h2>

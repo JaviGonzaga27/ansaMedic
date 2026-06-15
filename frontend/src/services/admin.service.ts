@@ -29,12 +29,28 @@ export type ProductInput = Omit<AdminProduct, 'id' | 'created_at' | 'updated_at'
 
 // ---- Mapeos entre la fila de Supabase y el modelo del admin ----
 
+/** Si el valor viene como texto JSON (string), lo parsea; si no, lo devuelve tal cual. */
+function parseMaybeJson(val: any): any {
+  if (val == null) return null;
+  if (typeof val === 'string') {
+    const t = val.trim();
+    if (!t) return null;
+    try { return JSON.parse(t); } catch { return t; }
+  }
+  return val;
+}
+
+const valStr = (v: any): string =>
+  Array.isArray(v) ? v.map(String).join(', ') : String(v);
+
 function rowToProduct(row: any): AdminProduct {
-  // caracteristicas puede venir como { lista: [...] } o como objeto suelto
+  // caracteristicas puede venir como string JSON, { lista: [...] } u objeto suelto
   let caracteristicas: string[] = [];
-  const c = row.caracteristicas;
+  const c = parseMaybeJson(row.caracteristicas);
   if (Array.isArray(c)) {
     caracteristicas = c.map(String);
+  } else if (typeof c === 'string') {
+    if (c.trim()) caracteristicas = [c.trim()];
   } else if (c && typeof c === 'object') {
     if (Array.isArray(c.lista)) {
       caracteristicas = c.lista.map(String);
@@ -46,11 +62,11 @@ function rowToProduct(row: any): AdminProduct {
   }
 
   let especificaciones: { name: string; value: string }[] = [];
-  const e = row.especificaciones;
+  const e = parseMaybeJson(row.especificaciones);
   if (e && typeof e === 'object' && !Array.isArray(e)) {
     especificaciones = Object.entries(e).map(([name, value]) => ({
-      name,
-      value: String(value),
+      name: name.charAt(0).toUpperCase() + name.slice(1),
+      value: valStr(value),
     }));
   }
 

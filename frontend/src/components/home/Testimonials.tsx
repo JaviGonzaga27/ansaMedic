@@ -16,21 +16,21 @@ const testimonials: TestimonialData[] = [
     role: "Odontóloga General",
     text: "Ansa Medic-Dent ha revolucionado mi práctica. Sus productos son de primera calidad y su servicio técnico es inigualable. ¡Altamente recomendado!",
     rating: 5,
-    gradient: "from-pink-500 to-rose-500"
+    gradient: "from-teal-400 to-teal-500"
   },
   {
     name: "Dr. Carlos Mendoza",
     role: "Especialista en Ortodoncia",
     text: "El soporte técnico es excepcional. Me mantienen actualizado con las últimas tecnologías sin salir de mi consultorio. Excelente servicio.",
     rating: 5,
-    gradient: "from-purple-500 to-indigo-500"
+    gradient: "from-teal-500 to-teal-600"
   },
   {
     name: "Dra. Ana Pérez",
     role: "Endodoncista",
     text: "La calidad de los productos y la atención personalizada hacen la diferencia. Llevo años trabajando con ellos y siempre superan mis expectativas.",
     rating: 5,
-    gradient: "from-blue-500 to-cyan-500"
+    gradient: "from-teal-500 to-teal-600"
   }
 ];
 
@@ -77,12 +77,12 @@ TestimonialCard.displayName = 'TestimonialCard';
 
 const Testimonials = () => {
   return (
-    <section className="bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 py-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <section className="bg-gradient-to-br from-cream-50 via-cream-100 to-teal-50 py-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-20 w-96 h-96 bg-gradient-to-br from-indigo-300 to-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
-        <div className="absolute bottom-20 right-20 w-96 h-96 bg-gradient-to-br from-pink-300 to-rose-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-purple-300 to-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
+        <div className="absolute top-20 left-20 w-96 h-96 bg-gradient-to-br from-teal-200 to-teal-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
+        <div className="absolute bottom-20 right-20 w-96 h-96 bg-gradient-to-br from-teal-200 to-teal-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-cream-300 to-teal-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
       </div>
 
       <div className="max-w-7xl mx-auto relative z-10 w-full">
@@ -100,7 +100,7 @@ const Testimonials = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 bg-clip-text text-transparent">
               Lo que dicen nuestros clientes
             </h2>
           </motion.div>

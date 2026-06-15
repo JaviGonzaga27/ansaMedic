@@ -6,17 +6,17 @@
  * servidor de desarrollo: apunta a la URL YA DESPLEGADA (CDN incluido).
  *
  * Uso:
- *   BASE_URL=https://www.ansamedicdent.com k6 run scripts/loadtest/k6-catalogo.js
+ *   BASE_URL=https://ansa-medic.vercel.app k6 run scripts/loadtest/k6-catalogo.js
  *
  * Para simular ~10.000 usuarios simultáneos, ejecutar con el escenario "pico":
- *   BASE_URL=https://www.ansamedicdent.com k6 run -e ESCENARIO=pico scripts/loadtest/k6-catalogo.js
+ *   BASE_URL=https://ansa-medic.vercel.app k6 run -e ESCENARIO=pico scripts/loadtest/k6-catalogo.js
  */
 
 import http from 'k6/http';
 import { check, sleep, group } from 'k6';
 import { Rate, Trend } from 'k6/metrics';
 
-const BASE_URL = __ENV.BASE_URL || 'https://www.ansamedicdent.com';
+const BASE_URL = __ENV.BASE_URL || 'https://ansa-medic.vercel.app/';
 const ESCENARIO = __ENV.ESCENARIO || 'normal';
 
 const errorRate = new Rate('errores');

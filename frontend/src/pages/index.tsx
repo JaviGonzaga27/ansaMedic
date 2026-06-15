@@ -6,14 +6,14 @@ import HeroSection from '../components/home/HeroSection';
 import FeaturedProducts from '../components/home/FeaturedProducts';
 import TechnicalService from '../components/home/TechnicalService';
 import CallToAction from '../components/home/CallToAction';
-import EmprendeSection from '../components/home/EmprendeSection';
+import ValueProps from '../components/home/ValueProps';
 import { SEO_CONSTANTS } from '../utils/constants';
 import type { GetStaticProps } from 'next';
 import { getFeaturedProducts, Product } from '../services/products.service';
 
 const Testimonials = dynamic(() => import('../components/home/Testimonials'), {
   ssr: false,
-  loading: () => <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50"><div className="animate-spin rounded-full h-32 w-32 border-b-2 border-indigo-600"></div></div>
+  loading: () => <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-cream-50 via-cream-100 to-teal-50"><div className="animate-spin rounded-full h-16 w-16 border-b-2 border-teal-600"></div></div>
 });
 
 interface HomeProps {
@@ -44,8 +44,8 @@ const Home = ({ featured }: HomeProps) => {
       <main className="overflow-x-hidden">
         <HeroSection />
         <FeaturedProducts initialProducts={featured} />
+        <ValueProps />
         <TechnicalService />
-        <EmprendeSection />
         <CallToAction />
       </main>
     </Layout>

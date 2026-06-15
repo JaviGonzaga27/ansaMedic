@@ -1,29 +1,21 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import {
-  FaPlus,
-  FaEdit,
-  FaTrash,
-  FaSignOutAlt,
-  FaSearch,
-  FaStar,
-  FaSpinner,
-  FaBoxOpen,
-  FaTags,
+  FaPlus, FaEdit, FaTrash, FaSignOutAlt, FaSearch, FaStar,
+  FaSpinner, FaBoxOpen, FaTags, FaFileExcel, FaEye,
 } from 'react-icons/fa';
 import { useAuth } from '../../context/AuthContext';
 import ProductForm from '../../components/admin/ProductForm';
 import CategoryManager from '../../components/admin/CategoryManager';
+import ExcelImport from '../../components/admin/ExcelImport';
+import ProductView from '../../components/admin/ProductView';
 import { listCategorias } from '../../services/categorias.service';
 import {
-  AdminProduct,
-  ProductInput,
-  listProducts,
-  createProduct,
-  updateProduct,
-  deleteProduct,
+  AdminProduct, ProductInput, listProducts, createProduct,
+  updateProduct, deleteProduct,
 } from '../../services/admin.service';
 
 const AdminPage: NextPage = () => {
@@ -39,15 +31,13 @@ const AdminPage: NextPage = () => {
   const [editing, setEditing] = useState<AdminProduct | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [catManagerOpen, setCatManagerOpen] = useState(false);
-  const [notice, setNotice] = useState<{ type: 'ok' | 'error'; msg: string } | null>(
-    null
-  );
+  const [excelOpen, setExcelOpen] = useState(false);
+  const [viewing, setViewing] = useState<AdminProduct | null>(null);
+  const [notice, setNotice] = useState<{ type: 'ok' | 'error'; msg: string } | null>(null);
 
   // --- Guard de sesión ---
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      router.replace('/admin/login');
-    }
+    if (!isLoading && !isAuthenticated) router.replace('/admin/login');
   }, [isLoading, isAuthenticated, router]);
 
   // --- Cargar datos ---
@@ -77,7 +67,6 @@ const AdminPage: NextPage = () => {
     }
   }, []);
 
-  // Limpia el aviso automáticamente
   useEffect(() => {
     if (!notice) return;
     const t = setTimeout(() => setNotice(null), 4000);
@@ -95,17 +84,20 @@ const AdminPage: NextPage = () => {
     );
   }, [products, search]);
 
+  const totalDestacados = useMemo(
+    () => products.filter((p) => p.destacado).length,
+    [products]
+  );
+
   // --- Acciones ---
   const handleCreate = () => {
     setEditing(null);
     setFormOpen(true);
   };
-
   const handleEdit = (p: AdminProduct) => {
     setEditing(p);
     setFormOpen(true);
   };
-
   const handleSubmit = async (input: ProductInput) => {
     if (editing) {
       await updateProduct(editing.id, input);
@@ -118,11 +110,8 @@ const AdminPage: NextPage = () => {
     setEditing(null);
     await loadData();
   };
-
   const handleDelete = async (p: AdminProduct) => {
-    if (!window.confirm(`¿Eliminar "${p.nombre_producto}"? Esta acción no se puede deshacer.`)) {
-      return;
-    }
+    if (!window.confirm(`¿Eliminar "${p.nombre_producto}"? Esta acción no se puede deshacer.`)) return;
     setDeletingId(p.id);
     try {
       await deleteProduct(p.id);
@@ -134,63 +123,75 @@ const AdminPage: NextPage = () => {
       setDeletingId(null);
     }
   };
-
   const handleLogout = async () => {
     await logout();
     router.replace('/admin/login');
   };
 
-  // --- Pantalla de carga / redirección ---
+  // --- Carga / redirección ---
   if (isLoading || !isAuthenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-slate-100">
         <FaSpinner className="text-3xl text-teal-600 animate-spin" />
       </div>
     );
   }
 
+  const kpis = [
+    { icon: FaBoxOpen, label: 'Productos', value: products.length, tint: 'bg-teal-50 text-teal-700' },
+    { icon: FaTags, label: 'Categorías', value: categorias.length, tint: 'bg-slate-100 text-slate-700' },
+    { icon: FaStar, label: 'Destacados', value: totalDestacados, tint: 'bg-amber-50 text-amber-700' },
+  ];
+
   return (
     <>
       <Head>
-        <title>Administración de productos | Ansa Medic Dent</title>
+        <title>Panel de administración | Ansa Medic Dent</title>
         <meta name="robots" content="noindex, nofollow" />
       </Head>
 
-      <div className="min-h-screen bg-gray-50">
-        {/* Barra superior */}
-        <header className="bg-white border-b border-gray-200 sticky top-0 z-30">
-          <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-            <div>
-              <h1 className="text-lg font-bold text-gray-900">Panel de Administración</h1>
-              <p className="text-xs text-gray-500">
-                {user?.email} · {products.length} productos
-              </p>
+      <div className="min-h-screen bg-slate-100">
+        {/* App bar */}
+        <header className="bg-white border-b border-slate-200 sticky top-0 z-30">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Image src="/logo.png" alt="Ansa Medic Dent" width={132} height={48} className="h-8 w-auto" quality={90} />
+              <span className="hidden sm:block h-6 w-px bg-slate-200" />
+              <span className="hidden sm:block text-sm font-semibold text-slate-700">Panel de administración</span>
             </div>
-            <div className="flex items-center gap-1">
-              <button
-                onClick={() => setCatManagerOpen(true)}
-                className="flex items-center gap-2 text-sm text-teal-700 hover:text-teal-800 font-medium px-3 py-2 rounded-lg hover:bg-teal-50 transition-colors"
-              >
-                <FaTags /> Categorías
-              </button>
+            <div className="flex items-center gap-3">
+              <div className="hidden sm:flex items-center gap-2 text-sm">
+                <div className="w-8 h-8 rounded-full bg-teal-600 text-white flex items-center justify-center font-semibold text-xs uppercase">
+                  {(user?.email || 'A').charAt(0)}
+                </div>
+                <span className="text-slate-600 max-w-[180px] truncate">{user?.email}</span>
+              </div>
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-2 text-sm text-gray-600 hover:text-red-600 font-medium px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors"
+                className="flex items-center gap-2 text-sm text-slate-600 hover:text-red-600 font-medium px-3 py-2 rounded-lg hover:bg-slate-100 transition-colors"
               >
-                <FaSignOutAlt /> Salir
+                <FaSignOutAlt /> <span className="hidden sm:inline">Salir</span>
               </button>
             </div>
           </div>
         </header>
 
-        <main className="max-w-6xl mx-auto px-4 py-6">
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6 md:py-8">
+          {/* Título */}
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h1 className="text-xl md:text-2xl font-bold text-slate-900">Productos</h1>
+              <p className="text-sm text-slate-500">Gestiona el catálogo de tu tienda</p>
+            </div>
+          </div>
+
           {/* Aviso */}
           {notice && (
             <div
-              className={`mb-4 text-sm rounded-lg px-4 py-3 ${
+              className={`mb-6 text-sm rounded-xl px-4 py-3 border ${
                 notice.type === 'ok'
-                  ? 'bg-green-50 border border-green-200 text-green-700'
-                  : 'bg-red-50 border border-red-200 text-red-700'
+                  ? 'bg-green-50 border-green-200 text-green-700'
+                  : 'bg-red-50 border-red-200 text-red-700'
               }`}
               role="alert"
             >
@@ -198,135 +199,167 @@ const AdminPage: NextPage = () => {
             </div>
           )}
 
-          {/* Controles */}
-          <div className="flex flex-col sm:flex-row gap-3 mb-5">
+          {/* KPIs */}
+          <div className="grid grid-cols-3 gap-3 md:gap-4 mb-6">
+            {kpis.map((k) => (
+              <div key={k.label} className="bg-white rounded-2xl border border-slate-200 p-4 md:p-5 flex items-center gap-4">
+                <div className={`w-11 h-11 rounded-xl flex items-center justify-center ${k.tint}`}>
+                  <k.icon className="text-lg" />
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-slate-900 leading-none">{k.value}</div>
+                  <div className="text-xs md:text-sm text-slate-500 mt-1">{k.label}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Toolbar */}
+          <div className="bg-white rounded-2xl border border-slate-200 p-3 md:p-4 mb-4 flex flex-col sm:flex-row gap-3">
             <div className="relative flex-1">
-              <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm" />
+              <FaSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm" />
               <input
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Buscar por nombre, categoría o descripción…"
-                className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+                className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:bg-white transition-colors"
               />
             </div>
-            <button
-              onClick={handleCreate}
-              className="bg-teal-600 hover:bg-teal-700 text-white font-semibold px-5 py-2.5 rounded-lg transition-colors flex items-center justify-center gap-2 whitespace-nowrap"
-            >
-              <FaPlus /> Nuevo producto
-            </button>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setExcelOpen(true)}
+                className="flex items-center gap-2 text-sm font-medium text-green-700 bg-green-50 border border-green-200 hover:bg-green-100 px-4 py-2.5 rounded-xl transition-colors whitespace-nowrap"
+              >
+                <FaFileExcel /> Importar Excel
+              </button>
+              <button
+                onClick={() => setCatManagerOpen(true)}
+                className="flex items-center gap-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 px-4 py-2.5 rounded-xl transition-colors whitespace-nowrap"
+              >
+                <FaTags /> Categorías
+              </button>
+              <button
+                onClick={handleCreate}
+                className="flex items-center gap-2 text-sm bg-teal-600 hover:bg-teal-700 text-white font-semibold px-4 py-2.5 rounded-xl transition-colors whitespace-nowrap shadow-sm"
+              >
+                <FaPlus /> Nuevo producto
+              </button>
+            </div>
           </div>
 
-          {/* Tabla / lista */}
+          {/* Tabla */}
           {loadingData ? (
-            <div className="flex justify-center items-center py-20">
+            <div className="flex justify-center items-center py-24 bg-white rounded-2xl border border-slate-200">
               <FaSpinner className="text-3xl text-teal-600 animate-spin" />
             </div>
           ) : filtered.length === 0 ? (
-            <div className="text-center py-20 bg-white rounded-xl border border-gray-200">
-              <FaBoxOpen className="mx-auto text-4xl text-gray-300 mb-3" />
-              <p className="text-gray-600">
-                {search ? 'No hay productos que coincidan con la búsqueda.' : 'Aún no hay productos. Crea el primero.'}
+            <div className="text-center py-20 bg-white rounded-2xl border border-slate-200">
+              <FaBoxOpen className="mx-auto text-4xl text-slate-300 mb-3" />
+              <p className="text-slate-600 font-medium">
+                {search ? 'Sin resultados para tu búsqueda.' : 'Aún no hay productos.'}
               </p>
+              {!search && (
+                <button onClick={handleCreate} className="mt-4 inline-flex items-center gap-2 text-sm bg-teal-600 hover:bg-teal-700 text-white font-semibold px-4 py-2.5 rounded-xl transition-colors">
+                  <FaPlus /> Crear el primero
+                </button>
+              )}
             </div>
           ) : (
-            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-              {/* Encabezado de tabla (desktop) */}
-              <div className="hidden md:grid grid-cols-[64px_1fr_180px_120px_120px] gap-4 px-4 py-3 bg-gray-50 border-b border-gray-200 text-xs font-semibold text-gray-500 uppercase tracking-wide">
-                <span>Imagen</span>
-                <span>Producto</span>
-                <span>Categoría</span>
-                <span>Destacado</span>
+            <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+              {/* Encabezado (desktop) */}
+              <div className="hidden md:grid grid-cols-[72px_1fr_180px_110px_140px] gap-4 px-5 py-3 bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                <span>Imagen</span><span>Producto</span><span>Categoría</span><span>Destacado</span>
                 <span className="text-right">Acciones</span>
               </div>
 
-              <ul className="divide-y divide-gray-100">
+              <ul className="divide-y divide-slate-100">
                 {filtered.map((p) => (
                   <li
                     key={p.id}
-                    className="grid grid-cols-[56px_1fr] md:grid-cols-[64px_1fr_180px_120px_120px] gap-3 md:gap-4 px-4 py-3 items-center hover:bg-gray-50 transition-colors"
+                    className="grid grid-cols-[56px_1fr] md:grid-cols-[72px_1fr_180px_110px_140px] gap-3 md:gap-4 px-4 md:px-5 py-3 items-center hover:bg-slate-50 transition-colors"
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={p.imagen_principal || 'https://placehold.co/64x64?text=?'}
                       alt={p.nombre_producto}
-                      className="w-14 h-14 md:w-16 md:h-16 object-contain rounded-lg border border-gray-100 bg-gray-50"
+                      className="w-14 h-14 object-contain rounded-xl border border-slate-100 bg-slate-50"
                     />
-
                     <div className="min-w-0">
-                      <p className="font-semibold text-gray-900 text-sm truncate">
-                        {p.nombre_producto}
-                      </p>
-                      <p className="text-xs text-gray-500 line-clamp-1">
-                        {p.descripcion}
-                      </p>
-                      {/* Categoría visible en móvil */}
-                      <span className="md:hidden inline-block mt-1 text-xs text-teal-700 bg-teal-50 px-2 py-0.5 rounded">
-                        {p.categoria}
-                      </span>
+                      <button onClick={() => setViewing(p)} className="font-semibold text-slate-900 text-sm truncate hover:text-teal-700 text-left">{p.nombre_producto}</button>
+                      <p className="text-xs text-slate-500 line-clamp-1">{p.descripcion}</p>
+                      <span className="md:hidden inline-block mt-1 text-xs text-teal-700 bg-teal-50 px-2 py-0.5 rounded-md">{p.categoria}</span>
                     </div>
-
-                    <span className="hidden md:inline text-sm text-gray-600 truncate">
+                    <span className="hidden md:inline-flex items-center text-xs font-medium text-slate-600 bg-slate-100 px-2.5 py-1 rounded-md truncate max-w-full w-fit">
                       {p.categoria}
                     </span>
-
                     <span className="hidden md:flex items-center">
                       {p.destacado ? (
-                        <span className="inline-flex items-center gap-1 text-xs font-medium text-amber-700 bg-amber-50 px-2 py-1 rounded">
+                        <span className="inline-flex items-center gap-1 text-xs font-medium text-amber-700 bg-amber-50 px-2.5 py-1 rounded-md">
                           <FaStar className="text-amber-500" /> Sí
                         </span>
                       ) : (
-                        <span className="text-xs text-gray-400">No</span>
+                        <span className="text-xs text-slate-400">—</span>
                       )}
                     </span>
-
                     <div className="col-span-2 md:col-span-1 flex md:justify-end gap-2">
                       <button
+                        onClick={() => setViewing(p)}
+                        className="flex items-center justify-center text-slate-500 hover:text-teal-700 hover:bg-teal-50 border border-slate-200 hover:border-teal-200 w-9 h-9 rounded-lg transition-colors"
+                        aria-label="Ver detalle"
+                      >
+                        <FaEye className="text-xs" />
+                      </button>
+                      <button
                         onClick={() => handleEdit(p)}
-                        className="flex items-center gap-1 text-sm text-teal-600 hover:text-white hover:bg-teal-600 border border-teal-200 px-3 py-1.5 rounded-lg transition-colors"
+                        className="flex items-center gap-1.5 text-sm text-slate-600 hover:text-teal-700 hover:bg-teal-50 border border-slate-200 hover:border-teal-200 px-3 py-1.5 rounded-lg transition-colors"
                       >
                         <FaEdit className="text-xs" /> Editar
                       </button>
                       <button
                         onClick={() => handleDelete(p)}
                         disabled={deletingId === p.id}
-                        className="flex items-center gap-1 text-sm text-red-600 hover:text-white hover:bg-red-600 border border-red-200 px-3 py-1.5 rounded-lg transition-colors disabled:opacity-50"
+                        className="flex items-center justify-center text-slate-500 hover:text-white hover:bg-red-600 border border-slate-200 hover:border-red-600 w-9 h-9 rounded-lg transition-colors disabled:opacity-50"
+                        aria-label="Eliminar"
                       >
-                        {deletingId === p.id ? (
-                          <FaSpinner className="animate-spin text-xs" />
-                        ) : (
-                          <FaTrash className="text-xs" />
-                        )}
-                        Eliminar
+                        {deletingId === p.id ? <FaSpinner className="animate-spin text-xs" /> : <FaTrash className="text-xs" />}
                       </button>
                     </div>
                   </li>
                 ))}
               </ul>
+
+              {/* Footer de tabla */}
+              <div className="px-5 py-3 bg-slate-50 border-t border-slate-200 text-xs text-slate-500">
+                Mostrando {filtered.length} de {products.length} productos
+              </div>
             </div>
           )}
         </main>
       </div>
 
-      {/* Modal de formulario */}
       {formOpen && (
         <ProductForm
           initial={editing}
           categorias={categorias}
           onSubmit={handleSubmit}
-          onCancel={() => {
-            setFormOpen(false);
-            setEditing(null);
-          }}
+          onCancel={() => { setFormOpen(false); setEditing(null); }}
         />
       )}
 
-      {/* Modal de gestión de categorías */}
       {catManagerOpen && (
-        <CategoryManager
-          onClose={() => setCatManagerOpen(false)}
-          onChanged={reloadCategorias}
+        <CategoryManager onClose={() => setCatManagerOpen(false)} onChanged={reloadCategorias} />
+      )}
+
+      {excelOpen && (
+        <ExcelImport onClose={() => setExcelOpen(false)} onImported={loadData} />
+      )}
+
+      {viewing && (
+        <ProductView
+          product={viewing}
+          onClose={() => setViewing(null)}
+          onEdit={() => { handleEdit(viewing); setViewing(null); }}
         />
       )}
     </>

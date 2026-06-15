@@ -78,14 +78,13 @@ const Layout: React.FC<LayoutProps> = ({
         <meta name="color-scheme" content="light" />
         <meta name="theme-color" content="#0f7d80" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content={siteName} />
         
         {/* Favicons */}
         <link rel="icon" href="/favicon.ico" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="apple-touch-icon" href="/logo.png" />
         <link rel="manifest" href="/site.webmanifest" />
         
         {/* Structured Data - Organization */}
@@ -192,7 +191,7 @@ const Layout: React.FC<LayoutProps> = ({
         <Header />
         <main 
           id="main-content" 
-          className="flex-grow pt-32 md:pt-36" 
+          className="flex-grow" 
           role="main"
           tabIndex={-1}
         >

@@ -22,7 +22,7 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({ images, alt }) => {
   return (
     <div>
       {/* Imagen principal */}
-      <div className="relative aspect-square w-full rounded-2xl overflow-hidden bg-white border border-gray-100 shadow-sm">
+      <div className="relative aspect-square w-full rounded-4xl overflow-hidden bg-white border border-cream-200 shadow-warm">
         <Image
           src={fotos[activa]}
           alt={alt}
@@ -41,10 +41,10 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({ images, alt }) => {
               key={url}
               onClick={() => setActiva(i)}
               aria-label={`Ver imagen ${i + 1}`}
-              className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${
+              className={`relative aspect-square rounded-2xl overflow-hidden border-2 transition-all ${
                 i === activa
                   ? 'border-teal-500 ring-2 ring-teal-200'
-                  : 'border-gray-200 hover:border-teal-300'
+                  : 'border-cream-200 hover:border-teal-300'
               }`}
             >
               <Image

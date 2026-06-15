@@ -8,7 +8,20 @@ import ProductsCategoriesData from '../../public/json/products/productsCategorie
 // Configuración de Supabase
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-const supabase = createClient(supabaseUrl, supabaseKey);
+const supabase = createClient(supabaseUrl, supabaseKey, {
+  auth: { persistSession: false, autoRefreshToken: false },
+});
+
+/** Si el valor viene como texto JSON (string), lo parsea; si no, lo devuelve tal cual. */
+function parseMaybeJson(val: any): any {
+  if (val == null) return null;
+  if (typeof val === 'string') {
+    const t = val.trim();
+    if (!t) return null;
+    try { return JSON.parse(t); } catch { return t; }
+  }
+  return val;
+}
 
 // Interfaces
 export interface Product {
@@ -51,25 +64,34 @@ interface SupabaseProduct {
  * Convierte un producto de Supabase al formato de la aplicación
  */
 function mapSupabaseProduct(supabaseProduct: SupabaseProduct): Product {
-  // Construir features desde las características
+  // Construir features desde las características (puede venir como texto JSON)
   const features: string[] = [];
-  if (supabaseProduct.caracteristicas) {
-    Object.entries(supabaseProduct.caracteristicas).forEach(([key, value]) => {
-      if (typeof value === 'string') {
-        features.push(value);
-      } else if (Array.isArray(value)) {
-        features.push(...value);
-      } else if (typeof value === 'object') {
-        features.push(`${key}: ${JSON.stringify(value)}`);
-      }
-    });
+  const carac = parseMaybeJson(supabaseProduct.caracteristicas);
+  if (Array.isArray(carac)) {
+    features.push(...carac.map(String));
+  } else if (typeof carac === 'string') {
+    if (carac.trim()) features.push(carac.trim());
+  } else if (carac && typeof carac === 'object') {
+    const lista = (carac as any).lista;
+    if (Array.isArray(lista)) {
+      features.push(...lista.map(String));
+    } else {
+      Object.values(carac).forEach((value) => {
+        if (Array.isArray(value)) features.push(...value.map(String));
+        else features.push(String(value));
+      });
+    }
   }
 
-  // Construir especificaciones
+  // Construir especificaciones (puede venir como texto JSON)
   const specifications: { name: string; value: string }[] = [];
-  if (supabaseProduct.especificaciones) {
-    Object.entries(supabaseProduct.especificaciones).forEach(([name, value]) => {
-      specifications.push({ name, value: String(value) });
+  const espec = parseMaybeJson(supabaseProduct.especificaciones);
+  if (espec && typeof espec === 'object' && !Array.isArray(espec)) {
+    Object.entries(espec).forEach(([name, value]) => {
+      specifications.push({
+        name: name.charAt(0).toUpperCase() + name.slice(1),
+        value: Array.isArray(value) ? value.map(String).join(', ') : String(value),
+      });
     });
   }
 

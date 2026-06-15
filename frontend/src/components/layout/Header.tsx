@@ -103,7 +103,7 @@ const Header = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 bg-white/98 backdrop-blur-md z-50 transition-all duration-300 shadow-md`}
+      className={`sticky top-0 left-0 right-0 bg-white/95 backdrop-blur-md z-50 transition-all duration-300 shadow-sm border-b border-cream-200`}
       role="banner"
     >
       {/* Top Bar - Contact Info */}
@@ -158,7 +158,7 @@ const Header = () => {
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
-                    className="absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-xl overflow-hidden z-50"
+                    className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-warm overflow-hidden z-50 border border-cream-200"
                   >
                     <div className="py-2">
                       <a 
@@ -252,10 +252,11 @@ const Header = () => {
             <Image
               src="/logo.png"
               alt="Ansa Medic Dent - Insumos Odontológicos"
-              width={110}
-              height={110}
-              className="transition-all duration-300 w-auto h-auto"
-              sizes="110px"
+              width={264}
+              height={97}
+              quality={90}
+              className="transition-all duration-300 w-auto h-12 sm:h-14 lg:h-20"
+              sizes="(max-width: 640px) 140px, (max-width: 1024px) 170px, 240px"
               placeholder="blur"
               blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
               priority

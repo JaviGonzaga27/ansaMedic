@@ -8,36 +8,36 @@ const TechnicalService = () => {
     {
       title: "Mantenimiento Preventivo",
       description: "Programas personalizados para extender la vida útil de tus equipos.",
-      icon: <FaTools className="text-5xl mb-4 text-blue-500" />,
-      gradient: "from-blue-500 to-cyan-500"
+      icon: <FaTools className="text-5xl mb-4 text-teal-500" />,
+      gradient: "from-teal-500 to-teal-600"
     },
     {
       title: "Reparaciones Especializadas",
       description: "Servicio profesional para autoclaves, compresores y piezas de mano.",
-      icon: <FaBolt className="text-5xl mb-4 text-yellow-500" />,
-      gradient: "from-yellow-500 to-orange-500"
+      icon: <FaBolt className="text-5xl mb-4 text-teal-600" />,
+      gradient: "from-teal-600 to-teal-700"
     },
     {
       title: "Repuestos de Buena Calidad",
       description: "Utilizamos únicamente repuestos de buena calidad para tus equipos.",
-      icon: <FaShieldAlt className="text-5xl mb-4 text-green-500" />,
-      gradient: "from-green-500 to-emerald-500"
+      icon: <FaShieldAlt className="text-5xl mb-4 text-teal-500" />,
+      gradient: "from-teal-400 to-teal-500"
     },
     {
       title: "Instalación Profesional",
       description: "Instalación y configuración de unidades dentales especializadas.",
-      icon: <FaClock className="text-5xl mb-4 text-purple-500" />,
-      gradient: "from-purple-500 to-pink-500"
+      icon: <FaClock className="text-5xl mb-4 text-teal-500" />,
+      gradient: "from-teal-400 to-teal-500"
     }
   ];
 
   return (
-    <section className="bg-gradient-to-br from-blue-50 via-cyan-50 to-teal-50 py-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <section className="bg-gradient-to-br from-cream-50 via-cream-100 to-teal-50 py-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-96 h-96 bg-gradient-to-br from-blue-300 to-cyan-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
+        <div className="absolute top-20 left-10 w-96 h-96 bg-gradient-to-br from-teal-200 to-teal-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-br from-teal-300 to-green-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-cyan-300 to-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-teal-200 to-teal-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
       </div>
 
       <div className="max-w-7xl w-full relative z-10 mx-auto">
@@ -53,7 +53,7 @@ const TechnicalService = () => {
             whileInView={{ scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-3 bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 bg-clip-text text-transparent"
+            className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-3 bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 bg-clip-text text-transparent"
           >
             Servicio Técnico Especializado
           </motion.h2>
@@ -94,7 +94,7 @@ const TechnicalService = () => {
             href={WHATSAPP_URLS.SERVICIO}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 hover:from-blue-700 hover:via-cyan-700 hover:to-teal-700 text-white font-bold py-3 px-6 sm:px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl text-sm sm:text-base"
+            className="inline-flex items-center bg-gradient-to-r from-teal-600 via-teal-500 to-teal-600 hover:from-teal-700 hover:via-teal-600 hover:to-teal-700 text-white font-bold py-3 px-6 sm:px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl text-sm sm:text-base"
           >
             <FaPhoneAlt className="mr-2 text-base sm:text-lg" />
             Solicitar Servicio Técnico

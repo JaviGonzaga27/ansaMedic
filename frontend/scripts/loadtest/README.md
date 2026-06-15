@@ -14,7 +14,7 @@ debe apuntar a la **URL desplegada**, no a `localhost` ni a `next dev`.
 ```bash
 # Prueba de estabilidad (200 usuarios)
 BASE_URL=https://TU-DOMINIO k6 run scripts/loadtest/k6-catalogo.js
-BASE_URL=https://TU-DOMINIO k6 run scripts/loadtest/k6-catalogo.js
+BASE_URL=https://ansa-medic.vercel.app/ k6 run scripts/loadtest/k6-catalogo.js
 
 # Pico hasta 10.000 usuarios virtuales concurrentes
 BASE_URL=https://TU-DOMINIO ESCENARIO=pico \

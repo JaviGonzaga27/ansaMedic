@@ -75,7 +75,7 @@ const FeaturedProducts = ({ initialProducts }: FeaturedProductsProps = {}) => {
 
   if (loading) {
     return (
-      <section className="bg-gradient-to-br from-indigo-50 via-purple-50 to-blue-50 py-16 px-4 sm:px-6 lg:px-8">
+      <section className="bg-gradient-to-br from-cream-50 via-cream-100 to-teal-50 py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center">
           <p className="text-gray-600">Cargando productos destacados...</p>
         </div>
@@ -88,11 +88,11 @@ const FeaturedProducts = ({ initialProducts }: FeaturedProductsProps = {}) => {
   }
 
   return (
-    <section className="bg-gradient-to-br from-indigo-50 via-purple-50 to-blue-50 py-12 md:py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <section className="bg-gradient-to-br from-cream-50 via-cream-100 to-teal-50 py-12 md:py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       {/* Animated decorative background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-10 right-10 w-96 h-96 bg-gradient-to-br from-indigo-300 to-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
-        <div className="absolute bottom-10 left-10 w-96 h-96 bg-gradient-to-br from-blue-300 to-indigo-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
+        <div className="absolute top-10 right-10 w-96 h-96 bg-gradient-to-br from-teal-200 to-teal-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
+        <div className="absolute bottom-10 left-10 w-96 h-96 bg-gradient-to-br from-teal-200 to-teal-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
       </div>
 
       <div className="max-w-7xl mx-auto relative z-10 w-full">
@@ -105,10 +105,10 @@ const FeaturedProducts = ({ initialProducts }: FeaturedProductsProps = {}) => {
             transition={{ duration: 0.6 }}
           >
             <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full mb-4 shadow-md">
-              <FaStar className="text-yellow-500 text-sm" />
+              <FaStar className="text-teal-500 text-sm" />
               <span className="text-sm font-semibold text-gray-700">Lo Más Destacado</span>
             </div>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 bg-clip-text text-transparent">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 bg-clip-text text-transparent">
               Novedades en Insumos Dentales
             </h2>
             <p className="text-base md:text-lg text-gray-700 max-w-2xl mx-auto">
@@ -147,7 +147,7 @@ const FeaturedProducts = ({ initialProducts }: FeaturedProductsProps = {}) => {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -100 }}
                 transition={{ duration: 0.5, ease: "easeInOut" }}
-                className="bg-white rounded-3xl shadow-2xl overflow-hidden"
+                className="bg-white rounded-5xl shadow-warm-lg overflow-hidden"
               >
                 <div className="grid md:grid-cols-5">
                   {/* Product Image - Larger on desktop */}
@@ -162,7 +162,7 @@ const FeaturedProducts = ({ initialProducts }: FeaturedProductsProps = {}) => {
                     />
                     {/* Badge */}
                     <div className="absolute top-4 left-4 md:top-6 md:left-6">
-                      <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-full text-xs md:text-sm font-bold shadow-lg flex items-center gap-2">
+                      <div className="bg-gradient-to-r from-teal-500 to-teal-600 text-white px-4 py-2 rounded-full text-xs md:text-sm font-bold shadow-lg flex items-center gap-2">
                         <FaStar className="text-yellow-300" />
                         <span>Destacado</span>
                       </div>
@@ -170,9 +170,9 @@ const FeaturedProducts = ({ initialProducts }: FeaturedProductsProps = {}) => {
                   </div>
 
                   {/* Product Info - More space on desktop */}
-                  <div className="md:col-span-3 p-6 md:p-10 lg:p-12 flex flex-col justify-center bg-gradient-to-br from-white to-purple-50/30">
+                  <div className="md:col-span-3 p-6 md:p-10 lg:p-12 flex flex-col justify-center bg-gradient-to-br from-white to-cream-100/50">
                     {/* Product Number */}
-                    <div className="text-purple-300 font-bold text-sm mb-3">
+                    <div className="text-teal-300 font-bold text-sm mb-3">
                       {String(currentIndex + 1).padStart(2, '0')} / {String(products.length).padStart(2, '0')}
                     </div>
 
@@ -215,7 +215,7 @@ const FeaturedProducts = ({ initialProducts }: FeaturedProductsProps = {}) => {
                       </button>
                       <Link
                         href="/products"
-                        className="sm:w-auto bg-gradient-to-r from-purple-100 to-pink-100 hover:from-purple-200 hover:to-pink-200 text-purple-700 font-semibold py-4 px-6 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 border-2 border-purple-200 hover:border-purple-300"
+                        className="sm:w-auto bg-gradient-to-r from-teal-100 to-cream-100 hover:from-teal-200 hover:to-cream-200 text-teal-700 font-semibold py-4 px-6 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 border-2 border-teal-200 hover:border-teal-300"
                       >
                         <FaShoppingCart />
                         <span>Ver Catálogo</span>
@@ -241,7 +241,7 @@ const FeaturedProducts = ({ initialProducts }: FeaturedProductsProps = {}) => {
                 }}
                 className={`rounded-full transition-all duration-300 flex-shrink-0 ${
                   index === currentIndex 
-                    ? 'bg-gradient-to-r from-purple-500 to-pink-500' 
+                    ? 'bg-gradient-to-r from-teal-400 to-teal-500' 
                     : 'bg-gray-300 hover:bg-gray-400'
                 }`}
                 aria-label={`Ir al producto ${index + 1}`}
@@ -260,7 +260,7 @@ const FeaturedProducts = ({ initialProducts }: FeaturedProductsProps = {}) => {
         >
           <Link
             href="/products"
-            className="inline-flex items-center space-x-3 bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 hover:from-indigo-700 hover:via-purple-700 hover:to-blue-700 text-white font-bold py-4 px-10 rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 active:scale-95"
+            className="inline-flex items-center space-x-3 bg-gradient-to-r from-teal-600 via-teal-500 to-teal-600 hover:from-teal-700 hover:via-teal-600 hover:to-teal-700 text-white font-bold py-4 px-10 rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 active:scale-95"
           >
             <FaShoppingCart className="text-xl" />
             <span className="text-lg">Ver Todos los Productos</span>
@@ -285,7 +285,7 @@ const FeaturedProducts = ({ initialProducts }: FeaturedProductsProps = {}) => {
               <span className="font-semibold">Envío a Todo Ecuador</span>
             </div>
             <div className="flex items-center gap-2">
-              <svg className="w-5 h-5 text-purple-500" fill="currentColor" viewBox="0 0 20 20">
+              <svg className="w-5 h-5 text-teal-500" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd"/>
               </svg>
               <span className="font-semibold">Asesoría Profesional</span>

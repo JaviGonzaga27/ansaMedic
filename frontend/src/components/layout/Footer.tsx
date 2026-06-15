@@ -22,7 +22,7 @@ const Footer: React.FC = () => {
   ];
 
   return (
-    <footer className="bg-gradient-to-br from-gray-900 via-gray-800 to-teal-900 text-white" role="contentinfo">
+    <footer className="bg-gradient-to-br from-gray-900 via-gray-800 to-teal-900 text-white border-t-4 border-teal-600" role="contentinfo">
       <div className="container mx-auto px-4 py-12 lg:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           
@@ -38,7 +38,7 @@ const Footer: React.FC = () => {
                 href="https://www.facebook.com/ansamedicdent" 
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 bg-gray-700 hover:bg-teal-600 rounded-lg flex items-center justify-center transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-2 focus:ring-offset-gray-900 transform hover:scale-110"
+                className="w-11 h-11 bg-gray-700 hover:bg-teal-600 rounded-xl flex items-center justify-center transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-2 focus:ring-offset-gray-900 transform hover:scale-110"
                 aria-label="Síguenos en Facebook"
               >
                 <Facebook size={20} aria-hidden="true" />
@@ -47,7 +47,7 @@ const Footer: React.FC = () => {
                 href="https://www.instagram.com/ansamedicdent" 
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 bg-gray-700 hover:bg-teal-600 rounded-lg flex items-center justify-center transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-2 focus:ring-offset-gray-900 transform hover:scale-110"
+                className="w-11 h-11 bg-gray-700 hover:bg-teal-600 rounded-xl flex items-center justify-center transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-2 focus:ring-offset-gray-900 transform hover:scale-110"
                 aria-label="Síguenos en Instagram"
               >
                 <Instagram size={20} aria-hidden="true" />
@@ -56,7 +56,7 @@ const Footer: React.FC = () => {
                 href="https://twitter.com/ansamedicdent" 
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 bg-gray-700 hover:bg-teal-600 rounded-lg flex items-center justify-center transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-2 focus:ring-offset-gray-900 transform hover:scale-110"
+                className="w-11 h-11 bg-gray-700 hover:bg-teal-600 rounded-xl flex items-center justify-center transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-2 focus:ring-offset-gray-900 transform hover:scale-110"
                 aria-label="Síguenos en Twitter"
               >
                 <Twitter size={20} aria-hidden="true" />

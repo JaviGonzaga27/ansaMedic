@@ -43,9 +43,9 @@ function ProductCard({ product }: ProductCardProps) {
     <>
       <div
         onClick={handleCardClick}
-        className="rounded-lg md:rounded-xl overflow-hidden shadow-md hover:shadow-xl bg-white transition-all duration-300 transform hover:-translate-y-1 flex flex-col h-[350px] sm:h-[380px] md:h-[400px] lg:h-[420px] cursor-pointer active:scale-[0.98] md:active:scale-100"
+        className="rounded-3xl overflow-hidden shadow-soft hover:shadow-warm bg-white border border-cream-100 transition-all duration-300 transform hover:-translate-y-1.5 flex flex-col h-[350px] sm:h-[380px] md:h-[400px] lg:h-[420px] cursor-pointer active:scale-[0.98] md:active:scale-100"
       >
-        <div className="relative h-[150px] sm:h-[170px] md:h-[180px] lg:h-[200px] overflow-hidden flex-shrink-0 bg-gray-100">
+        <div className="relative h-[150px] sm:h-[170px] md:h-[180px] lg:h-[200px] overflow-hidden flex-shrink-0 bg-cream-50">
           <Image
             src={product.imageUrl}
             alt={product.name}

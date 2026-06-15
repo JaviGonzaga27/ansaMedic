@@ -21,6 +21,7 @@ function ProductList({ initialProducts, initialCategories }: ProductListProps = 
   const [products, setProducts] = useState<Product[]>(initialProducts ?? []);
   const [categories, setCategories] = useState<Category[]>(initialCategories ?? []);
   const [loading, setLoading] = useState(!hasInitial);
+  const [sortBy, setSortBy] = useState<'recomendado' | 'az' | 'za'>('recomendado');
 
   const productPerPage = 12;
 
@@ -64,18 +65,27 @@ function ProductList({ initialProducts, initialCategories }: ProductListProps = 
     return productsToFilter;
   }, [selectedCategory, searchTerm, products, categories]);
 
+  const sortedProducts = useMemo(() => {
+    if (sortBy === 'recomendado') return filteredProducts;
+    const arr = [...filteredProducts];
+    arr.sort((a, b) =>
+      sortBy === 'az' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name)
+    );
+    return arr;
+  }, [filteredProducts, sortBy]);
+
   useEffect(() => {
     setCurrentPage(1);
-  }, [selectedCategory, searchTerm]);
+  }, [selectedCategory, searchTerm, sortBy]);
 
   const paginatedData = useMemo(() => {
     const indexOfLastProduct = currentPage * productPerPage;
     const indexOfFirstProduct = indexOfLastProduct - productPerPage;
-    const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
-    const totalPages = Math.ceil(filteredProducts.length / productPerPage);
-    
+    const currentProducts = sortedProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+    const totalPages = Math.ceil(sortedProducts.length / productPerPage);
+
     return { currentProducts, totalPages };
-  }, [filteredProducts, currentPage, productPerPage]);
+  }, [sortedProducts, currentPage, productPerPage]);
 
   const handlePageChange = useCallback((pageNumber: number) => {
     setCurrentPage(pageNumber);
@@ -102,7 +112,7 @@ function ProductList({ initialProducts, initialCategories }: ProductListProps = 
           aria-label="Filtros"
           role="complementary"
         >
-          <div className="bg-white rounded-xl shadow-md overflow-hidden lg:sticky lg:top-32">
+          <div className="bg-white rounded-3xl shadow-soft border border-cream-200 overflow-hidden lg:sticky lg:top-40">
             {/* Barra de búsqueda */}
             <div className="p-4 border-b border-gray-200">
               <div className="relative">
@@ -202,17 +212,30 @@ function ProductList({ initialProducts, initialCategories }: ProductListProps = 
           role="region"
         >
 
-      {/* Contador de productos */}
-      <div className="mb-4 md:mb-6 bg-white rounded-lg shadow-sm p-3 md:p-4">
-        <p className="text-sm md:text-base text-gray-700 text-center md:text-left" aria-live="polite" aria-atomic="true">
+      {/* Barra de herramientas del catálogo */}
+      <div className="mb-4 md:mb-6 bg-white rounded-2xl shadow-soft border border-cream-200 p-3 md:p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <p className="text-sm md:text-base text-gray-700" aria-live="polite" aria-atomic="true">
           Mostrando <span className="font-bold text-teal-600">{paginatedData.currentProducts.length}</span> de{' '}
           <span className="font-bold text-teal-600">{filteredProducts.length}</span> productos
         </p>
+        <div className="flex items-center gap-2 self-end sm:self-auto">
+          <label htmlFor="sort" className="text-sm text-gray-500">Ordenar:</label>
+          <select
+            id="sort"
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value as 'recomendado' | 'az' | 'za')}
+            className="text-sm bg-white border border-gray-300 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-teal-500"
+          >
+            <option value="recomendado">Recomendado</option>
+            <option value="az">Nombre (A-Z)</option>
+            <option value="za">Nombre (Z-A)</option>
+          </select>
+        </div>
       </div>
       
       {/* Lista de productos */}
       {paginatedData.currentProducts.length === 0 ? (
-        <div className="text-center py-12 md:py-16 bg-white rounded-xl shadow-md" role="status">
+        <div className="text-center py-12 md:py-16 bg-white rounded-3xl shadow-soft border border-cream-200" role="status">
           <svg className="mx-auto h-12 w-12 md:h-16 md:w-16 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
