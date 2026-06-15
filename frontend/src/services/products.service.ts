@@ -154,17 +154,8 @@ function getProductsFromJSON(): Product[] {
  * Para usar solo Supabase, descomenta la línea y comenta el resto
  */
 export async function getAllProducts(): Promise<Product[]> {
-  // 🔥 SOLO SUPABASE: Descomenta esta línea cuando migres todo
-  // return await getProductsFromSupabase();
-
-  // 📦 JSON + SUPABASE: Sistema actual (comentar cuando migres)
-  const [supabaseProducts, jsonProducts] = await Promise.all([
-    getProductsFromSupabase(),
-    Promise.resolve(getProductsFromJSON()),
-  ]);
-
-  // Combinar productos, Supabase primero para que aparezcan al inicio
-  return [...supabaseProducts, ...jsonProducts];
+  // Solo productos reales de Supabase (se quitaron los de prueba del JSON).
+  return await getProductsFromSupabase();
 }
 
 /**
@@ -187,58 +178,15 @@ export async function getCatalogData(): Promise<{
  */
 export async function getAllCategories(preloaded?: Product[]): Promise<Category[]> {
   const allProducts = preloaded ?? (await getAllProducts());
-
-  // Crear un mapa de categorías
   const categoryMap = new Map<string, Category>();
-  
-  // 📦 JSON + SUPABASE: Agregar categorías del JSON (comentar cuando migres)
-  const jsonCategories = ProductsCategoriesData.categories.map(cat => ({
-    id: cat.id,
-    name: cat.name,
-    products: [] as Product[],
-  }));
-  jsonCategories.forEach(cat => {
-    categoryMap.set(cat.id, cat);
-  });
 
-  // Agregar categorías de Supabase si no existen
-  allProducts.forEach(product => {
-    if (product.category) {
-      const categoryId = product.source === 'supabase' 
-        ? product.category.toLowerCase().replace(/\s+/g, '-')
-        : product.category; // Para productos JSON mantener el ID original
-      
-      if (!categoryMap.has(categoryId) && product.source === 'supabase') {
-        categoryMap.set(categoryId, {
-          id: categoryId,
-          name: product.category,
-          products: [],
-        });
-      }
+  allProducts.forEach((product) => {
+    if (!product.category) return;
+    const categoryId = product.category.toLowerCase().replace(/\s+/g, '-');
+    if (!categoryMap.has(categoryId)) {
+      categoryMap.set(categoryId, { id: categoryId, name: product.category, products: [] });
     }
-  });
-
-  // Asignar productos a sus categorías
-  allProducts.forEach(product => {
-    if (product.source === 'json') {
-      // Buscar la categoría original del JSON
-      const jsonCategory = ProductsCategoriesData.categories.find(cat =>
-        cat.products.some(p => p.id === product.id)
-      );
-      if (jsonCategory) {
-        const category = categoryMap.get(jsonCategory.id);
-        if (category) {
-          category.products.push(product);
-        }
-      }
-    } else if (product.category) {
-      // Producto de Supabase
-      const categoryId = product.category.toLowerCase().replace(/\s+/g, '-');
-      const category = categoryMap.get(categoryId);
-      if (category) {
-        category.products.push(product);
-      }
-    }
+    categoryMap.get(categoryId)!.products.push(product);
   });
 
   return Array.from(categoryMap.values());

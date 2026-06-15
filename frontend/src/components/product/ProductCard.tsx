@@ -50,7 +50,8 @@ function ProductCard({ product }: ProductCardProps) {
             src={product.imageUrl}
             alt={product.name}
             fill
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            sizes="(max-width: 640px) 60vw, (max-width: 1024px) 33vw, 300px"
+            quality={90}
             className="object-contain p-2 md:p-3 transition-transform duration-300 hover:scale-110"
           />
           <button

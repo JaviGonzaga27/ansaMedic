@@ -1,5 +1,5 @@
-import React from 'react';
-import { FaTimes, FaStar, FaEdit } from 'react-icons/fa';
+import React, { useState } from 'react';
+import { FaTimes, FaStar, FaEdit, FaExclamationTriangle } from 'react-icons/fa';
 import { AdminProduct } from '../../services/admin.service';
 
 interface ProductViewProps {
@@ -10,6 +10,7 @@ interface ProductViewProps {
 
 const ProductView: React.FC<ProductViewProps> = ({ product, onClose, onEdit }) => {
   const imagenes = [product.imagen_principal, ...(product.imagenes_adicionales || [])].filter(Boolean);
+  const [lowRes, setLowRes] = useState(false);
 
   const fmt = (d?: string) => (d ? new Date(d).toLocaleString('es-EC') : '—');
 
@@ -39,9 +40,17 @@ const ProductView: React.FC<ProductViewProps> = ({ product, onClose, onEdit }) =
                   key={i}
                   src={url}
                   alt={`${product.nombre_producto} ${i + 1}`}
+                  onLoad={(e) => { if (i === 0 && e.currentTarget.naturalWidth && e.currentTarget.naturalWidth < 600) setLowRes(true); }}
                   className={`object-contain rounded-xl border bg-slate-50 ${i === 0 ? 'w-28 h-28 border-teal-200' : 'w-20 h-20 border-slate-100'}`}
                 />
               ))}
+            </div>
+          )}
+
+          {lowRes && (
+            <div className="bg-amber-50 border border-amber-200 text-amber-800 text-xs rounded-lg px-3 py-2 flex items-start gap-2">
+              <FaExclamationTriangle className="mt-0.5 flex-shrink-0" />
+              <span>La imagen principal es de <b>baja resolución</b> y puede verse borrosa en el catálogo. Sube una de al menos 800&nbsp;px de ancho desde “Editar”.</span>
             </div>
           )}
 

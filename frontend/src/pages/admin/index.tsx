@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import {
   FaPlus, FaEdit, FaTrash, FaSignOutAlt, FaSearch, FaStar,
-  FaSpinner, FaBoxOpen, FaTags, FaFileExcel, FaEye,
+  FaSpinner, FaBoxOpen, FaTags, FaFileExcel, FaEye, FaExclamationTriangle,
 } from 'react-icons/fa';
 import { useAuth } from '../../context/AuthContext';
 import ProductForm from '../../components/admin/ProductForm';
@@ -33,6 +33,7 @@ const AdminPage: NextPage = () => {
   const [catManagerOpen, setCatManagerOpen] = useState(false);
   const [excelOpen, setExcelOpen] = useState(false);
   const [viewing, setViewing] = useState<AdminProduct | null>(null);
+  const [lowResIds, setLowResIds] = useState<Set<string>>(new Set());
   const [notice, setNotice] = useState<{ type: 'ok' | 'error'; msg: string } | null>(null);
 
   // --- Guard de sesión ---
@@ -182,6 +183,11 @@ const AdminPage: NextPage = () => {
             <div>
               <h1 className="text-xl md:text-2xl font-bold text-slate-900">Productos</h1>
               <p className="text-sm text-slate-500">Gestiona el catálogo de tu tienda</p>
+              {lowResIds.size > 0 && (
+                <p className="text-xs text-amber-600 mt-1 flex items-center gap-1.5">
+                  <FaExclamationTriangle /> {lowResIds.size} con imagen de baja resolución
+                </p>
+              )}
             </div>
           </div>
 
@@ -279,12 +285,26 @@ const AdminPage: NextPage = () => {
                     key={p.id}
                     className="grid grid-cols-[56px_1fr] md:grid-cols-[72px_1fr_180px_110px_140px] gap-3 md:gap-4 px-4 md:px-5 py-3 items-center hover:bg-slate-50 transition-colors"
                   >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={p.imagen_principal || 'https://placehold.co/64x64?text=?'}
-                      alt={p.nombre_producto}
-                      className="w-14 h-14 object-contain rounded-xl border border-slate-100 bg-slate-50"
-                    />
+                    <div className="relative w-14 h-14">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={p.imagen_principal || 'https://placehold.co/64x64?text=?'}
+                        alt={p.nombre_producto}
+                        onLoad={(e) => {
+                          const w = e.currentTarget.naturalWidth;
+                          if (w && w < 500) setLowResIds((prev) => (prev.has(p.id) ? prev : new Set(prev).add(p.id)));
+                        }}
+                        className="w-14 h-14 object-contain rounded-xl border border-slate-100 bg-slate-50"
+                      />
+                      {lowResIds.has(p.id) && (
+                        <span
+                          className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-amber-400 text-amber-900 rounded-full flex items-center justify-center shadow"
+                          title="Imagen de baja resolución: se verá borrosa. Súbela en mayor tamaño (≥800px)."
+                        >
+                          <FaExclamationTriangle className="text-[9px]" />
+                        </span>
+                      )}
+                    </div>
                     <div className="min-w-0">
                       <button onClick={() => setViewing(p)} className="font-semibold text-slate-900 text-sm truncate hover:text-teal-700 text-left">{p.nombre_producto}</button>
                       <p className="text-xs text-slate-500 line-clamp-1">{p.descripcion}</p>

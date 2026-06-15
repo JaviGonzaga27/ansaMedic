@@ -157,7 +157,8 @@ const FeaturedProducts = ({ initialProducts }: FeaturedProductsProps = {}) => {
                       alt={products[currentIndex].name}
                       fill
                       className="object-cover p-6 md:p-10 hover:scale-105 transition-transform duration-500"
-                      sizes="(max-width: 768px) 100vw, 40vw"
+                      sizes="(max-width: 768px) 100vw, 500px"
+                      quality={90}
                       priority
                     />
                     {/* Badge */}

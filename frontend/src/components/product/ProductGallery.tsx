@@ -28,7 +28,8 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({ images, alt }) => {
           alt={alt}
           fill
           priority
-          sizes="(max-width: 1024px) 100vw, 50vw"
+          sizes="(max-width: 1024px) 100vw, 600px"
+          quality={90}
           className="object-contain p-6"
         />
       </div>
@@ -51,7 +52,8 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({ images, alt }) => {
                 src={url}
                 alt={`${alt} miniatura ${i + 1}`}
                 fill
-                sizes="80px"
+                sizes="(max-width: 1024px) 18vw, 120px"
+                quality={85}
                 className="object-contain p-1 bg-white"
               />
             </button>
