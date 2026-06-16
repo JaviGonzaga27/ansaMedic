@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FaWhatsapp, FaTimes } from 'react-icons/fa';
 import { MapPin, ChevronRight } from 'lucide-react';
 import { CONTACT } from '@/utils/constants';
+import { trackEvent } from '../../services/metrics.service';
 
 interface LocationSelectorProps {
   isOpen: boolean;
@@ -17,10 +18,9 @@ export default function LocationSelector({ isOpen, onClose, productName, product
     const productUrl = typeof window !== 'undefined' ? `${window.location.origin}${productId ? `/products/${productId}` : '/products'}` : '';
     const message = encodeURIComponent(`Hola, estoy interesado en ${productName}. Link: ${productUrl}`);
     
-    // Usar el protocolo whatsapp:// que funciona para móvil, desktop y web
-    const whatsappUrl = `whatsapp://send?phone=${phoneNumber}&text=${message}`;
-    
-    window.location.href = whatsappUrl;
+    trackEvent('whatsapp', productId, productName);
+    const whatsappUrl = `https://wa.me/${phoneNumber.replace(/[^0-9]/g, '')}?text=${message}`;
+    window.open(whatsappUrl, '_blank');
     onClose();
   };
 

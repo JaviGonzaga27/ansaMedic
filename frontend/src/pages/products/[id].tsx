@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import type { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -8,6 +8,7 @@ import ProductGallery from '../../components/product/ProductGallery';
 import ProductCard from '../../components/product/ProductCard';
 import LocationSelector from '../../components/common/LocationSelector';
 import { useQuote } from '../../context/QuoteContext';
+import { trackEvent } from '../../services/metrics.service';
 import {
   getAllProducts,
   getProductById,
@@ -25,6 +26,10 @@ const ProductPage: NextPage<ProductPageProps> = ({ product, related }) => {
   const [waOpen, setWaOpen] = useState(false);
   const { has, toggle } = useQuote();
   const inQuote = has(product.id);
+
+  useEffect(() => {
+    trackEvent('vista', product.id, product.name);
+  }, [product.id, product.name]);
 
   const detalle = product.details?.[0];
   const imagenes = [product.imageUrl, ...(detalle?.images || [])];

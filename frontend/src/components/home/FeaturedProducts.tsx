@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaWhatsapp, FaChevronLeft, FaChevronRight, FaShoppingCart, FaStar } from 'react-icons/fa';
 import { getFeaturedProducts, Product } from '../../services/products.service';
+import { trackEvent } from '../../services/metrics.service';
+import { brandedImage } from '../../utils/productImage';
 
 interface FeaturedProductsProps {
   /** Destacados pre-generados en getStaticProps (ISR). Evita el fetch en cliente. */
@@ -47,14 +49,9 @@ const FeaturedProducts = ({ initialProducts }: FeaturedProductsProps = {}) => {
   }, [autoplay, products.length]);
 
   const handleWhatsAppClick = (productName: string) => {
+    trackEvent('whatsapp', products[currentIndex]?.id, productName);
     const message = encodeURIComponent(`Hola, estoy interesado en obtener más información sobre: ${productName}`);
-    const phoneNumber = '+593979380563';
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
-    const whatsappUrl = isMobile
-      ? `whatsapp://send?phone=${phoneNumber}&text=${message}`
-      : `https://web.whatsapp.com/send?phone=${phoneNumber}&text=${message}`;
-
+    const whatsappUrl = `https://wa.me/593979380563?text=${message}`;
     window.open(whatsappUrl, '_blank');
   };
 
@@ -153,7 +150,7 @@ const FeaturedProducts = ({ initialProducts }: FeaturedProductsProps = {}) => {
                   {/* Product Image - Larger on desktop */}
                   <div className="md:col-span-2 relative aspect-square md:aspect-auto overflow-hidden bg-gradient-to-br from-teal-50 to-teal-100">
                     <Image
-                      src={products[currentIndex].imageUrl}
+                      src={brandedImage(products[currentIndex].imageUrl, 800)}
                       alt={products[currentIndex].name}
                       fill
                       className="object-cover p-6 md:p-10 hover:scale-105 transition-transform duration-500"

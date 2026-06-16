@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
+import { brandedImage } from '../../utils/productImage';
 
 interface ProductGalleryProps {
   images: string[];
@@ -24,7 +25,7 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({ images, alt }) => {
       {/* Imagen principal */}
       <div className="relative aspect-square w-full rounded-4xl overflow-hidden bg-white border border-cream-200 shadow-warm">
         <Image
-          src={fotos[activa]}
+          src={brandedImage(fotos[activa], 1000)}
           alt={alt}
           fill
           priority

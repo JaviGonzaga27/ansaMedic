@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { FaWhatsapp, FaInfoCircle, FaPlus, FaCheck } from 'react-icons/fa';
 import LocationSelector from '../common/LocationSelector';
 import { useQuote } from '../../context/QuoteContext';
+import { brandedImage } from '../../utils/productImage';
 
 interface ProductCardProps {
   product: {
@@ -47,7 +48,7 @@ function ProductCard({ product }: ProductCardProps) {
       >
         <div className="relative h-[150px] sm:h-[170px] md:h-[180px] lg:h-[200px] overflow-hidden flex-shrink-0 bg-cream-50">
           <Image
-            src={product.imageUrl}
+            src={brandedImage(product.imageUrl, 600)}
             alt={product.name}
             fill
             sizes="(max-width: 640px) 60vw, (max-width: 1024px) 33vw, 300px"

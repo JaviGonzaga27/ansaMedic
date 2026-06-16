@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FaFileInvoice, FaWhatsapp, FaTimes, FaTrash } from 'react-icons/fa';
 import { MapPin, ChevronRight } from 'lucide-react';
 import { useQuote } from '../../context/QuoteContext';
+import { trackEvent } from '../../services/metrics.service';
 import { CONTACT } from '@/utils/constants';
 
 const QuoteWidget: React.FC = () => {
@@ -25,6 +26,7 @@ const QuoteWidget: React.FC = () => {
     const phone = (
       location === 'quito' ? CONTACT.WHATSAPP.QUITO : CONTACT.WHATSAPP.VALLE
     ).replace(/[^0-9]/g, '');
+    items.forEach((it) => trackEvent('cotizacion', it.id, it.name));
     const url = `https://wa.me/${phone}?text=${encodeURIComponent(buildMessage())}`;
     window.open(url, '_blank');
     setChooseLocation(false);

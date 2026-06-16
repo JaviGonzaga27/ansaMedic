@@ -17,10 +17,8 @@ const WhatsappNavbar = () => {
     const phoneNumber = location === 'Quito' ? CONTACT.WHATSAPP.QUITO : CONTACT.WHATSAPP.VALLE;
     const message = encodeURIComponent(`Hola, estoy interesado en realizar una cotización. Sector: ${location.toUpperCase()}`);
 
-    // Usar el protocolo whatsapp:// que funciona para móvil, desktop y web
-    const whatsappUrl = `whatsapp://send?phone=${phoneNumber}&text=${message}`;
-    
-    window.location.href = whatsappUrl;
+    const whatsappUrl = `https://wa.me/${phoneNumber.replace(/[^0-9]/g, '')}?text=${message}`;
+    window.open(whatsappUrl, '_blank');
     setIsModalOpen(false);
   };
 
