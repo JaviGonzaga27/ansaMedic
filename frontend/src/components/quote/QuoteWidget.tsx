@@ -29,7 +29,7 @@ const QuoteWidget: React.FC = () => {
     ).replace(/[^0-9]/g, '');
     const url = `https://wa.me/${phone}?text=${encodeURIComponent(buildMessage())}`;
     // Abrir WhatsApp primero (dentro del gesto del usuario), luego registrar.
-    window.open(url, '_blank');
+    window.location.href = url;
     items.forEach((it) => trackEvent('cotizacion', it.id, it.name));
     setChooseLocation(false);
     setOpen(false);

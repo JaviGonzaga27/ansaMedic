@@ -28,7 +28,7 @@ const HeroSection: React.FC = () => {
     const phoneNumber = location === 'Quito' ? CONTACT.WHATSAPP.QUITO : CONTACT.WHATSAPP.VALLE;
     const message = encodeURIComponent(`Hola, estoy interesado en realizar una cotización. Sector: ${location.toUpperCase()}`);
     const url = `https://wa.me/${phoneNumber.replace(/[^0-9]/g, '')}?text=${message}`;
-    window.open(url, '_blank');
+    window.location.href = url;
     setIsWhatsAppModalOpen(false);
   };
 

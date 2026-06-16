@@ -52,7 +52,7 @@ const FeaturedProducts = ({ initialProducts }: FeaturedProductsProps = {}) => {
     trackEvent('whatsapp', products[currentIndex]?.id, productName);
     const message = encodeURIComponent(`Hola, estoy interesado en obtener más información sobre: ${productName}`);
     const whatsappUrl = `https://wa.me/593979380563?text=${message}`;
-    window.open(whatsappUrl, '_blank');
+    window.location.href = whatsappUrl;
   };
 
   const nextSlide = () => {

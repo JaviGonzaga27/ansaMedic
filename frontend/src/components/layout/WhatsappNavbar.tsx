@@ -18,7 +18,7 @@ const WhatsappNavbar = () => {
     const message = encodeURIComponent(`Hola, estoy interesado en realizar una cotización. Sector: ${location.toUpperCase()}`);
 
     const whatsappUrl = `https://wa.me/${phoneNumber.replace(/[^0-9]/g, '')}?text=${message}`;
-    window.open(whatsappUrl, '_blank');
+    window.location.href = whatsappUrl;
     setIsModalOpen(false);
   };
 

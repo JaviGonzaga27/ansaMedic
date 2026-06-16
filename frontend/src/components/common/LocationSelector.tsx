@@ -20,7 +20,7 @@ export default function LocationSelector({ isOpen, onClose, productName, product
     
     trackEvent('whatsapp', productId, productName);
     const whatsappUrl = `https://wa.me/${phoneNumber.replace(/[^0-9]/g, '')}?text=${message}`;
-    window.open(whatsappUrl, '_blank');
+    window.location.href = whatsappUrl;
     onClose();
   };
 
