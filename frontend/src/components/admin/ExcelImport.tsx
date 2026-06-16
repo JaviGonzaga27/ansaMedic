@@ -175,6 +175,10 @@ const ExcelImport: React.FC<ExcelImportProps> = ({ onClose, onImported }) => {
           caracteristicas: p.caracteristicas,
           especificaciones: p.especificaciones,
           destacado: p.destacado,
+          disponibilidad: 'disponible',
+          codigo: '',
+          precio: null,
+          orden: 0,
         };
         await createProduct(input);
         ok++;

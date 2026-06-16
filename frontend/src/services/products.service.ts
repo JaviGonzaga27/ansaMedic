@@ -36,6 +36,7 @@ export interface Product {
     features: string[];
     specifications: { name: string; value: string }[];
   }[];
+  availability?: 'disponible' | 'agotado' | 'bajo_pedido';
   source?: 'json' | 'supabase'; // Para identificar origen
 }
 
@@ -56,6 +57,8 @@ interface SupabaseProduct {
   caracteristicas: any;
   especificaciones: any;
   destacado: boolean;
+  disponibilidad: string;
+  orden: number;
   created_at: string;
   updated_at: string;
 }
@@ -102,6 +105,7 @@ function mapSupabaseProduct(supabaseProduct: SupabaseProduct): Product {
     description: supabaseProduct.descripcion,
     category: supabaseProduct.categoria,
     featured: supabaseProduct.destacado,
+    availability: (supabaseProduct.disponibilidad as any) || 'disponible',
     details: [
       {
         images: [supabaseProduct.imagen_principal, ...supabaseProduct.imagenes_adicionales],
@@ -121,6 +125,7 @@ async function getProductsFromSupabase(): Promise<Product[]> {
     const { data, error } = await supabase
       .from('productos')
       .select('*')
+      .order('orden', { ascending: true })
       .order('created_at', { ascending: false });
 
     if (error) {
@@ -128,7 +133,8 @@ async function getProductsFromSupabase(): Promise<Product[]> {
       return [];
     }
 
-    return (data || []).map(mapSupabaseProduct);
+    // Los productos AGOTADOS no se muestran en el sitio público.
+    return (data || []).map(mapSupabaseProduct).filter((p) => p.availability !== 'agotado');
   } catch (error) {
     console.error('Error in getProductsFromSupabase:', error);
     return [];

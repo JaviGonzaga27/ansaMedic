@@ -8,6 +8,8 @@ import { createClient } from '../lib/supabase/client';
 
 const supabase = createClient();
 
+export type Disponibilidad = 'disponible' | 'agotado' | 'bajo_pedido';
+
 export interface AdminProduct {
   id: string;
   categoria: string;
@@ -15,11 +17,13 @@ export interface AdminProduct {
   descripcion: string;
   imagen_principal: string;
   imagenes_adicionales: string[];
-  // Lista de características (se guarda como { lista: [...] } en JSONB)
   caracteristicas: string[];
-  // Especificaciones técnicas como pares nombre/valor
   especificaciones: { name: string; value: string }[];
   destacado: boolean;
+  disponibilidad: Disponibilidad;
+  codigo: string;
+  precio: number | null;
+  orden: number;
   created_at?: string;
   updated_at?: string;
 }
@@ -27,9 +31,8 @@ export interface AdminProduct {
 /** Datos del formulario (sin campos autogenerados) */
 export type ProductInput = Omit<AdminProduct, 'id' | 'created_at' | 'updated_at'>;
 
-// ---- Mapeos entre la fila de Supabase y el modelo del admin ----
+// ---- Mapeos ----
 
-/** Si el valor viene como texto JSON (string), lo parsea; si no, lo devuelve tal cual. */
 function parseMaybeJson(val: any): any {
   if (val == null) return null;
   if (typeof val === 'string') {
@@ -44,7 +47,6 @@ const valStr = (v: any): string =>
   Array.isArray(v) ? v.map(String).join(', ') : String(v);
 
 function rowToProduct(row: any): AdminProduct {
-  // caracteristicas puede venir como string JSON, { lista: [...] } u objeto suelto
   let caracteristicas: string[] = [];
   const c = parseMaybeJson(row.caracteristicas);
   if (Array.isArray(c)) {
@@ -52,13 +54,10 @@ function rowToProduct(row: any): AdminProduct {
   } else if (typeof c === 'string') {
     if (c.trim()) caracteristicas = [c.trim()];
   } else if (c && typeof c === 'object') {
-    if (Array.isArray(c.lista)) {
-      caracteristicas = c.lista.map(String);
-    } else {
-      caracteristicas = Object.values(c).flatMap((v) =>
-        Array.isArray(v) ? v.map(String) : [String(v)]
-      );
-    }
+    if (Array.isArray(c.lista)) caracteristicas = c.lista.map(String);
+    else caracteristicas = Object.values(c).flatMap((v) =>
+      Array.isArray(v) ? v.map(String) : [String(v)]
+    );
   }
 
   let especificaciones: { name: string; value: string }[] = [];
@@ -70,6 +69,10 @@ function rowToProduct(row: any): AdminProduct {
     }));
   }
 
+  const disp = row.disponibilidad;
+  const disponibilidad: Disponibilidad =
+    disp === 'agotado' || disp === 'bajo_pedido' ? disp : 'disponible';
+
   return {
     id: row.id,
     categoria: row.categoria ?? '',
@@ -80,6 +83,10 @@ function rowToProduct(row: any): AdminProduct {
     caracteristicas,
     especificaciones,
     destacado: !!row.destacado,
+    disponibilidad,
+    codigo: row.codigo ?? '',
+    precio: row.precio != null ? Number(row.precio) : null,
+    orden: row.orden != null ? Number(row.orden) : 0,
     created_at: row.created_at,
     updated_at: row.updated_at,
   };
@@ -89,9 +96,7 @@ function productToRow(input: ProductInput) {
   const especificacionesObj: Record<string, string> = {};
   input.especificaciones
     .filter((s) => s.name.trim())
-    .forEach((s) => {
-      especificacionesObj[s.name.trim()] = s.value;
-    });
+    .forEach((s) => { especificacionesObj[s.name.trim()] = s.value; });
 
   return {
     categoria: input.categoria.trim(),
@@ -102,17 +107,21 @@ function productToRow(input: ProductInput) {
     caracteristicas: { lista: input.caracteristicas.filter((f) => f.trim()) },
     especificaciones: especificacionesObj,
     destacado: input.destacado,
+    disponibilidad: input.disponibilidad,
+    codigo: input.codigo.trim() || null,
+    precio: input.precio,
+    orden: input.orden,
   };
 }
 
-// ---- Operaciones CRUD ----
+// ---- CRUD ----
 
 export async function listProducts(): Promise<AdminProduct[]> {
   const { data, error } = await supabase
     .from('productos')
     .select('*')
+    .order('orden', { ascending: true })
     .order('created_at', { ascending: false });
-
   if (error) throw new Error(error.message);
   return (data || []).map(rowToProduct);
 }
@@ -123,24 +132,25 @@ export async function createProduct(input: ProductInput): Promise<AdminProduct> 
     .insert(productToRow(input) as never)
     .select()
     .single();
-
   if (error) throw new Error(error.message);
   return rowToProduct(data);
 }
 
-export async function updateProduct(
-  id: string,
-  input: ProductInput
-): Promise<AdminProduct> {
+export async function updateProduct(id: string, input: ProductInput): Promise<AdminProduct> {
   const { data, error } = await supabase
     .from('productos')
     .update(productToRow(input) as never)
     .eq('id', id)
     .select()
     .single();
-
   if (error) throw new Error(error.message);
   return rowToProduct(data);
+}
+
+/** Actualiza solo algunos campos (edición rápida desde la tabla). */
+export async function patchProduct(id: string, patch: Partial<ProductInput>): Promise<void> {
+  const { error } = await supabase.from('productos').update(patch as never).eq('id', id);
+  if (error) throw new Error(error.message);
 }
 
 export async function deleteProduct(id: string): Promise<void> {
@@ -148,7 +158,42 @@ export async function deleteProduct(id: string): Promise<void> {
   if (error) throw new Error(error.message);
 }
 
-/** Lista de categorías existentes (para el datalist del formulario) */
+/** Duplica un producto (crea una copia con "(copia)" en el nombre). */
+export async function duplicateProduct(p: AdminProduct): Promise<AdminProduct> {
+  const input: ProductInput = {
+    categoria: p.categoria,
+    nombre_producto: `${p.nombre_producto} (copia)`,
+    descripcion: p.descripcion,
+    imagen_principal: p.imagen_principal,
+    imagenes_adicionales: p.imagenes_adicionales,
+    caracteristicas: p.caracteristicas,
+    especificaciones: p.especificaciones,
+    destacado: false,
+    disponibilidad: p.disponibilidad,
+    codigo: p.codigo,
+    precio: p.precio,
+    orden: p.orden,
+  };
+  return createProduct(input);
+}
+
+/** Elimina varios productos. */
+export async function bulkDelete(ids: string[]): Promise<void> {
+  if (ids.length === 0) return;
+  const { error } = await supabase.from('productos').delete().in('id', ids);
+  if (error) throw new Error(error.message);
+}
+
+/** Actualiza varios productos con los mismos campos (destacado, categoría, disponibilidad). */
+export async function bulkPatch(
+  ids: string[],
+  patch: Partial<Pick<ProductInput, 'destacado' | 'categoria' | 'disponibilidad'>>
+): Promise<void> {
+  if (ids.length === 0) return;
+  const { error } = await supabase.from('productos').update(patch as never).in('id', ids);
+  if (error) throw new Error(error.message);
+}
+
 export async function listCategorias(): Promise<string[]> {
   const { data, error } = await supabase.from('productos').select('categoria');
   if (error) return [];
@@ -167,5 +212,9 @@ export function emptyProduct(): ProductInput {
     caracteristicas: [],
     especificaciones: [],
     destacado: false,
+    disponibilidad: 'disponible',
+    codigo: '',
+    precio: null,
+    orden: 0,
   };
 }

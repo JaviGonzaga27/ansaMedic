@@ -112,11 +112,18 @@ const ProductPage: NextPage<ProductPageProps> = ({ product, related }) => {
 
             {/* Información */}
             <div className="flex flex-col">
-              {product.category && (
-                <span className="inline-block w-fit text-xs font-semibold text-teal-700 bg-teal-100 px-3.5 py-1.5 rounded-full mb-3">
-                  {product.category}
-                </span>
-              )}
+              <div className="flex flex-wrap items-center gap-2 mb-3">
+                {product.category && (
+                  <span className="inline-block w-fit text-xs font-semibold text-teal-700 bg-teal-100 px-3.5 py-1.5 rounded-full">
+                    {product.category}
+                  </span>
+                )}
+                {product.availability && product.availability !== 'disponible' && (
+                  <span className={`inline-block text-xs font-semibold px-3.5 py-1.5 rounded-full ${product.availability === 'agotado' ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700'}`}>
+                    {product.availability === 'agotado' ? 'Agotado' : 'Bajo pedido'}
+                  </span>
+                )}
+              </div>
               <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 leading-tight mb-4">
                 {product.name}
               </h1>
@@ -252,7 +259,7 @@ export const getStaticProps: GetStaticProps<ProductPageProps> = async ({ params 
 
   return {
     props: { product, related },
-    revalidate: 60, // ISR: re-genera la página cada 60s si hay cambios
+    revalidate: 60,
   };
 };
 

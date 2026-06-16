@@ -153,6 +153,7 @@ const FeaturedProducts = ({ initialProducts }: FeaturedProductsProps = {}) => {
                       src={brandedImage(products[currentIndex].imageUrl, 800)}
                       alt={products[currentIndex].name}
                       fill
+                      unoptimized
                       className="object-cover p-6 md:p-10 hover:scale-105 transition-transform duration-500"
                       sizes="(max-width: 768px) 100vw, 500px"
                       quality={90}

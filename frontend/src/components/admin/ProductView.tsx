@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
 import { FaTimes, FaStar, FaEdit, FaExclamationTriangle } from 'react-icons/fa';
 import { AdminProduct } from '../../services/admin.service';
+import { cldOptimize } from '../../utils/productImage';
+
+const DISP: Record<string, { label: string; cls: string }> = {
+  disponible: { label: 'Disponible', cls: 'text-green-700 bg-green-50' },
+  bajo_pedido: { label: 'Bajo pedido', cls: 'text-amber-700 bg-amber-50' },
+  agotado: { label: 'Agotado', cls: 'text-red-700 bg-red-50' },
+};
 
 interface ProductViewProps {
   product: AdminProduct;
@@ -38,7 +45,7 @@ const ProductView: React.FC<ProductViewProps> = ({ product, onClose, onEdit }) =
                 /* eslint-disable-next-line @next/next/no-img-element */
                 <img
                   key={i}
-                  src={url}
+                  src={cldOptimize(url, 320)}
                   alt={`${product.nombre_producto} ${i + 1}`}
                   onLoad={(e) => { if (i === 0 && e.currentTarget.naturalWidth && e.currentTarget.naturalWidth < 600) setLowRes(true); }}
                   className={`object-contain rounded-xl border bg-slate-50 ${i === 0 ? 'w-28 h-28 border-teal-200' : 'w-20 h-20 border-slate-100'}`}
@@ -62,6 +69,14 @@ const ProductView: React.FC<ProductViewProps> = ({ product, onClose, onEdit }) =
             {product.destacado && (
               <span className="inline-flex items-center gap-1 text-xs font-medium text-amber-700 bg-amber-50 px-2.5 py-1 rounded-md">
                 <FaStar className="text-amber-500" /> Destacado
+              </span>
+            )}
+            <span className={`inline-flex text-xs font-medium px-2.5 py-1 rounded-md ${DISP[product.disponibilidad]?.cls || ''}`}>
+              {DISP[product.disponibilidad]?.label || product.disponibilidad}
+            </span>
+            {product.codigo && (
+              <span className="inline-flex text-xs font-medium text-slate-600 bg-slate-100 px-2.5 py-1 rounded-md">
+                Cód: {product.codigo}
               </span>
             )}
           </div>
@@ -111,6 +126,7 @@ const ProductView: React.FC<ProductViewProps> = ({ product, onClose, onEdit }) =
             <p>ID: <span className="font-mono">{product.id}</span></p>
             <p>Creado: {fmt(product.created_at)} · Actualizado: {fmt(product.updated_at)}</p>
             <p>Imágenes: {imagenes.length} ({product.imagenes_adicionales?.length || 0} adicionales)</p>
+            {product.precio != null && <p>Precio (interno): ${product.precio}</p>}
           </div>
         </div>
       </div>

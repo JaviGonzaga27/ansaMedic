@@ -16,11 +16,10 @@ const QuoteWidget: React.FC = () => {
 
   const buildMessage = () => {
     const origin = typeof window !== 'undefined' ? window.location.origin : '';
-    // Mensaje corto: nombres + un solo enlace al catálogo.
-    // (Incluir el enlace de cada producto hacía el texto demasiado largo y
-    //  WhatsApp fallaba al abrir el chat.)
-    const lineas = items.map((it, i) => `${i + 1}. ${it.name}`).join('\n');
-    return `Hola, quisiera cotizar estos productos:\n\n${lineas}\n\nCatálogo: ${origin}/products`;
+    const lineas = items
+      .map((it, i) => `${i + 1}. ${it.name}\n${origin}/products/${it.id}`)
+      .join('\n\n');
+    return `Hola, quisiera cotizar los siguientes productos:\n\n${lineas}`;
   };
 
   const enviar = (location: 'quito' | 'valle') => {

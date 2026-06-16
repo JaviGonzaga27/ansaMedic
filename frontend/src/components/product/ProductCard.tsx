@@ -13,6 +13,7 @@ interface ProductCardProps {
     imageUrl: string;
     name: string;
     description: string;
+    availability?: 'disponible' | 'agotado' | 'bajo_pedido';
     details?: {
       images: string[];
       features: string[];
@@ -51,6 +52,7 @@ function ProductCard({ product }: ProductCardProps) {
             src={brandedImage(product.imageUrl, 600)}
             alt={product.name}
             fill
+            unoptimized
             sizes="(max-width: 640px) 60vw, (max-width: 1024px) 33vw, 300px"
             quality={90}
             className="object-contain p-2 md:p-3 transition-transform duration-300 hover:scale-110"
@@ -68,6 +70,11 @@ function ProductCard({ product }: ProductCardProps) {
           >
             {inQuote ? <FaCheck className="text-xs" /> : <FaPlus className="text-xs" />}
           </button>
+          {product.availability && product.availability !== 'disponible' && (
+            <span className={`absolute top-1.5 left-1.5 z-10 text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full ${product.availability === 'agotado' ? 'bg-red-500 text-white' : 'bg-amber-400 text-amber-900'}`}>
+              {product.availability === 'agotado' ? 'Agotado' : 'Bajo pedido'}
+            </span>
+          )}
         </div>
         <div className="px-2 py-2 sm:px-3 sm:py-3 md:px-4 md:py-3 flex-grow flex flex-col overflow-hidden">
           <h2 className="font-bold text-xs sm:text-sm md:text-sm lg:text-base mb-1 sm:mb-2 text-teal-700 line-clamp-2">{product.name}</h2>

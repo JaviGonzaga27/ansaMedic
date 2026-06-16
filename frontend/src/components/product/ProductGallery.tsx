@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { brandedImage } from '../../utils/productImage';
+import { brandedImage, cldOptimize } from '../../utils/productImage';
 
 interface ProductGalleryProps {
   images: string[];
@@ -28,6 +28,7 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({ images, alt }) => {
           src={brandedImage(fotos[activa], 1000)}
           alt={alt}
           fill
+          unoptimized
           priority
           sizes="(max-width: 1024px) 100vw, 600px"
           quality={90}
@@ -50,9 +51,10 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({ images, alt }) => {
               }`}
             >
               <Image
-                src={url}
+                src={cldOptimize(url, 150)}
                 alt={`${alt} miniatura ${i + 1}`}
                 fill
+                unoptimized
                 sizes="(max-width: 1024px) 18vw, 120px"
                 quality={85}
                 className="object-contain p-1 bg-white"

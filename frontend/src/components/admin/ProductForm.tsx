@@ -26,6 +26,10 @@ function toInput(p: AdminProduct | null | undefined): ProductInput {
     caracteristicas: p.caracteristicas,
     especificaciones: p.especificaciones,
     destacado: p.destacado,
+    disponibilidad: p.disponibilidad,
+    codigo: p.codigo,
+    precio: p.precio,
+    orden: p.orden,
   };
 }
 
@@ -263,6 +267,62 @@ const ProductForm: React.FC<ProductFormProps> = ({
                   </button>
                 </div>
               ))}
+            </div>
+          </div>
+
+          {/* Disponibilidad / código / precio / orden */}
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                Disponibilidad
+              </label>
+              <select
+                value={form.disponibilidad}
+                onChange={(e) => set('disponibilidad', e.target.value as ProductInput['disponibilidad'])}
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-teal-500"
+              >
+                <option value="disponible">Disponible</option>
+                <option value="bajo_pedido">Bajo pedido</option>
+                <option value="agotado">Agotado</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                Código / SKU
+              </label>
+              <input
+                type="text"
+                value={form.codigo}
+                onChange={(e) => set('codigo', e.target.value)}
+                placeholder="Opcional"
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                Precio (uso interno)
+              </label>
+              <input
+                type="number"
+                step="0.01"
+                min="0"
+                value={form.precio ?? ''}
+                onChange={(e) => set('precio', e.target.value === '' ? null : Number(e.target.value))}
+                placeholder="Opcional"
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                Orden
+              </label>
+              <input
+                type="number"
+                value={form.orden}
+                onChange={(e) => set('orden', Number(e.target.value) || 0)}
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+              />
+              <p className="text-xs text-gray-400 mt-1">Menor = aparece primero.</p>
             </div>
           </div>
 
