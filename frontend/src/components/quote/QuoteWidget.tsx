@@ -16,19 +16,21 @@ const QuoteWidget: React.FC = () => {
 
   const buildMessage = () => {
     const origin = typeof window !== 'undefined' ? window.location.origin : '';
-    const lineas = items
-      .map((it, i) => `${i + 1}. ${it.name}\n${origin}/products/${it.id}`)
-      .join('\n\n');
-    return `Hola, quisiera cotizar los siguientes productos:\n\n${lineas}`;
+    // Mensaje corto: nombres + un solo enlace al catálogo.
+    // (Incluir el enlace de cada producto hacía el texto demasiado largo y
+    //  WhatsApp fallaba al abrir el chat.)
+    const lineas = items.map((it, i) => `${i + 1}. ${it.name}`).join('\n');
+    return `Hola, quisiera cotizar estos productos:\n\n${lineas}\n\nCatálogo: ${origin}/products`;
   };
 
   const enviar = (location: 'quito' | 'valle') => {
     const phone = (
       location === 'quito' ? CONTACT.WHATSAPP.QUITO : CONTACT.WHATSAPP.VALLE
     ).replace(/[^0-9]/g, '');
-    items.forEach((it) => trackEvent('cotizacion', it.id, it.name));
     const url = `https://wa.me/${phone}?text=${encodeURIComponent(buildMessage())}`;
+    // Abrir WhatsApp primero (dentro del gesto del usuario), luego registrar.
     window.open(url, '_blank');
+    items.forEach((it) => trackEvent('cotizacion', it.id, it.name));
     setChooseLocation(false);
     setOpen(false);
   };
