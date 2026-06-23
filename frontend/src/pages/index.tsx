@@ -3,13 +3,14 @@ import Head from 'next/head';
 import dynamic from 'next/dynamic';
 import Layout from '../components/layout/Layout';
 import HeroSection from '../components/home/HeroSection';
+import CategoryGrid, { HomeCategory } from '../components/home/CategoryGrid';
 import FeaturedProducts from '../components/home/FeaturedProducts';
 import TechnicalService from '../components/home/TechnicalService';
 import CallToAction from '../components/home/CallToAction';
 import ValueProps from '../components/home/ValueProps';
 import { SEO_CONSTANTS } from '../utils/constants';
 import type { GetStaticProps } from 'next';
-import { getFeaturedProducts, Product } from '../services/products.service';
+import { getCatalogData, Product } from '../services/products.service';
 
 const Testimonials = dynamic(() => import('../components/home/Testimonials'), {
   ssr: false,
@@ -18,9 +19,10 @@ const Testimonials = dynamic(() => import('../components/home/Testimonials'), {
 
 interface HomeProps {
   featured: Product[];
+  categories: HomeCategory[];
 }
 
-const Home = ({ featured }: HomeProps) => {
+const Home = ({ featured, categories }: HomeProps) => {
 
   return (
     <Layout
@@ -43,6 +45,7 @@ const Home = ({ featured }: HomeProps) => {
 
       <main className="overflow-x-hidden">
         <HeroSection />
+        <CategoryGrid categories={categories} />
         <FeaturedProducts initialProducts={featured} />
         <ValueProps />
         <TechnicalService />
@@ -53,9 +56,13 @@ const Home = ({ featured }: HomeProps) => {
 };
 
 export const getStaticProps: GetStaticProps<HomeProps> = async () => {
-  const featured = await getFeaturedProducts();
+  const { products, categories: cats } = await getCatalogData();
+  const featured = products.filter((p) => p.featured);
+  const categories: HomeCategory[] = cats
+    .map((c) => ({ id: c.id, name: c.name, count: c.products.length }))
+    .sort((a, b) => b.count - a.count);
   return {
-    props: { featured },
+    props: { featured, categories },
     revalidate: 60,
   };
 };

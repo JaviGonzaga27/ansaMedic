@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaWhatsapp, FaChevronLeft, FaChevronRight, FaShoppingCart, FaStar } from 'react-icons/fa';
 import { getFeaturedProducts, Product } from '../../services/products.service';
-import { trackEvent } from '../../services/metrics.service';
+import { trackEvent, trackThen } from '../../services/metrics.service';
 import { brandedImage } from '../../utils/productImage';
 
 interface FeaturedProductsProps {
@@ -48,10 +48,10 @@ const FeaturedProducts = ({ initialProducts }: FeaturedProductsProps = {}) => {
     return () => clearInterval(interval);
   }, [autoplay, products.length]);
 
-  const handleWhatsAppClick = (productName: string) => {
-    trackEvent('whatsapp', products[currentIndex]?.id, productName);
+  const handleWhatsAppClick = async (productName: string) => {
     const message = encodeURIComponent(`Hola, estoy interesado en obtener más información sobre: ${productName}`);
     const whatsappUrl = `https://wa.me/593979380563?text=${message}`;
+    await trackThen(trackEvent('whatsapp', products[currentIndex]?.id, productName, 'quito'));
     window.location.href = whatsappUrl;
   };
 

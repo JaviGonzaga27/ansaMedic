@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FaWhatsapp, FaTimes } from 'react-icons/fa';
 import { MapPin, ChevronRight } from 'lucide-react';
 import { CONTACT } from '@/utils/constants';
-import { trackEvent } from '../../services/metrics.service';
+import { trackEvent, trackThen } from '../../services/metrics.service';
 
 interface LocationSelectorProps {
   isOpen: boolean;
@@ -13,13 +13,12 @@ interface LocationSelectorProps {
 }
 
 export default function LocationSelector({ isOpen, onClose, productName, productId }: LocationSelectorProps) {
-  const handleWhatsAppClick = (location: 'Quito' | 'Valle') => {
+  const handleWhatsAppClick = async (location: 'Quito' | 'Valle') => {
     const phoneNumber = location === 'Quito' ? CONTACT.WHATSAPP.QUITO : CONTACT.WHATSAPP.VALLE;
     const productUrl = typeof window !== 'undefined' ? `${window.location.origin}${productId ? `/products/${productId}` : '/products'}` : '';
     const message = encodeURIComponent(`Hola, estoy interesado en ${productName}. Link: ${productUrl}`);
-    
-    trackEvent('whatsapp', productId, productName);
     const whatsappUrl = `https://wa.me/${phoneNumber.replace(/[^0-9]/g, '')}?text=${message}`;
+    await trackThen(trackEvent('whatsapp', productId, productName, location === 'Quito' ? 'quito' : 'valle'));
     window.location.href = whatsappUrl;
     onClose();
   };

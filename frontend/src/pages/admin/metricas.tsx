@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import {
-  FaSpinner, FaSignOutAlt, FaEye, FaWhatsapp, FaFileInvoice,
+  FaSpinner, FaSignOutAlt, FaEye, FaWhatsapp, FaFileInvoice, FaMapMarkerAlt,
   FaArrowLeft, FaChartLine,
 } from 'react-icons/fa';
 import { useAuth } from '../../context/AuthContext';
@@ -63,11 +63,16 @@ const MetricasPage: NextPage = () => {
     );
   }
 
+  const pct = (curr: number, prev: number) => {
+    if (prev === 0) return curr > 0 ? 100 : 0;
+    return Math.round(((curr - prev) / prev) * 100);
+  };
+
   const kpis = data
     ? [
-        { icon: FaEye, label: 'Vistas de productos', value: data.vistas, tint: 'bg-teal-50 text-teal-700' },
-        { icon: FaWhatsapp, label: 'Consultas por WhatsApp', value: data.whatsapp, tint: 'bg-green-50 text-green-700' },
-        { icon: FaFileInvoice, label: 'Productos cotizados', value: data.cotizaciones, tint: 'bg-amber-50 text-amber-700' },
+        { icon: FaEye, label: 'Vistas de productos', value: data.vistas, prev: data.prev.vistas, tint: 'bg-teal-50 text-teal-700' },
+        { icon: FaWhatsapp, label: 'Consultas por WhatsApp', value: data.whatsapp, prev: data.prev.whatsapp, tint: 'bg-green-50 text-green-700' },
+        { icon: FaFileInvoice, label: 'Productos cotizados', value: data.cotizaciones, prev: data.prev.cotizaciones, tint: 'bg-amber-50 text-amber-700' },
       ]
     : [];
 
@@ -153,21 +158,61 @@ const MetricasPage: NextPage = () => {
                     <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${k.tint}`}>
                       <k.icon className="text-lg" />
                     </div>
-                    <div>
+                    <div className="min-w-0">
                       <div className="text-3xl font-bold text-slate-900 leading-none">{k.value}</div>
                       <div className="text-xs text-slate-500 mt-1">{k.label}</div>
+                      {(() => {
+                        const d = pct(k.value, k.prev);
+                        const up = d >= 0;
+                        return (
+                          <div className="mt-1.5 flex items-center gap-1 text-[11px]">
+                            <span className={`inline-flex items-center gap-0.5 font-semibold ${up ? 'text-green-600' : 'text-red-500'}`}>
+                              {up ? '▲' : '▼'} {Math.abs(d)}%
+                            </span>
+                            <span className="text-slate-400">vs. anterior ({k.prev})</span>
+                          </div>
+                        );
+                      })()}
                     </div>
                   </div>
                 ))}
               </div>
 
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              {/* Desglose por sucursal */}
+              <div className="bg-white rounded-2xl border border-slate-200 p-5 mb-4">
+                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2 mb-4">
+                  <FaMapMarkerAlt className="text-teal-600" /> Por sucursal
+                </h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="rounded-xl border border-slate-100 p-4">
+                    <div className="text-xs font-semibold text-slate-500 mb-2">Quito (Carcelén)</div>
+                    <div className="flex items-center gap-2 text-sm text-slate-700 mb-1">
+                      <FaWhatsapp className="text-green-600" /> Consultas: <span className="font-bold text-slate-900">{data.sucursal.whatsapp.quito}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-slate-700">
+                      <FaFileInvoice className="text-amber-600" /> Cotizaciones: <span className="font-bold text-slate-900">{data.sucursal.cotizacion.quito}</span>
+                    </div>
+                  </div>
+                  <div className="rounded-xl border border-slate-100 p-4">
+                    <div className="text-xs font-semibold text-slate-500 mb-2">Valle (Plaza París)</div>
+                    <div className="flex items-center gap-2 text-sm text-slate-700 mb-1">
+                      <FaWhatsapp className="text-green-600" /> Consultas: <span className="font-bold text-slate-900">{data.sucursal.whatsapp.valle}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-slate-700">
+                      <FaFileInvoice className="text-amber-600" /> Cotizaciones: <span className="font-bold text-slate-900">{data.sucursal.cotizacion.valle}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                 <TopList title="Productos más vistos" icon={<FaEye className="text-teal-600" />} items={data.topVistas} />
                 <TopList title="Más consultados por WhatsApp" icon={<FaWhatsapp className="text-green-600" />} items={data.topWhatsapp} />
+                <TopList title="Más cotizados" icon={<FaFileInvoice className="text-amber-600" />} items={data.topCotizados} />
               </div>
 
               <p className="text-xs text-slate-400 mt-6">
-                Los datos se registran de forma anónima (sin información personal del visitante).
+                Los datos comparan el periodo seleccionado con el periodo inmediatamente anterior de igual duración. Se registran de forma anónima (sin información personal del visitante).
               </p>
             </>
           ) : null}

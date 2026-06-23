@@ -416,6 +416,35 @@ const AdminPage: NextPage = () => {
               </div>
             </div>
           )}
+
+          {/* Panel de filtros (también abajo de la tabla) */}
+          {products.length > 0 && (
+            <div className="bg-white rounded-2xl border border-slate-200 p-3 md:p-4 mt-4">
+              <div className="flex flex-col lg:flex-row gap-3 lg:items-center">
+                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">Filtrar productos</span>
+                <div className="relative flex-1">
+                  <FaSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm" />
+                  <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Buscar por nombre, código, categoría…" className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:bg-white transition-colors" />
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <select value={catFilter} onChange={(e) => setCatFilter(e.target.value)} className="text-sm bg-white border border-slate-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-teal-500">
+                    <option value="all">Todas las categorías</option>
+                    {categorias.map((c) => <option key={c} value={c}>{c}</option>)}
+                  </select>
+                  <select value={imgFilter} onChange={(e) => setImgFilter(e.target.value as any)} className="text-sm bg-white border border-slate-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-teal-500">
+                    <option value="todos">Todas las imágenes</option>
+                    <option value="sin">Sin imagen</option>
+                    <option value="baja">Baja resolución</option>
+                  </select>
+                  {(search || catFilter !== 'all' || imgFilter !== 'todos') && (
+                    <button onClick={() => { setSearch(''); setCatFilter('all'); setImgFilter('todos'); }} className="text-sm font-medium text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 px-4 py-2.5 rounded-xl transition-colors whitespace-nowrap">
+                      Limpiar
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
         </main>
       </div>
 

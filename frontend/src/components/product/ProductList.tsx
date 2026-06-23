@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback, memo } from 'react';
+import { useRouter } from 'next/router';
 import ProductCard from './ProductCard';
 import {
   getCatalogData,
@@ -22,6 +23,7 @@ function ProductList({ initialProducts, initialCategories }: ProductListProps = 
   const [categories, setCategories] = useState<Category[]>(initialCategories ?? []);
   const [loading, setLoading] = useState(!hasInitial);
   const [sortBy, setSortBy] = useState<'recomendado' | 'az' | 'za'>('recomendado');
+  const router = useRouter();
 
   const productPerPage = 12;
 
@@ -48,6 +50,22 @@ function ProductList({ initialProducts, initialCategories }: ProductListProps = 
       active = false;
     };
   }, [hasInitial]);
+
+  // Pre-selecciona categoría desde la URL (?cat=) al llegar desde la home.
+  useEffect(() => {
+    if (!router.isReady) return;
+    const cat = router.query.cat;
+    const catId = Array.isArray(cat) ? cat[0] : cat;
+    if (!catId || categories.length === 0) return;
+    const exists = categories.some((c) => c.id === catId);
+    if (!exists) return;
+    setSelectedCategory(catId);
+    if (typeof window !== 'undefined') {
+      requestAnimationFrame(() => {
+        document.getElementById('catalogo')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    }
+  }, [router.isReady, router.query.cat, categories]);
 
   const filteredProducts = useMemo(() => {
     let productsToFilter = selectedCategory === 'all' 
@@ -96,7 +114,7 @@ function ProductList({ initialProducts, initialCategories }: ProductListProps = 
   }, []);
 
   return (
-    <div className="w-full">
+    <div className="w-full scroll-mt-32" id="catalogo">
       {loading ? (
         <div className="flex justify-center items-center min-h-[400px]">
           <div className="text-center">

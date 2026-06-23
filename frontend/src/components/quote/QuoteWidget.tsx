@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaFileInvoice, FaWhatsapp, FaTimes, FaTrash } from 'react-icons/fa';
+import { FaFileInvoice, FaWhatsapp, FaTimes, FaTrash, FaMinus, FaPlus } from 'react-icons/fa';
 import { MapPin, ChevronRight } from 'lucide-react';
 import { useQuote } from '../../context/QuoteContext';
-import { trackEvent } from '../../services/metrics.service';
+import { trackEvent, trackThen } from '../../services/metrics.service';
 import { CONTACT } from '@/utils/constants';
 
 const QuoteWidget: React.FC = () => {
-  const { items, count, remove, clear } = useQuote();
+  const { items, count, totalUnits, remove, clear, increment, decrement, setQuantity } = useQuote();
   const [open, setOpen] = useState(false);
   const [chooseLocation, setChooseLocation] = useState(false);
 
@@ -17,19 +17,22 @@ const QuoteWidget: React.FC = () => {
   const buildMessage = () => {
     const origin = typeof window !== 'undefined' ? window.location.origin : '';
     const lineas = items
-      .map((it, i) => `${i + 1}. ${it.name}\n${origin}/products/${it.id}`)
+      .map(
+        (it, i) =>
+          `${i + 1}. ${it.name} — Cantidad: ${it.quantity}\n${origin}/products/${it.id}`
+      )
       .join('\n\n');
-    return `Hola, quisiera cotizar los siguientes productos:\n\n${lineas}`;
+    return `Hola, quisiera cotizar los siguientes productos:\n\n${lineas}\n\nTotal de artículos: ${totalUnits}`;
   };
 
-  const enviar = (location: 'quito' | 'valle') => {
+  const enviar = async (location: 'quito' | 'valle') => {
     const phone = (
       location === 'quito' ? CONTACT.WHATSAPP.QUITO : CONTACT.WHATSAPP.VALLE
     ).replace(/[^0-9]/g, '');
     const url = `https://wa.me/${phone}?text=${encodeURIComponent(buildMessage())}`;
-    // Abrir WhatsApp primero (dentro del gesto del usuario), luego registrar.
+    // Registrar (esperando un poco) antes de salir a WhatsApp, para no perder el evento.
+    await trackThen(Promise.all(items.map((it) => trackEvent('cotizacion', it.id, it.name, location))));
     window.location.href = url;
-    items.forEach((it) => trackEvent('cotizacion', it.id, it.name));
     setChooseLocation(false);
     setOpen(false);
   };
@@ -106,12 +109,40 @@ const QuoteWidget: React.FC = () => {
                         className="object-contain p-1"
                       />
                     </div>
-                    <p className="flex-1 text-sm font-medium text-gray-800 line-clamp-2">
-                      {it.name}
-                    </p>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-gray-800 line-clamp-2 mb-2">
+                        {it.name}
+                      </p>
+                      {/* Stepper de cantidad */}
+                      <div className="inline-flex items-center rounded-lg border border-gray-200 bg-white overflow-hidden">
+                        <button
+                          onClick={() => decrement(it.id)}
+                          disabled={it.quantity <= 1}
+                          className="w-8 h-8 flex items-center justify-center text-gray-600 hover:bg-teal-50 hover:text-teal-700 disabled:opacity-40 disabled:hover:bg-white transition-colors"
+                          aria-label={`Disminuir cantidad de ${it.name}`}
+                        >
+                          <FaMinus className="text-[10px]" />
+                        </button>
+                        <input
+                          type="number"
+                          min={1}
+                          value={it.quantity}
+                          onChange={(e) => setQuantity(it.id, Number(e.target.value))}
+                          className="w-12 h-8 text-center text-sm font-semibold text-gray-900 border-x border-gray-200 focus:outline-none focus:bg-teal-50 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                          aria-label={`Cantidad de ${it.name}`}
+                        />
+                        <button
+                          onClick={() => increment(it.id)}
+                          className="w-8 h-8 flex items-center justify-center text-gray-600 hover:bg-teal-50 hover:text-teal-700 transition-colors"
+                          aria-label={`Aumentar cantidad de ${it.name}`}
+                        >
+                          <FaPlus className="text-[10px]" />
+                        </button>
+                      </div>
+                    </div>
                     <button
                       onClick={() => remove(it.id)}
-                      className="text-red-500 hover:text-white hover:bg-red-600 border border-red-200 rounded-lg p-2 transition-colors flex-shrink-0"
+                      className="text-red-500 hover:text-white hover:bg-red-600 border border-red-200 rounded-lg p-2 transition-colors flex-shrink-0 self-start"
                       aria-label={`Quitar ${it.name}`}
                     >
                       <FaTrash className="text-xs" />
@@ -122,6 +153,12 @@ const QuoteWidget: React.FC = () => {
 
               {/* Footer */}
               <div className="border-t border-gray-200 p-4 space-y-3">
+                <div className="flex items-center justify-between text-sm text-gray-600">
+                  <span>{count} {count === 1 ? 'producto' : 'productos'}</span>
+                  <span className="font-semibold text-gray-900">
+                    {totalUnits} {totalUnits === 1 ? 'artículo' : 'artículos'} en total
+                  </span>
+                </div>
                 {chooseLocation ? (
                   <div className="space-y-2">
                     <p className="text-sm text-gray-600 text-center mb-1">

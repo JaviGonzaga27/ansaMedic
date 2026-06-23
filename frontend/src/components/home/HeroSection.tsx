@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FaWhatsapp, FaAward, FaMapMarkerAlt, FaShieldAlt, FaArrowRight } from 'react-icons/fa';
 import { MapPin, ChevronRight, X } from 'lucide-react';
 import { CONTACT, CAROUSEL_IMAGES } from '@/utils/constants';
+import { trackEvent, trackThen } from '../../services/metrics.service';
 
 const HeroSection: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -24,10 +25,11 @@ const HeroSection: React.FC = () => {
     { icon: FaShieldAlt, text: 'Calidad garantizada' },
   ];
 
-  const openWhatsapp = (location: 'Quito' | 'Valle de los Chillos') => {
+  const openWhatsapp = async (location: 'Quito' | 'Valle de los Chillos') => {
     const phoneNumber = location === 'Quito' ? CONTACT.WHATSAPP.QUITO : CONTACT.WHATSAPP.VALLE;
     const message = encodeURIComponent(`Hola, estoy interesado en realizar una cotización. Sector: ${location.toUpperCase()}`);
     const url = `https://wa.me/${phoneNumber.replace(/[^0-9]/g, '')}?text=${message}`;
+    await trackThen(trackEvent('whatsapp', undefined, undefined, location === 'Quito' ? 'quito' : 'valle'));
     window.location.href = url;
     setIsWhatsAppModalOpen(false);
   };
